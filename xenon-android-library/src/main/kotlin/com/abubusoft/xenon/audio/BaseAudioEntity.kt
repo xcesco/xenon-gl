@@ -1,161 +1,143 @@
-package com.abubusoft.xenon.audio;
+package com.abubusoft.xenon.audio
 
-import com.abubusoft.xenon.audio.exception.AudioException;
-import com.abubusoft.xenon.audio.exception.SoundReleasedException;
+import com.abubusoft.xenon.audio.exception.AudioException
+import com.abubusoft.xenon.audio.exception.SoundReleasedException
 
 /**
  * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 16:35:37 - 13.06.2010
  */
-public abstract class BaseAudioEntity implements IAudioEntity {
-	// ===========================================================
-	// Constants
-	// ===========================================================
+abstract class BaseAudioEntity     // ===========================================================
+// Constructors
+// ===========================================================
+    (  // ===========================================================
+    // Constants
+    // ===========================================================
+    // ===========================================================
+    // Fields
+    // ===========================================================
+    private val audioManager: IAudioManager<out IAudioEntity>
+) : IAudioEntity {
+    protected var leftVolume = 1.0f
+    protected var rightVolume = 1.0f
 
-	// ===========================================================
-	// Fields
-	// ===========================================================
+    // ===========================================================
+    // Getter & Setter
+    // ===========================================================
+    var isReleased = false
+        private set
 
-	private final IAudioManager<? extends IAudioEntity> audioManager;
+    @Throws(AudioException::class, SoundReleasedException::class)
+    protected open fun getAudioManager(): IAudioManager<out IAudioEntity>? {
+        assertNotReleased()
+        return audioManager
+    }
 
-	protected float leftVolume = 1.0f;
-	protected float rightVolume = 1.0f;
+    @get:Throws(AudioException::class)
+    val actualLeftVolume: Float
+        get() {
+            assertNotReleased()
+            return leftVolume * masterVolume
+        }
 
-	private boolean released;
+    @get:Throws(AudioException::class)
+    val actualRightVolume: Float
+        get() {
+            assertNotReleased()
+            return rightVolume * masterVolume
+        }
 
-	// ===========================================================
-	// Constructors
-	// ===========================================================
+    @get:Throws(AudioException::class)
+    protected val masterVolume: Float
+        protected get() {
+            assertNotReleased()
+            return audioManager.masterVolume
+        }
 
-	public BaseAudioEntity(final IAudioManager<? extends IAudioEntity> pAudioManager) {
-		this.audioManager = pAudioManager;
-	}
+    // ===========================================================
+    // Methods for/from SuperClass/Interfaces
+    // ===========================================================
+    @Throws(AudioException::class, SoundReleasedException::class)
+    protected abstract fun throwOnReleased()
+    @Throws(AudioException::class)
+    override fun getVolume(): Float {
+        assertNotReleased()
+        return (leftVolume + rightVolume) * 0.5f
+    }
 
-	// ===========================================================
-	// Getter & Setter
-	// ===========================================================
+    @Throws(AudioException::class)
+    override fun getLeftVolume(): Float {
+        assertNotReleased()
+        return leftVolume
+    }
 
-	public boolean isReleased() {
-		return this.released;
-	}
+    @Throws(AudioException::class)
+    override fun getRightVolume(): Float {
+        assertNotReleased()
+        return rightVolume
+    }
 
-	protected IAudioManager<? extends IAudioEntity> getAudioManager() throws AudioException, SoundReleasedException {
-		this.assertNotReleased();
+    @Throws(AudioException::class)
+    override fun setVolume(pVolume: Float) {
+        assertNotReleased()
+        this.setVolume(pVolume, pVolume)
+    }
 
-		return this.audioManager;
-	}
+    @Throws(AudioException::class)
+    override fun setVolume(pLeftVolume: Float, pRightVolume: Float) {
+        assertNotReleased()
+        leftVolume = pLeftVolume
+        rightVolume = pRightVolume
+    }
 
-	public float getActualLeftVolume() throws AudioException {
-		this.assertNotReleased();
+    @Throws(AudioException::class)
+    override fun onMasterVolumeChanged(pMasterVolume: Float) {
+        assertNotReleased()
+    }
 
-		return this.leftVolume * this.getMasterVolume();
-	}
+    @Throws(AudioException::class)
+    override fun play() {
+        assertNotReleased()
+    }
 
-	public float getActualRightVolume() throws AudioException {
-		this.assertNotReleased();
+    @Throws(AudioException::class)
+    override fun pause() {
+        assertNotReleased()
+    }
 
-		return this.rightVolume * this.getMasterVolume();
-	}
+    @Throws(AudioException::class)
+    override fun resume() {
+        assertNotReleased()
+    }
 
-	protected float getMasterVolume() throws AudioException {
-		this.assertNotReleased();
+    @Throws(AudioException::class)
+    override fun stop() {
+        assertNotReleased()
+    }
 
-		return this.audioManager.getMasterVolume();
-	}
+    @Throws(AudioException::class)
+    override fun setLooping(pLooping: Boolean) {
+        assertNotReleased()
+    }
 
-	// ===========================================================
-	// Methods for/from SuperClass/Interfaces
-	// ===========================================================
+    @Throws(AudioException::class)
+    override fun release() {
+        assertNotReleased()
+        isReleased = true
+    }
 
-	protected abstract void throwOnReleased() throws AudioException, SoundReleasedException ;
-
-	@Override
-	public float getVolume() throws AudioException {
-		this.assertNotReleased();
-
-		return (this.leftVolume + this.rightVolume) * 0.5f;
-	}
-
-	@Override
-	public float getLeftVolume() throws AudioException {
-		this.assertNotReleased();
-
-		return this.leftVolume;
-	}
-
-	@Override
-	public float getRightVolume() throws AudioException {
-		this.assertNotReleased();
-
-		return this.rightVolume;
-	}
-
-	@Override
-	public final void setVolume(final float pVolume) throws AudioException {
-		this.assertNotReleased();
-
-		this.setVolume(pVolume, pVolume);
-	}
-
-	@Override
-	public void setVolume(final float pLeftVolume, final float pRightVolume) throws AudioException {
-		this.assertNotReleased();
-
-		this.leftVolume = pLeftVolume;
-		this.rightVolume = pRightVolume;
-	}
-
-	@Override
-	public void onMasterVolumeChanged(final float pMasterVolume) throws AudioException {
-		this.assertNotReleased();
-	}
-
-	@Override
-	public void play() throws AudioException {
-		this.assertNotReleased();
-	}
-
-	@Override
-	public void pause() throws AudioException {
-		this.assertNotReleased();
-	}
-
-	@Override
-	public void resume() throws AudioException {
-		this.assertNotReleased();
-	}
-
-	@Override
-	public void stop() throws AudioException {
-		this.assertNotReleased();
-	}
-
-	@Override
-	public void setLooping(final boolean pLooping) throws AudioException {
-		this.assertNotReleased();
-	}
-
-	@Override
-	public void release() throws AudioException {
-		this.assertNotReleased();
-
-		this.released = true;
-	}
-
-	// ===========================================================
-	// Methods
-	// ===========================================================
-
-	protected void assertNotReleased() throws AudioException {
-		if(this.released) {
-			this.throwOnReleased();
-		}
-	}
-
-	// ===========================================================
-	// Inner and Anonymous Classes
-	// ===========================================================
+    // ===========================================================
+    // Methods
+    // ===========================================================
+    @Throws(AudioException::class)
+    protected fun assertNotReleased() {
+        if (isReleased) {
+            throwOnReleased()
+        }
+    } // ===========================================================
+    // Inner and Anonymous Classes
+    // ===========================================================
 }

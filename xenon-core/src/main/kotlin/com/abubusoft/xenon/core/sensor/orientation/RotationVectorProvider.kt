@@ -11,7 +11,7 @@ import com.abubusoft.xenon.core.sensor.internal.AttachedSensors
  * @author Alexander Pacha
  */
 @AttachedSensors(Sensor.TYPE_ROTATION_VECTOR)
-class RotationVectorProvider : OrientationProvider() {
+object RotationVectorProvider : OrientationProvider() {
     override fun onSensorChanged(event: SensorEvent) {
         // we received a sensor event. it is a good practice to check
         // that we received the proper event
@@ -28,15 +28,5 @@ class RotationVectorProvider : OrientationProvider() {
             currentOrientationQuaternion.setXYZW(q[1], q[2], q[3], -q[0])
         }
         update()
-    }
-
-    companion object {
-        var instance: RotationVectorProvider? = null
-        fun instance(): RotationVectorProvider? {
-            if (instance == null) {
-                instance = RotationVectorProvider()
-            }
-            return instance
-        }
     }
 }

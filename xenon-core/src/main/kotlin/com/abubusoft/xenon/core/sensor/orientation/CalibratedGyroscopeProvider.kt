@@ -13,7 +13,7 @@ import com.abubusoft.xenon.core.sensor.orientation.math.Quaternion
  * @author Alexander Pacha
  */
 @AttachedSensors(Sensor.TYPE_GYROSCOPE)
-class CalibratedGyroscopeProvider : OrientationProvider() {
+object CalibratedGyroscopeProvider : OrientationProvider() {
     /**
      * The quaternion that stores the difference that is obtained by the gyroscope.
      * Basically it contains a rotational difference encoded into a quaternion.
@@ -94,29 +94,21 @@ class CalibratedGyroscopeProvider : OrientationProvider() {
         update()
     }
 
-    companion object {
-        var instance: CalibratedGyroscopeProvider? = null
-        fun instance(): CalibratedGyroscopeProvider? {
-            if (instance == null) {
-                instance = CalibratedGyroscopeProvider()
-            }
-            return instance
-        }
 
-        /**
-         * Constant specifying the factor between a Nano-second and a second
-         */
-        private const val NS2S = 1.0f / 1000000000.0f
+    /**
+     * Constant specifying the factor between a Nano-second and a second
+     */
+    private const val NS2S = 1.0f / 1000000000.0f
 
-        /**
-         * This is a filter-threshold for discarding Gyroscope measurements that are below a certain level and
-         * potentially are only noise and not real motion. Values from the gyroscope are usually between 0 (stop) and
-         * 10 (rapid rotation), so 0.1 seems to be a reasonable threshold to filter noise (usually smaller than 0.1) and
-         * real motion (usually > 0.1). Note that there is a chance of missing real motion, if the use is turning the
-         * device really slowly, so this value has to find a balance between accepting noise (threshold = 0) and missing
-         * slow user-action (threshold > 0.5). 0.1 seems to work fine for most applications.
-         *
-         */
-        private const val EPSILON = 0.1
-    }
+    /**
+     * This is a filter-threshold for discarding Gyroscope measurements that are below a certain level and
+     * potentially are only noise and not real motion. Values from the gyroscope are usually between 0 (stop) and
+     * 10 (rapid rotation), so 0.1 seems to be a reasonable threshold to filter noise (usually smaller than 0.1) and
+     * real motion (usually > 0.1). Note that there is a chance of missing real motion, if the use is turning the
+     * device really slowly, so this value has to find a balance between accepting noise (threshold = 0) and missing
+     * slow user-action (threshold > 0.5). 0.1 seems to work fine for most applications.
+     *
+     */
+    private const val EPSILON = 0.1
+
 }

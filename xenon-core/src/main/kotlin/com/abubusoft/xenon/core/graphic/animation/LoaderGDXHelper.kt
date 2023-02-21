@@ -53,15 +53,14 @@ object LoaderGDXHelper {
     fun createAnimations(resources: Resources, input: String, tilesMap: HashMap<String, Bitmap>): HashMap<String, BitmapAnimation> {
         val map = HashMap<String, BitmapAnimation>()
         var name = "<undefined>"
-        var animation = BitmapAnimation()
+        var animation = BitmapAnimation(name)
         val definition = input.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         var row: String
         var temp: Array<String>
         for (i in definition.indices) {
             row = definition[i].trim { it <= ' ' }
             if ("{" == row) {
-                animation = BitmapAnimation()
-                animation.name = name
+                animation = BitmapAnimation(name)
             } else if ("}" == row) {
                 map[name] = animation
             } else if (row.startsWith("looping:")) {

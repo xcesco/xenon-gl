@@ -11,7 +11,7 @@ import com.abubusoft.xenon.core.sensor.internal.AttachedSensors
  * @author Alexander Pacha
  */
 @AttachedSensors(Sensor.TYPE_ACCELEROMETER, Sensor.TYPE_MAGNETIC_FIELD)
-class AccelerometerCompassProvider : OrientationProvider() {
+object AccelerometerCompassProvider : OrientationProvider() {
     /**
      * Compass values
      */
@@ -40,15 +40,5 @@ class AccelerometerCompassProvider : OrientationProvider() {
             currentOrientationQuaternion.setRowMajor(currentOrientationRotationMatrix.matrix)
         }
         update()
-    }
-
-    companion object {
-        var instance: AccelerometerCompassProvider? = null
-        fun instance(): AccelerometerCompassProvider? {
-            if (instance == null) {
-                instance = AccelerometerCompassProvider()
-            }
-            return instance
-        }
     }
 }

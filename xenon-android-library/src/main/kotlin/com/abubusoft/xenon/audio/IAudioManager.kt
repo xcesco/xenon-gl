@@ -1,31 +1,29 @@
 /**
- * 
+ *
  */
-package com.abubusoft.xenon.audio;
+package com.abubusoft.xenon.audio
 
-import com.abubusoft.xenon.audio.exception.AudioException;
+import com.abubusoft.xenon.audio.exception.AudioException
 
 /**
- * (c) 2010 Nicolas Gramlich 
+ * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 15:02:06 - 13.06.2010
  */
-public interface IAudioManager<T extends IAudioEntity> {
-	// ===========================================================
-	// Constants
-	// ===========================================================
+interface IAudioManager<T : IAudioEntity?> {
+    // ===========================================================
+    // Constants
+    // ===========================================================
+    // ===========================================================
+    // Methods
+    // ===========================================================
+    @set:Throws(AudioException::class)
+    var masterVolume: Float
+    fun add(pAudioEntity: T)
+    fun remove(pAudioEntity: T): Boolean
 
-	// ===========================================================
-	// Methods
-	// ===========================================================
-
-	public float getMasterVolume();
-	public void setMasterVolume(final float pMasterVolume) throws AudioException;
-
-	public void add(final T pAudioEntity);
-	public boolean remove(final T pAudioEntity);
-
-	public void releaseAll() throws AudioException;
+    @Throws(AudioException::class)
+    fun releaseAll()
 }

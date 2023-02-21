@@ -25,7 +25,7 @@ class Quaternion : Vector4f() {
      * Remember that for performance reasons, this matrix is only updated, when it is accessed and not on every change
      * of the quaternion-values.
      */
-    private val matrix: Matrixf4x4
+    private val matrix: Matrixf4x4 = Matrixf4x4()
 
     /**
      * This variable is used to synchronise the rotation matrix with the current quaternion values. If someone has
@@ -33,7 +33,7 @@ class Quaternion : Vector4f() {
      * quaternion numbers then the matrix will need to be updated. To save on processing we only really want to update
      * the matrix when someone wants to fetch it, instead of whenever someone sets a quaternion value.
      */
-    private val dirty = false
+    //var dirty = false
 
     fun clone(): Quaternion {
         val clone = Quaternion()
@@ -45,7 +45,7 @@ class Quaternion : Vector4f() {
      * Normalise this Quaternion into a unity Quaternion.
      */
     fun normalise() {
-        this.dirty = true
+        dirty = true
         val mag = Math.sqrt(
             (points[3] * points[3] + points[0] * points[0] + points[1] * points[1] + (points[2]
                     * points[2])).toDouble()
@@ -65,8 +65,8 @@ class Quaternion : Vector4f() {
      *
      * @param quat The quaternion to copy from
      */
-    fun set(quat: Quaternion?) {
-        this.dirty = true
+    fun set(quat: Quaternion) {
+        dirty = true
         copyVec4(quat)
     }
 
@@ -115,7 +115,6 @@ class Quaternion : Vector4f() {
      * Creates a new Quaternion object and initialises it with the identity Quaternion
      */
     init {
-        matrix = Matrixf4x4()
         loadIdentityQuat()
     }
 
@@ -123,10 +122,10 @@ class Quaternion : Vector4f() {
         if (bufferQuaternion == null) {
             bufferQuaternion = Quaternion()
         }
-        this.dirty = true
+        dirty = true
         bufferQuaternion!!.copyVec4(this)
         multiplyByQuat(input, bufferQuaternion!!)
-        copyVec4(bufferQuaternion)
+        copyVec4(bufferQuaternion!!)
     }
 
     /**
@@ -135,7 +134,7 @@ class Quaternion : Vector4f() {
      * @param scalar the value that the vector should be multiplied with
      */
     override fun multiplyByScalar(scalar: Float) {
-        this.dirty = true
+        dirty = true
         multiplyByScalar(scalar)
     }
 
@@ -145,7 +144,7 @@ class Quaternion : Vector4f() {
      * @param input The quaternion that you want to add to this one
      */
     fun addQuat(input: Quaternion) {
-        this.dirty = true
+        dirty = true
         addQuat(input, this)
     }
 
@@ -168,7 +167,7 @@ class Quaternion : Vector4f() {
      * @param input The quaternion that you want to subtracted from this one
      */
     fun subQuat(input: Quaternion) {
-        this.dirty = true
+        dirty = true
         subQuat(input, this)
     }
 
@@ -277,7 +276,7 @@ class Quaternion : Vector4f() {
      * Sets the quaternion to an identity quaternion of 0,0,0,1.
      */
     fun loadIdentityQuat() {
-        this.dirty = true
+        dirty = true
         x = 0f
         y = 0f
         z = 0f
@@ -298,7 +297,7 @@ class Quaternion : Vector4f() {
         val qy: Float
         val qz: Float
         val qw: Float
-        val mat = matrix.getMatrix()
+        val mat = matrix.matrix
         var indices: IntArray? = null
         indices = if (matrix.size() == 16) {
             if (matrix.isColumnMajor) {
@@ -360,8 +359,8 @@ class Quaternion : Vector4f() {
      *
      * @param matrix A column major rotation matrix
      */
-    fun setColumnMajor(matrix: FloatArray?) {
-        this.matrix.setMatrix(matrix!!)
+    fun setColumnMajor(matrix: FloatArray) {
+        this.matrix.setMatrixElements(matrix)
         this.matrix.isColumnMajor = true
         generateQuaternionFromMatrix()
     }
@@ -372,8 +371,8 @@ class Quaternion : Vector4f() {
      *
      * @param matrix A column major rotation matrix
      */
-    fun setRowMajor(matrix: FloatArray?) {
-        this.matrix.setMatrix(matrix!!)
+    fun setRowMajor(matrix: FloatArray) {
+        this.matrix.setMatrixElements(matrix)
         this.matrix.isColumnMajor = false
         generateQuaternionFromMatrix()
     }
@@ -433,7 +432,6 @@ class Quaternion : Vector4f() {
      */
     val matrix4x4: Matrixf4x4
         get() {
-            //toMatrixColMajor();
             if (dirty) {
                 convertQuatToMatrix()
                 dirty = false
@@ -441,7 +439,7 @@ class Quaternion : Vector4f() {
             return matrix
         }
 
-    fun copyFromVec3(vec: Vector3f?, w: Float) {
+    fun copyFromVec3(vec: Vector3f, w: Float) {
         copyFromV3f(vec, w)
     }
 

@@ -1,38 +1,52 @@
-package com.abubusoft.xenon.audio;
+package com.abubusoft.xenon.audio
 
-import com.abubusoft.xenon.audio.exception.AudioException;
+import com.abubusoft.xenon.audio.exception.AudioException
 
 /**
- * (c) 2010 Nicolas Gramlich 
+ * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 14:53:29 - 13.06.2010
  */
-public interface IAudioEntity {
-	// ===========================================================
-	// Constants
-	// ===========================================================
+interface IAudioEntity {
+    // ===========================================================
+    // Constants
+    // ===========================================================
+    // ===========================================================
+    // Methods
+    // ===========================================================
+    @Throws(AudioException::class)
+    fun play()
 
-	// ===========================================================
-	// Methods
-	// ===========================================================
+    @Throws(AudioException::class)
+    fun pause()
 
-	public void play() throws AudioException;
-	public void pause() throws AudioException;
-	public void resume() throws AudioException;
-	public void stop() throws AudioException;
+    @Throws(AudioException::class)
+    fun resume()
 
-	public float getVolume() throws AudioException;
-	public void setVolume(final float pVolume) throws AudioException;
+    @Throws(AudioException::class)
+    fun stop()
 
-	public float getLeftVolume() throws AudioException;
-	public float getRightVolume() throws AudioException;
-	public void setVolume(final float pLeftVolume, final float pRightVolume) throws AudioException;
+    @get:Throws(AudioException::class)
+    @set:Throws(AudioException::class)
+    var volume: Float
 
-	public void onMasterVolumeChanged(final float pMasterVolume) throws AudioException;
+    @get:Throws(AudioException::class)
+    val leftVolume: Float
 
-	public void setLooping(final boolean pLooping) throws AudioException;
+    @get:Throws(AudioException::class)
+    val rightVolume: Float
 
-	public void release() throws AudioException;
+    @Throws(AudioException::class)
+    fun setVolume(pLeftVolume: Float, pRightVolume: Float)
+
+    @Throws(AudioException::class)
+    fun onMasterVolumeChanged(pMasterVolume: Float)
+
+    @Throws(AudioException::class)
+    fun setLooping(pLooping: Boolean)
+
+    @Throws(AudioException::class)
+    fun release()
 }

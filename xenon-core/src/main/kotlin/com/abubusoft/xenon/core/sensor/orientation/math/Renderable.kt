@@ -11,21 +11,10 @@ import java.util.concurrent.locks.ReentrantLock
  */
 open class Renderable : Serializable {
     //Used in data managemenst and synchronisation. If you make a renderable then you should change this boolean to true.
-    protected var dirty = true
+    var dirty = true
+
     var lock = ReentrantLock()
         protected set
-
-    fun dirty(): Boolean {
-        return dirty
-    }
-
-    fun setClean() {
-        dirty = false
-    }
-
-    fun setDirty() {
-        dirty = true
-    }
 
     companion object {
         /**

@@ -48,15 +48,6 @@ class Matrixf4x4 {
         isMatrixValid = true
     }
 
-    /**
-     * Gets the matrix.
-     *
-     * @return the matrix, can be null if the matrix is invalid
-     */
-    fun getMatrix(): FloatArray {
-        return matrix
-    }
-
     fun size(): Int {
         return matrix.size
     }
@@ -65,22 +56,22 @@ class Matrixf4x4 {
      * Sets the matrix from a float[16] array. If the matrix you set isn't 16 long then the matrix will be set as
      * invalid.
      *
-     * @param matrix the new matrix
+     * @param elements the new matrix
      */
-    fun setMatrix(matrix: FloatArray) {
-        this.matrix = matrix
-        if (matrix.size == 16 || matrix.size == 9) isMatrixValid = true else {
+    fun setMatrixElements(elements: FloatArray) {
+        this.matrix = elements
+        if (elements.size == 16 || elements.size == 9) isMatrixValid = true else {
             isMatrixValid = false
-            Log.e("matrix", "Matrix set is invalid, size is " + matrix.size + " expected 9 or 16")
+            Log.e("matrix", "Matrix set is invalid, size is " + elements.size + " expected 9 or 16")
         }
     }
 
-    fun setMatrixValues(otherMatrix: FloatArray) {
-        if (matrix.size != otherMatrix.size) {
-            Log.e("matrix", "Matrix set is invalid, size is " + otherMatrix.size + " expected 9 or 16")
+    fun copyMatrixValues(otherElements: FloatArray) {
+        if (matrix.size != otherElements.size) {
+            Log.e("matrix", "Matrix set is invalid, size is " + otherElements.size + " expected 9 or 16")
         }
-        for (i in otherMatrix.indices) {
-            matrix[i] = otherMatrix[i]
+        for (i in otherElements.indices) {
+            matrix[i] = otherElements[i]
         }
     }
 
@@ -161,11 +152,10 @@ class Matrixf4x4 {
      * @param matrixf the matrixf
      */
     fun multiplyMatrix4x4ByMatrix(matrixf: Matrixf4x4) {
-
         // TODO implement Strassen Algorithm in place of this slower naive one.
         if (isMatrixValid && matrixf.isMatrixValid) {
             val bufferMatrix = floatArrayOf(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
-            val matrix = matrixf.getMatrix()
+            val matrix = matrixf.matrix
             /**
              * for(int i = 0; i < 4; i++){ for(int j = 0; j < 4; j++){
              *
@@ -174,10 +164,10 @@ class Matrixf4x4 {
              * i]; bufferMatrix[3 * 4 + j] += this.matrix[k + j] * matrix[3 * 4 + i]; } }
              */
             multiplyMatrix(matrix, 0, bufferMatrix, 0)
-            matrixf.setMatrix(bufferMatrix)
+            matrixf.setMatrixElements(bufferMatrix)
         } else Log.e(
             "matrix", "Matrix is invalid, internal is " + matrix.size + " long" + " , input matrix is "
-                    + matrixf.getMatrix().size + " long"
+                    + matrixf.matrix.size + " long"
         )
     }
 

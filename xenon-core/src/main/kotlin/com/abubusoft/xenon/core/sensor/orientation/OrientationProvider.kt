@@ -115,7 +115,7 @@ abstract class OrientationProvider : InputSensorProvider {
      * Starts the sensor fusion (e.g. when resuming the activity)
      */
     fun start() {
-        val sensorManager = ElioSensorManager.instance().sensorManager
+        val sensorManager = ElioSensorManager.sensorManager
 
         // enable our sensor when the activity is resumed, ask for
         // 10 ms updates.
@@ -211,7 +211,7 @@ abstract class OrientationProvider : InputSensorProvider {
      * Stops the sensor fusion (e.g. when pausing/suspending the activity)
      */
     fun stop() {
-        val sensorManager = ElioSensorManager.instance().sensorManager
+        val sensorManager = ElioSensorManager.sensorManager
 
         // make sure to turn our sensors off when the activity is paused
         for (sensor in sensorList) {

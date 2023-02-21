@@ -1,84 +1,67 @@
-package com.abubusoft.xenon.audio;
+package com.abubusoft.xenon.audio
 
-import java.util.ArrayList;
-
-import com.abubusoft.xenon.audio.exception.AudioException;
+import com.abubusoft.xenon.audio.exception.AudioException
 
 /**
- * (c) 2010 Nicolas Gramlich 
+ * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 18:07:02 - 13.06.2010
  */
-public abstract class BaseAudioManager<T extends IAudioEntity> implements IAudioManager<T> {
-	// ===========================================================
-	// Constants
-	// ===========================================================
+abstract class BaseAudioManager<T : IAudioEntity?> : IAudioManager<T> {
+    // ===========================================================
+    // Constants
+    // ===========================================================
+    // ===========================================================
+    // Fields
+    // ===========================================================
+    protected val mAudioEntities = ArrayList<T>()
+    protected var mMasterVolume = 1.0f
 
-	// ===========================================================
-	// Fields
-	// ===========================================================
+    // ===========================================================
+    // Constructors
+    // ===========================================================
+    // ===========================================================
+    // Getter & Setter
+    // ===========================================================
+    // ===========================================================
+    // Methods for/from SuperClass/Interfaces
+    // ===========================================================
+    override fun getMasterVolume(): Float {
+        return mMasterVolume
+    }
 
-	protected final ArrayList<T> mAudioEntities = new ArrayList<T>();
+    @Throws(AudioException::class)
+    override fun setMasterVolume(pMasterVolume: Float) {
+        mMasterVolume = pMasterVolume
+        val audioEntities = mAudioEntities
+        for (i in audioEntities.indices.reversed()) {
+            val audioEntity = audioEntities[i]
+            audioEntity!!.onMasterVolumeChanged(pMasterVolume)
+        }
+    }
 
-	protected float mMasterVolume = 1.0f;
+    override fun add(pAudioEntity: T) {
+        mAudioEntities.add(pAudioEntity)
+    }
 
-	// ===========================================================
-	// Constructors
-	// ===========================================================
+    override fun remove(pAudioEntity: T): Boolean {
+        return mAudioEntities.remove(pAudioEntity)
+    }
 
-	// ===========================================================
-	// Getter & Setter
-	// ===========================================================
-
-	// ===========================================================
-	// Methods for/from SuperClass/Interfaces
-	// ===========================================================
-
-	@Override
-	public float getMasterVolume() {
-		return this.mMasterVolume;
-	}
-
-	@Override
-	public void setMasterVolume(final float pMasterVolume) throws AudioException {
-		this.mMasterVolume = pMasterVolume;
-
-		final ArrayList<T> audioEntities = this.mAudioEntities;
-		for(int i = audioEntities.size() - 1; i >= 0; i--) {
-			final T audioEntity = audioEntities.get(i);
-
-			audioEntity.onMasterVolumeChanged(pMasterVolume);
-		}
-	}
-
-	@Override
-	public void add(final T pAudioEntity) {
-		this.mAudioEntities.add(pAudioEntity);
-	}
-
-	@Override
-	public boolean remove(final T pAudioEntity) {
-		return this.mAudioEntities.remove(pAudioEntity);
-	}
-
-	@Override
-	public void releaseAll() throws AudioException {
-		final ArrayList<T> audioEntities = this.mAudioEntities;
-		for(int i = audioEntities.size() - 1; i >= 0; i--) {
-			final T audioEntity = audioEntities.get(i);
-
-			audioEntity.stop();
-			audioEntity.release();
-		}
-	}
-
-	// ===========================================================
-	// Methods
-	// ===========================================================
-
-	// ===========================================================
-	// Inner and Anonymous Classes
-	// ===========================================================
+    @Throws(AudioException::class)
+    override fun releaseAll() {
+        val audioEntities = mAudioEntities
+        for (i in audioEntities.indices.reversed()) {
+            val audioEntity = audioEntities[i]
+            audioEntity!!.stop()
+            audioEntity.release()
+        }
+    } // ===========================================================
+    // Methods
+    // ===========================================================
+    // ===========================================================
+    // Inner and Anonymous Classes
+    // ===========================================================
 }

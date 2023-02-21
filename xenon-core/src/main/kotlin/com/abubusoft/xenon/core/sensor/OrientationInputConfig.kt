@@ -82,7 +82,8 @@ class OrientationInputConfig private constructor() {
      * limite in abs in gradi del pitch
      */
     var pitchLimit = 0.0
-    var provider: ProviderType? = null
+
+    var provider: ProviderType = ProviderType.ROTATION_VECTOR
 
     /**
      * limite in abs in gradi del roll
@@ -157,7 +158,7 @@ class OrientationInputConfig private constructor() {
      * @param value
      * @return this
      */
-    fun provider(value: ProviderType?): OrientationInputConfig {
+    fun provider(value: ProviderType): OrientationInputConfig {
         provider = value
         return this
     }

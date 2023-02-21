@@ -1,121 +1,108 @@
-package com.abubusoft.xenon.audio.sound;
+package com.abubusoft.xenon.audio.sound
 
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.IOException;
-
-import com.abubusoft.xenon.core.XenonRuntimeException;
-import com.abubusoft.kripton.android.Logger;
-
-import android.content.Context;
-import android.content.res.AssetFileDescriptor;
+import android.content.Context
+import android.content.res.AssetFileDescriptor
+import com.abubusoft.kripton.android.Logger
+import com.abubusoft.xenon.core.XenonRuntimeException
+import java.io.File
+import java.io.FileDescriptor
+import java.io.IOException
 
 /**
  * (c) 2010 Nicolas Gramlich (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 14:23:03 - 11.03.2010
  */
-public class SoundFactory {
-	// ===========================================================
-	// Constants
-	// ===========================================================
+object SoundFactory {
+    // ===========================================================
+    // Constants
+    // ===========================================================
+    // ===========================================================
+    // Fields
+    // ===========================================================
+    private var sAssetBasePath = ""
+    // ===========================================================
+    // Constructors
+    // ===========================================================
+    // ===========================================================
+    // Getter & Setter
+    // ===========================================================
+    /**
+     * @param pAssetBasePath
+     * must end with '`/`' or have `.length() == 0`.
+     */
+    var assetBasePath: String
+        get() = sAssetBasePath
+        set(pAssetBasePath) {
+            if (pAssetBasePath.endsWith("/") || pAssetBasePath.length == 0) {
+                sAssetBasePath = pAssetBasePath
+            } else {
+                throw IllegalStateException("pAssetBasePath must end with '/' or be lenght zero.")
+            }
+        }
 
-	// ===========================================================
-	// Fields
-	// ===========================================================
+    fun onCreate() {
+        assetBasePath = ""
+    }
 
-	private static String sAssetBasePath = "";
+    // ===========================================================
+    // Methods for/from SuperClass/Interfaces
+    // ===========================================================
+    // ===========================================================
+    // Methods
+    // ===========================================================
+    fun createSoundFromPath(pPath: String?): Sound {
+        val pSoundManager: SoundManager = SoundManager.Companion.instance()
+        val soundID = pSoundManager.soundPool.load(pPath, 1)
+        val sound = Sound(pSoundManager, soundID)
+        pSoundManager.add(sound)
+        return sound
+    }
 
-	// ===========================================================
-	// Constructors
-	// ===========================================================
+    fun createSoundFromAsset(pContext: Context, pAssetPath: String): Sound {
+        val pSoundManager: SoundManager = SoundManager.Companion.instance()
+        val soundID: Int
+        soundID = try {
+            pSoundManager.soundPool.load(pContext.assets.openFd(sAssetBasePath + pAssetPath), 1)
+        } catch (e: IOException) {
+            Logger.error(e.message)
+            e.printStackTrace()
+            throw XenonRuntimeException(e)
+        }
+        val sound = Sound(pSoundManager, soundID)
+        pSoundManager.add(sound)
+        return sound
+    }
 
-	// ===========================================================
-	// Getter & Setter
-	// ===========================================================
+    fun createSoundFromResource(pContext: Context?, pSoundResID: Int): Sound {
+        val pSoundManager: SoundManager = SoundManager.Companion.instance()
+        val soundID = pSoundManager.soundPool.load(pContext, pSoundResID, 1)
+        val sound = Sound(pSoundManager, soundID)
+        pSoundManager.add(sound)
+        return sound
+    }
 
-	/**
-	 * @param pAssetBasePath
-	 *            must end with '<code>/</code>' or have <code>.length() == 0</code>.
-	 */
-	public static void setAssetBasePath(final String pAssetBasePath) {
-		if (pAssetBasePath.endsWith("/") || pAssetBasePath.length() == 0) {
-			SoundFactory.sAssetBasePath = pAssetBasePath;
-		} else {
-			throw new IllegalStateException("pAssetBasePath must end with '/' or be lenght zero.");
-		}
-	}
+    fun createSoundFromFile(pFile: File): Sound {
+        return createSoundFromPath(pFile.absolutePath)
+    }
 
-	public static String getAssetBasePath() {
-		return SoundFactory.sAssetBasePath;
-	}
+    fun createSoundFromAssetFileDescriptor(pAssetFileDescriptor: AssetFileDescriptor?): Sound {
+        val pSoundManager: SoundManager = SoundManager.Companion.instance()
+        val soundID = pSoundManager.soundPool.load(pAssetFileDescriptor, 1)
+        val sound = Sound(pSoundManager, soundID)
+        pSoundManager.add(sound)
+        return sound
+    }
 
-	public static void onCreate() {
-		SoundFactory.setAssetBasePath("");
-	}
-
-	// ===========================================================
-	// Methods for/from SuperClass/Interfaces
-	// ===========================================================
-
-	// ===========================================================
-	// Methods
-	// ===========================================================
-
-	public static Sound createSoundFromPath(final String pPath) {
-		SoundManager pSoundManager = SoundManager.instance();
-		final int soundID = pSoundManager.getSoundPool().load(pPath, 1);
-		final Sound sound = new Sound(pSoundManager, soundID);
-		pSoundManager.add(sound);
-		return sound;
-
-	}
-
-	public static Sound createSoundFromAsset(final Context pContext, final String pAssetPath) {
-		SoundManager pSoundManager = SoundManager.instance();
-		int soundID;
-		try {
-			soundID = pSoundManager.getSoundPool().load(pContext.getAssets().openFd(SoundFactory.sAssetBasePath + pAssetPath), 1);
-		} catch (IOException e) {
-			Logger.error(e.getMessage());
-			e.printStackTrace();
-			throw new XenonRuntimeException(e);
-		}
-		final Sound sound = new Sound(pSoundManager, soundID);
-		pSoundManager.add(sound);
-		return sound;
-	}
-
-	public static Sound createSoundFromResource(final Context pContext, final int pSoundResID) {
-		SoundManager pSoundManager = SoundManager.instance();
-		final int soundID = pSoundManager.getSoundPool().load(pContext, pSoundResID, 1);
-		final Sound sound = new Sound(pSoundManager, soundID);
-		pSoundManager.add(sound);
-		return sound;
-	}
-
-	public static Sound createSoundFromFile(final File pFile) {
-		return SoundFactory.createSoundFromPath(pFile.getAbsolutePath());
-	}
-
-	public static Sound createSoundFromAssetFileDescriptor(final AssetFileDescriptor pAssetFileDescriptor) {
-		SoundManager pSoundManager = SoundManager.instance();
-		final int soundID = pSoundManager.getSoundPool().load(pAssetFileDescriptor, 1);
-		final Sound sound = new Sound(pSoundManager, soundID);
-		pSoundManager.add(sound);
-		return sound;
-	}
-
-	public static Sound createSoundFromFileDescriptor(final FileDescriptor pFileDescriptor, final long pOffset, final long pLength) throws IOException {
-		SoundManager pSoundManager = SoundManager.instance();
-		final int soundID = pSoundManager.getSoundPool().load(pFileDescriptor, pOffset, pLength, 1);
-		final Sound sound = new Sound(pSoundManager, soundID);
-		pSoundManager.add(sound);
-		return sound;
-	}
-
-	// ===========================================================
-	// Inner and Anonymous Classes
-	// ===========================================================
+    @Throws(IOException::class)
+    fun createSoundFromFileDescriptor(pFileDescriptor: FileDescriptor?, pOffset: Long, pLength: Long): Sound {
+        val pSoundManager: SoundManager = SoundManager.Companion.instance()
+        val soundID = pSoundManager.soundPool.load(pFileDescriptor, pOffset, pLength, 1)
+        val sound = Sound(pSoundManager, soundID)
+        pSoundManager.add(sound)
+        return sound
+    } // ===========================================================
+    // Inner and Anonymous Classes
+    // ===========================================================
 }

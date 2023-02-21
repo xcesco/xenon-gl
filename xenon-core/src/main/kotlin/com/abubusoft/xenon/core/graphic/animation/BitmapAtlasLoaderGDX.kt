@@ -21,7 +21,7 @@ object BitmapAtlasLoaderGDX {
             animationMap
         } catch (e: Exception) {
             e.printStackTrace()
-            null
+            throw (e)
         }
     }
 }

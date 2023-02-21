@@ -2,7 +2,6 @@ package com.abubusoft.xenon.core.graphic
 
 import android.content.res.Resources
 import android.graphics.*
-import com.abubusoft.xenon.core.graphic.BitmapManager.Companion.wrapBitmap
 import java.io.BufferedInputStream
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -49,8 +48,8 @@ object SampledBitmapFactory {
         // The target rectangle for the new, scaled version of the source bitmap
         // will now be
         val targetRect = RectF(left, top, left + scaledWidth, top + scaledHeight)
-        val reducedImage: Bitmap = wrapBitmap(Bitmap.createScaledBitmap(source, scaledWidth.toInt(), scaledHeight.toInt(), false))
-        val dest: Bitmap = wrapBitmap(Bitmap.createBitmap(newWidth, newHeight, source.config))
+        val reducedImage: Bitmap = BitmapManager.wrapBitmap(Bitmap.createScaledBitmap(source, scaledWidth.toInt(), scaledHeight.toInt(), false))
+        val dest: Bitmap = BitmapManager.wrapBitmap(Bitmap.createBitmap(newWidth, newHeight, source.config))
         val canvas = Canvas(dest)
         canvas.drawBitmap(reducedImage, null, targetRect, null)
         reducedImage.recycle()
@@ -100,7 +99,7 @@ object SampledBitmapFactory {
         // Finally, we create a new bitmap of the specified size and draw our
         // new,
         // scaled bitmap onto it.
-        val dest: Bitmap = wrapBitmap(Bitmap.createBitmap(newWidth, newHeight, source.config))
+        val dest: Bitmap = BitmapManager.wrapBitmap(Bitmap.createBitmap(newWidth, newHeight, source.config))
         val canvas = Canvas(dest)
         canvas.drawBitmap(source, null, targetRect, null)
         return dest
@@ -120,10 +119,10 @@ object SampledBitmapFactory {
         val image1 = decodeBitmap(res, resId, reqWidth, reqHeight, null)
         var image2: Bitmap? = null
         when (type) {
-            ScalePositionType.CROP_CENTER -> image2 = wrapBitmap(cropCenter(image1, reqWidth, reqHeight))
-            ScalePositionType.FIT_WIDTH_TOP -> image2 = wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
-            ScalePositionType.FIT_WIDTH_CENTER -> image2 = wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
-            ScalePositionType.FIT_WIDTH_BOTTOM -> image2 = wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
+            ScalePositionType.CROP_CENTER -> image2 = BitmapManager.wrapBitmap(cropCenter(image1, reqWidth, reqHeight))
+            ScalePositionType.FIT_WIDTH_TOP -> image2 = BitmapManager.wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
+            ScalePositionType.FIT_WIDTH_CENTER -> image2 = BitmapManager.wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
+            ScalePositionType.FIT_WIDTH_BOTTOM -> image2 = BitmapManager.wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
             else -> {}
         }
 
@@ -152,10 +151,10 @@ object SampledBitmapFactory {
         val image1 = Bitmap.createScaledBitmap(sourceBitmap!!, reqWidth, reqHeight, true)
         var image2: Bitmap? = null
         when (type) {
-            ScalePositionType.CROP_CENTER -> image2 = wrapBitmap(cropCenter(image1, reqWidth, reqHeight))
-            ScalePositionType.FIT_WIDTH_TOP -> image2 = wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
-            ScalePositionType.FIT_WIDTH_CENTER -> image2 = wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
-            ScalePositionType.FIT_WIDTH_BOTTOM -> image2 = wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
+            ScalePositionType.CROP_CENTER -> image2 = BitmapManager.wrapBitmap(cropCenter(image1, reqWidth, reqHeight))
+            ScalePositionType.FIT_WIDTH_TOP -> image2 = BitmapManager.wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
+            ScalePositionType.FIT_WIDTH_CENTER -> image2 = BitmapManager.wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
+            ScalePositionType.FIT_WIDTH_BOTTOM -> image2 = BitmapManager.wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
             else -> {}
         }
 
@@ -182,14 +181,14 @@ object SampledBitmapFactory {
         val image1 = decodeBitmap(imageFileName, reqWidth, reqHeight, null)
         var image2: Bitmap? = null
         when (type) {
-            ScalePositionType.CROP_CENTER -> image2 = wrapBitmap(cropCenter(image1, reqWidth, reqHeight))
-            ScalePositionType.FIT_WIDTH_TOP -> image2 = wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
-            ScalePositionType.FIT_WIDTH_CENTER -> image2 = wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
-            ScalePositionType.FIT_WIDTH_BOTTOM -> image2 = wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
+            ScalePositionType.CROP_CENTER -> image2 = BitmapManager.wrapBitmap(cropCenter(image1, reqWidth, reqHeight))
+            ScalePositionType.FIT_WIDTH_TOP -> image2 = BitmapManager.wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
+            ScalePositionType.FIT_WIDTH_CENTER -> image2 = BitmapManager.wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
+            ScalePositionType.FIT_WIDTH_BOTTOM -> image2 = BitmapManager.wrapBitmap(scaleWidth(image1, reqWidth, reqHeight, type))
             else -> {}
         }
 
-        // wrapBitmap(cropCenter(image1, reqWidth, reqHeight));
+        // BitmapManager.wrapBitmap(cropCenter(image1, reqWidth, reqHeight));
         // se possibile lo ricicliamo
         if (image1 != image2) {
             image1!!.recycle()
@@ -259,7 +258,7 @@ object SampledBitmapFactory {
 
         // ricicliamo bitmap
         if (temp != null && !temp.isRecycled) temp.recycle()
-        return wrapBitmap(BitmapFactory.decodeResource(res, resId, options))
+        return BitmapManager.wrapBitmap(BitmapFactory.decodeResource(res, resId, options))
     }
 
     /**
@@ -305,7 +304,7 @@ object SampledBitmapFactory {
 
             val bitmap = BitmapFactory.decodeStream(bis, null, options)
             if (bitmap != null) {
-                bp = wrapBitmap(bitmap)
+                bp = BitmapManager.wrapBitmap(bitmap)
             }
         } catch (e: FileNotFoundException) {
             e.printStackTrace()

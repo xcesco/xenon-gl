@@ -11,7 +11,7 @@ import com.abubusoft.xenon.core.sensor.internal.AttachedSensors
  * @author Alexander Pacha
  */
 @AttachedSensors(Sensor.TYPE_GRAVITY, Sensor.TYPE_MAGNETIC_FIELD)
-class GravityCompassProvider : OrientationProvider() {
+object GravityCompassProvider : OrientationProvider() {
     /**
      * Compass values
      */
@@ -38,15 +38,5 @@ class GravityCompassProvider : OrientationProvider() {
             currentOrientationQuaternion.setRowMajor(currentOrientationRotationMatrix.matrix)
         }
         update()
-    }
-
-    companion object {
-        var instance: GravityCompassProvider? = null
-        fun instance(): GravityCompassProvider? {
-            if (instance == null) {
-                instance = GravityCompassProvider()
-            }
-            return instance
-        }
     }
 }

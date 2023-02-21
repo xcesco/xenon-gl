@@ -38,7 +38,7 @@ import com.abubusoft.xenon.core.sensor.orientation.*
  *
  * @author Francesco Benincasa
  */
-class ElioSensorManager private constructor() : SensorEventListener {
+object ElioSensorManager : SensorEventListener {
     /**
      * Stati del manager
      *
@@ -119,13 +119,13 @@ class ElioSensorManager private constructor() : SensorEventListener {
     /**
      * insieme degli eventi
      */
-    private val sensorsToProviders: SparseArray<ArrayList<InputSensorProvider?>>
+    private val sensorsToProviders: SparseArray<ArrayList<InputSensorProvider>> = SparseArray()
     private var initDone = false
 
     /**
      * detector di input relativi ai sensori agganciati
      */
-    private val providers: HashSet<InputSensorProvider?>
+    private val providers: HashSet<InputSensorProvider>
 
     /**
      * configurazione del manager
@@ -163,12 +163,7 @@ class ElioSensorManager private constructor() : SensorEventListener {
      *
      *
      * Abilita la rilevazione dei sensori relativi all'orientamento del dispositivo.
-     *
-     *
-     *
-     *
      * Di seguito riportiamo i movimenti ed i relativi assi di rotazione
-     *
      *
      * <pre>
      * ^ Roll (z)
@@ -186,23 +181,21 @@ class ElioSensorManager private constructor() : SensorEventListener {
      * @param config
      * @param listener
      */
-    fun enableOrientation(config: OrientationInputConfig, listener: OrientationInputListener?) {
+    fun enableOrientation(config: OrientationInputConfig, listener: OrientationInputListener) {
         if (deviceOrientation) return
         var provider: OrientationProvider? = null
         provider = when (config.provider) {
-            ProviderType.ACCELEROMETER_COMPASS -> AccelerometerCompassProvider.instance()
-            ProviderType.CALIBRATE_COMPASS -> CalibratedGyroscopeProvider.instance()
-            ProviderType.GRAVITY_COMPASS -> GravityCompassProvider.instance()
-            ProviderType.IMPROVED_ORIENTATION_SENSOR2 -> Fusion2OrientationProvider.instance()
-            ProviderType.ROTATION_VECTOR -> RotationVectorProvider.instance()
-            ProviderType.IMPROVED_ORIENTATION_SENSOR1 -> Fusion1OrientationProvider.instance()
+            ProviderType.ACCELEROMETER_COMPASS -> AccelerometerCompassProvider
+            ProviderType.CALIBRATE_COMPASS -> CalibratedGyroscopeProvider
+            ProviderType.GRAVITY_COMPASS -> GravityCompassProvider
+            ProviderType.IMPROVED_ORIENTATION_SENSOR2 -> Fusion2OrientationProvider
+            ProviderType.ROTATION_VECTOR -> RotationVectorProvider
+            ProviderType.IMPROVED_ORIENTATION_SENSOR1 -> Fusion1OrientationProvider
         }
-        if (provider != null && !providers.contains(provider)) {
+        if (!providers.contains(provider)) {
             providers.add(provider)
             deviceOrientation = true
-            if (listener != null) {
-                provider.addListener(config, listener)
-            }
+            provider.addListener(config, listener)
         }
     }
 
@@ -214,7 +207,7 @@ class ElioSensorManager private constructor() : SensorEventListener {
         deviceCompass = true
     }
 
-    fun enableShake(config: ShakeInputConfig?, listener: ShakeInputListener?) {
+    fun enableShake(config: ShakeInputConfig, listener: ShakeInputListener) {
         val detector = ShakeInputDetector.instance()
         detector.addListener(config, listener)
         // aggiungiamo il detector associato
@@ -227,7 +220,6 @@ class ElioSensorManager private constructor() : SensorEventListener {
      */
     fun onPause() {
         if (status == StatusType.STARTED) {
-            // Logger.info("onPause sensor listeners");
             unregistryListener()
         }
     }
@@ -248,18 +240,17 @@ class ElioSensorManager private constructor() : SensorEventListener {
     fun startMeasure() {
         if (status == StatusType.STARTED) return
         if (providers.size == 0) {
-            // Logger.info("No sensor to activate!");
         } else {
             // puliamo sensori
             sensorsToProviders.clear()
-            var sensorTypes: HashSet<Int?>
-            var currentList: ArrayList<InputSensorProvider?>
+            var sensorTypes: HashSet<Int>
+            var currentList: ArrayList<InputSensorProvider>
             // prendiamo tutti i detector di sensori
             for (item in providers) {
-                sensorTypes = item!!.attachedTypeofSensors
+                sensorTypes = item.getAttachedTypeofSensors()
                 // registriamoli con i vari sensori sensorsToDetectors
                 for (sensorType in sensorTypes) {
-                    if (sensorsToProviders.indexOfKey(sensorType!!) < 0) {
+                    if (sensorsToProviders.indexOfKey(sensorType) < 0) {
                         sensorsToProviders.append(sensorType, ArrayList())
                     }
                     currentList = sensorsToProviders[sensorType]
@@ -273,7 +264,6 @@ class ElioSensorManager private constructor() : SensorEventListener {
 
     fun onResume() {
         if (status == StatusType.STARTED) {
-            // Logger.info("onResume sensor listeners");
             registryListener()
         }
     }
@@ -294,7 +284,6 @@ class ElioSensorManager private constructor() : SensorEventListener {
      * costruttore
      */
     init {
-        sensorsToProviders = SparseArray()
         providers = HashSet()
         status = StatusType.STOPPED
         deviceOrientation = false
@@ -306,24 +295,8 @@ class ElioSensorManager private constructor() : SensorEventListener {
         if (sensorIndex >= 0) {
             val currentDetectors = sensorsToProviders.valueAt(sensorIndex)
             for (i in currentDetectors.indices) {
-                currentDetectors.get(i)!!.onSensorChanged(event)
+                currentDetectors.get(i).onSensorChanged(event)
             }
-        }
-    }
-
-    companion object {
-        /**
-         * istanza
-         */
-        private val instance = ElioSensorManager()
-
-        /**
-         * instanza singleton
-         *
-         * @return instanza singleton
-         */
-        fun instance(): ElioSensorManager {
-            return instance
         }
     }
 }

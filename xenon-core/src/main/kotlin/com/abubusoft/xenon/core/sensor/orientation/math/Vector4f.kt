@@ -7,7 +7,7 @@ import java.io.Serializable
  */
 open class Vector4f : Renderable, Serializable {
     /** The points.  */
-    protected var points = floatArrayOf(0f, 0f, 0f, 0f)
+    val points = floatArrayOf(0f, 0f, 0f, 0f)
 
     /**
      * Instantiates a new vector4f.

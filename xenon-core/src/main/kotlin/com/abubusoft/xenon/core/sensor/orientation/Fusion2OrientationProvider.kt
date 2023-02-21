@@ -15,7 +15,7 @@ import com.abubusoft.xenon.core.sensor.orientation.math.Quaternion
  * @author Alexander Pacha
  */
 @AttachedSensors(Sensor.TYPE_GYROSCOPE, Sensor.TYPE_ROTATION_VECTOR)
-class Fusion2OrientationProvider : OrientationProvider() {
+object Fusion2OrientationProvider : OrientationProvider() {
     /**
      * The quaternion that stores the difference that is obtained by the gyroscope. Basically it contains a rotational difference encoded into a quaternion.
      *
@@ -183,57 +183,49 @@ class Fusion2OrientationProvider : OrientationProvider() {
         }
     }
 
-    companion object {
-        var instance: Fusion2OrientationProvider? = null
-        fun instance(): Fusion2OrientationProvider? {
-            if (instance == null) {
-                instance = Fusion2OrientationProvider()
-            }
-            return instance
-        }
 
-        /**
-         * Constant specifying the factor between a Nano-second and a second
-         */
-        private const val NS2S = 1.0f / 1000000000.0f
+    /**
+     * Constant specifying the factor between a Nano-second and a second
+     */
+    private const val NS2S = 1.0f / 1000000000.0f
 
-        /**
-         * This is a filter-threshold for discarding Gyroscope measurements that are below a certain level and potentially are only noise and not real motion. Values from the gyroscope are usually between 0 (stop) and 10 (rapid rotation), so
-         * 0.1 seems to be a reasonable threshold to filter noise (usually smaller than 0.1) and real motion (usually > 0.1). Note that there is a chance of missing real motion, if the use is turning the device really slowly, so this value has
-         * to find a balance between accepting noise (threshold = 0) and missing slow user-action (threshold > 0.5). 0.1 seems to work fine for most applications.
-         *
-         */
-        private const val EPSILON = 0.1
+    /**
+     * This is a filter-threshold for discarding Gyroscope measurements that are below a certain level and potentially are only noise and not real motion. Values from the gyroscope are usually between 0 (stop) and 10 (rapid rotation), so
+     * 0.1 seems to be a reasonable threshold to filter noise (usually smaller than 0.1) and real motion (usually > 0.1). Note that there is a chance of missing real motion, if the use is turning the device really slowly, so this value has
+     * to find a balance between accepting noise (threshold = 0) and missing slow user-action (threshold > 0.5). 0.1 seems to work fine for most applications.
+     *
+     */
+    private const val EPSILON = 0.1
 
-        /**
-         * This weight determines indirectly how much the rotation sensor will be used to correct. This weight will be multiplied by the velocity to obtain the actual weight. (in sensor-fusion-scenario 2 -
-         * SensorSelection.GyroscopeAndRotationVector2). Must be a value between 0 and approx. 0.04 (because, if multiplied with a velocity of up to 25, should be still less than 1, otherwise the SLERP will not correctly interpolate). Should be
-         * close to zero.
-         */
-        private const val INDIRECT_INTERPOLATION_WEIGHT = 0.01f
+    /**
+     * This weight determines indirectly how much the rotation sensor will be used to correct. This weight will be multiplied by the velocity to obtain the actual weight. (in sensor-fusion-scenario 2 -
+     * SensorSelection.GyroscopeAndRotationVector2). Must be a value between 0 and approx. 0.04 (because, if multiplied with a velocity of up to 25, should be still less than 1, otherwise the SLERP will not correctly interpolate). Should be
+     * close to zero.
+     */
+    private const val INDIRECT_INTERPOLATION_WEIGHT = 0.01f
 
-        /**
-         * The threshold that indicates an outlier of the rotation vector. If the dot-product between the two vectors (gyroscope orientation and rotationVector orientation) falls below this threshold (ideally it should be 1, if they are exactly
-         * the same) the system falls back to the gyroscope values only and just ignores the rotation vector.
-         *
-         * This value should be quite high (> 0.7) to filter even the slightest discrepancies that causes jumps when tiling the device. Possible values are between 0 and 1, where a value close to 1 means that even a very small difference
-         * between the two sensors will be treated as outlier, whereas a value close to zero means that the almost any discrepancy between the two sensors is tolerated.
-         */
-        private const val OUTLIER_THRESHOLD = 0.85f
+    /**
+     * The threshold that indicates an outlier of the rotation vector. If the dot-product between the two vectors (gyroscope orientation and rotationVector orientation) falls below this threshold (ideally it should be 1, if they are exactly
+     * the same) the system falls back to the gyroscope values only and just ignores the rotation vector.
+     *
+     * This value should be quite high (> 0.7) to filter even the slightest discrepancies that causes jumps when tiling the device. Possible values are between 0 and 1, where a value close to 1 means that even a very small difference
+     * between the two sensors will be treated as outlier, whereas a value close to zero means that the almost any discrepancy between the two sensors is tolerated.
+     */
+    private const val OUTLIER_THRESHOLD = 0.85f
 
-        /**
-         * The threshold that indicates a massive discrepancy between the rotation vector and the gyroscope orientation. If the dot-product between the two vectors (gyroscope orientation and rotationVector orientation) falls below this
-         * threshold (ideally it should be 1, if they are exactly the same), the system will start increasing the panic counter (that probably indicates a gyroscope failure).
-         *
-         * This value should be lower than OUTLIER_THRESHOLD (0.5 - 0.7) to only start increasing the panic counter, when there is a huge discrepancy between the two fused sensors.
-         */
-        private const val OUTLIER_PANIC_THRESHOLD = 0.75f
+    /**
+     * The threshold that indicates a massive discrepancy between the rotation vector and the gyroscope orientation. If the dot-product between the two vectors (gyroscope orientation and rotationVector orientation) falls below this
+     * threshold (ideally it should be 1, if they are exactly the same), the system will start increasing the panic counter (that probably indicates a gyroscope failure).
+     *
+     * This value should be lower than OUTLIER_THRESHOLD (0.5 - 0.7) to only start increasing the panic counter, when there is a huge discrepancy between the two fused sensors.
+     */
+    private const val OUTLIER_PANIC_THRESHOLD = 0.75f
 
-        /**
-         * The threshold that indicates that a chaos state has been established rather than just a temporary peak in the rotation vector (caused by exploding angled during fast tilting).
-         *
-         * If the chaosCounter is bigger than this threshold, the current position will be reset to whatever the rotation vector indicates.
-         */
-        private const val PANIC_THRESHOLD = 60
-    }
+    /**
+     * The threshold that indicates that a chaos state has been established rather than just a temporary peak in the rotation vector (caused by exploding angled during fast tilting).
+     *
+     * If the chaosCounter is bigger than this threshold, the current position will be reset to whatever the rotation vector indicates.
+     */
+    private const val PANIC_THRESHOLD = 60
+
 }
