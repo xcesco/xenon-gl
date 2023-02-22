@@ -41,8 +41,6 @@ import javax.microedition.khronos.opengles.GL10
  *
  * A GLSurfaceView provides the following features:
  *
- *
- *
  *  * Manages a surface, which is a special piece of memory that can be composited into the Android view system.
  *  * Manages an EGL display, which enables OpenGL to render into a surface.
  *  * Accepts a user-provided Renderer object that does the actual rendering.

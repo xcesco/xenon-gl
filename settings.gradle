@@ -16,3 +16,4 @@ rootProject.name = "XenonGL"
 include ':app'
 include ':xenon-android-library'
 include ':xenon-core'
+include ':xenon-views'

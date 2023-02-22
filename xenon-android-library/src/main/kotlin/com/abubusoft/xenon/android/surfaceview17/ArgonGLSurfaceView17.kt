@@ -42,10 +42,10 @@ class ArgonGLSurfaceView17 : ArgonGLView, SurfaceHolder.Callback {
             val attrib_list = intArrayOf(EGL_CONTEXT_CLIENT_VERSION, mEGLContextClientVersion, EGL14.EGL_NONE)
             val context = EGL14.eglCreateContext(display, config, EGL14.EGL_NO_CONTEXT, if (mEGLContextClientVersion != 0) attrib_list else null, 0)
             val settings = XenonBeanContext.getBean<XenonSettings>(XenonBeanType.XENON_SETTINGS)
-            if (settings.openGL.asyncMode) {
-                AsyncOperationManager.instance().init(context, display, config)
+            if (settings?.openGL?.asyncMode ?: false) {
+                AsyncOperationManager.init(context, display, config)
             } else {
-                AsyncOperationManager.instance().init()
+                AsyncOperationManager.init()
             }
             return context
         }
@@ -55,7 +55,7 @@ class ArgonGLSurfaceView17 : ArgonGLView, SurfaceHolder.Callback {
             // async
             val settings = XenonBeanContext.getBean<XenonSettings>(XenonBeanType.XENON_SETTINGS)
             if (settings.openGL.asyncMode) {
-                if (!AsyncOperationManager.instance().destroy()) {
+                if (!AsyncOperationManager.destroy()) {
                     Logger.error("display: texture loader context: $context")
                     Logger.info("tid=" + Thread.currentThread().id)
                     Logger.error("eglDestroyContex %s", EGL14.eglGetError())
@@ -100,7 +100,7 @@ class ArgonGLSurfaceView17 : ArgonGLView, SurfaceHolder.Callback {
         }
 
         override fun destroySurface(display: EGLDisplay?, surface: EGLSurface?) {
-            if (EGL14.eglDestroySurface(display, surface) == false) {
+            if (!EGL14.eglDestroySurface(display, surface)) {
                 Logger.error("eglDestroySurface Failed")
             }
         }
@@ -395,7 +395,7 @@ class ArgonGLSurfaceView17 : ArgonGLView, SurfaceHolder.Callback {
      * All potentially blocking synchronization is done through the sGLThreadManager object. This avoids multiple-lock ordering issues.
      *
      */
-    internal inner class GLThread(instanceWeakRef: WeakReference<ArgonGLSurfaceView17>) : Thread() {
+    class GLThread(instanceWeakRef: WeakReference<ArgonGLSurfaceView17>) : Thread() {
         private var mEglHelper: EglHelper? = null
         val mEventQueue = ArrayList<Runnable>()
         var mExited = false
@@ -1137,7 +1137,6 @@ class ArgonGLSurfaceView17 : ArgonGLView, SurfaceHolder.Callback {
             return
         }
 
-        //this.hookCallbacks();
         mGLThread!!.onResume()
         mRenderer.onResume()
     }
@@ -1366,8 +1365,7 @@ class ArgonGLSurfaceView17 : ArgonGLView, SurfaceHolder.Callback {
                     if (EglHelper.cachedErrors != null && EglHelper.cachedErrors!!.size > 0) {
                         log = ""
                         for ((key, value) in EglHelper.cachedErrors!!) {
-                            log = """$log
->>$key ($value)"""
+                            log = """$log>>$key ($value)"""
                             if (log.length > 300) {
                                 log = "$log<<<<<Log Too Large>>>>>"
                                 break
