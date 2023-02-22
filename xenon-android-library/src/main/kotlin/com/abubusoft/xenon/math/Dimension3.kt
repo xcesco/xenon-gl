@@ -1,50 +1,48 @@
-package com.abubusoft.xenon.math;
+package com.abubusoft.xenon.math
 
-import java.io.Serializable;
-
-import com.abubusoft.kripton.annotation.Bind;
-import com.abubusoft.kripton.annotation.BindType;
+import com.abubusoft.kripton.annotation.Bind
+import com.abubusoft.kripton.annotation.BindType
+import java.io.Serializable
 
 /**
  * Dimensioni 3d
- * 
- * @author Francesco Benincasa
  *
+ * @author Francesco Benincasa
  */
 @BindType
-public class Dimension3 implements Serializable {
-	
-	private static final long serialVersionUID = 3425624648092503466L;
+class Dimension3 : Serializable {
+    /**
+     * larghezza
+     */
+    @Bind
+    var width = 0f
 
-	/**
-	 * larghezza
-	 */
-	@Bind
-	public float width;
-	
-	/**
-	 * altezza
-	 */
-	@Bind
-	public float height;
-	
-	/**
-	 * profondità
-	 */
-	@Bind
-	public float depth;
-	
-	/**
-	 * Imposta in un'unica volta i tre valori
-	 * 
-	 * @param width
-	 * @param height
-	 * @param depth
-	 */
-	public void set(float width, float height, float depth)
-	{
-		this.width=width;
-		this.height=height;
-		this.depth=depth;
-	}
+    /**
+     * altezza
+     */
+    @Bind
+    var height = 0f
+
+    /**
+     * profondità
+     */
+    @Bind
+    var depth = 0f
+
+    /**
+     * Imposta in un'unica volta i tre valori
+     *
+     * @param width
+     * @param height
+     * @param depth
+     */
+    operator fun set(width: Float, height: Float, depth: Float) {
+        this.width = width
+        this.height = height
+        this.depth = depth
+    }
+
+    companion object {
+        private const val serialVersionUID = 3425624648092503466L
+    }
 }

@@ -9,13 +9,13 @@ import android.opengl.GLES20;
  * <p>
  * Specifies the data allocation of the pixel data. Per il momento supportiamo texture i cui elementi sono unsigned byte, e float
  * </p>
- * 
+ *
  * <p>
- * {@link https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glTexSubImage2D.xml}
+ * {@link <a href="https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glTexSubImage2D.xml">...</a>}
  * </p>
- * 
+ *
  * @author Francesco Benincasa
- * 
+ *
  */
 public enum TextureInternalFormatType {
 	/**

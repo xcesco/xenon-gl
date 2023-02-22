@@ -24,7 +24,6 @@ public class TextureReplaceOptions {
 		return (new TextureReplaceOptions()).asyncLoad(false);
 	}
 	
-	
 	/**
 	 * <p>
 	 * Carica la bitmap in async mode

@@ -14,32 +14,32 @@ class BufferAllocationOptions {
      * tipo di index buffer
      *
      */
-    var indexAllocation: BufferAllocationType? = null
+    lateinit var indexAllocation: BufferAllocationType
 
     /**
      * tipo di vertex buffer
      */
-    var vertexAllocation: BufferAllocationType? = null
+    lateinit var vertexAllocation: BufferAllocationType
 
     /**
      * tipo di texture buffer
      */
-    var textureAllocation: BufferAllocationType? = null
+    lateinit var textureAllocation: BufferAllocationType
 
     /**
      * tipo di color buffer
      */
-    var colorAllocation: BufferAllocationType? = null
+    lateinit var colorAllocation: BufferAllocationType
 
     /**
      * allocazione per le normali
      */
-    var normalAllocation: BufferAllocationType? = null
+    lateinit var normalAllocation: BufferAllocationType
 
     /**
      * allocazione per gli attributi
      */
-    var attributeAllocation: BufferAllocationType? = null
+    lateinit var attributeAllocation: BufferAllocationType
 
     /**
      *
@@ -50,7 +50,7 @@ class BufferAllocationOptions {
      * @param value
      * @return this
      */
-    fun allocation(value: BufferAllocationType?): BufferAllocationOptions {
+    fun allocation(value: BufferAllocationType): BufferAllocationOptions {
         textureAllocation = value
         vertexAllocation = value
         indexAllocation = value

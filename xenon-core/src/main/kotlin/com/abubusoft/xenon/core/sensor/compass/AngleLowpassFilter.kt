@@ -32,9 +32,9 @@ class AngleLowpassFilter {
         sumCos += Math.cos(radians.toDouble()).toFloat()
         queue.add(radians)
         if (queue.size > LENGTH) {
-            val old = queue.poll()
-            sumSin -= Math.sin(old.toDouble()).toFloat()
-            sumCos -= Math.cos(old.toDouble()).toFloat()
+            val old = queue.poll()?.toDouble() ?: 0.0
+            sumSin -= Math.sin(old).toFloat()
+            sumCos -= Math.cos(old).toFloat()
         }
     }
 

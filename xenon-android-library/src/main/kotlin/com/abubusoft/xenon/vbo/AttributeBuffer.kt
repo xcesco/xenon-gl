@@ -50,8 +50,7 @@ class AttributeBuffer : AbstractBuffer {
      * Se il tipo di allocazione è di tipo [BufferAllocationType.STATIC] allora questo array punta, dopo il metodo [.update]
      *
      */
-    @BindXml(elementTag = "v")
-    private var coords: FloatArray? = null
+    @BindXml(elementTag = "v") var coords: FloatArray? = null
 
     /**
      * coordinate che vengono usati nel caso in cui il buffer sia di tipo senza VertexBuffer

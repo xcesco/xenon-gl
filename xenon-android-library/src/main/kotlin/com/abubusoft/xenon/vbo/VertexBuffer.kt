@@ -28,7 +28,7 @@ import java.nio.FloatBuffer
  */
 @BindType
 class VertexBuffer : AbstractBuffer {
-    internal constructor(vertexCountValue: Int, allocationValue: BufferAllocationType?) : super(vertexCountValue, POSITION_DIMENSIONS, allocationValue) {
+    internal constructor(vertexCountValue: Int, allocationValue: BufferAllocationType) : super(vertexCountValue, POSITION_DIMENSIONS, allocationValue) {
         coords = FloatArray(capacity)
         build()
     }

@@ -1,21 +1,19 @@
-package com.abubusoft.xenon.texture;
+package com.abubusoft.xenon.texture
 
-import com.abubusoft.xenon.core.Uncryptable;
-
-import android.graphics.Bitmap;
+import android.graphics.Bitmap
+import com.abubusoft.xenon.core.Uncryptable
 
 /**
  * Serve a trasformare una bitmap prima di inserirla come una texture
  * @author Francesco Benincasa
- *
  */
-public interface BitmapTransformation extends Uncryptable {
-
-	/**
-	 * <p>Elabora la bitmap prima di inserirla nella texture.</p>
-	 * 
-	 * @param source
-	 * @return
-	 */
-	Bitmap transform(Bitmap source);
+interface BitmapTransformation {
+    /**
+     *
+     * Elabora la bitmap prima di inserirla nella texture.
+     *
+     * @param source
+     * @return
+     */
+    fun transform(source: Bitmap): Bitmap
 }

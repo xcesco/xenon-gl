@@ -1,133 +1,113 @@
 /**
- * 
+ *
  */
-package com.abubusoft.xenon.math;
+package com.abubusoft.xenon.math
 
-import static com.abubusoft.xenon.math.XenonMath.power2;
-import static com.abubusoft.xenon.math.XenonMath.sqrt;
-import static com.abubusoft.xenon.math.XenonMath.abs;
-
-import com.abubusoft.kripton.annotation.BindType;
+import com.abubusoft.kripton.annotation.BindType
+import com.abubusoft.xenon.math.XenonMath.abs
+import com.abubusoft.xenon.math.XenonMath.power2
+import com.abubusoft.xenon.math.XenonMath.power2I
+import com.abubusoft.xenon.math.XenonMath.sqrt
 
 /**
  * Punto in un sistema di coordinate unicamente intere.
  * @author Francesco Benincasa
- *
  */
 @BindType
-public class PointI2 {
-
-	/* (non-Javadoc)
+class PointI2 {
+    /* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + x;
-		result = prime * result + y;
-		return result;
-	}
+    override fun hashCode(): Int {
+        val prime = 31
+        var result = 1
+        result = prime * result + x
+        result = prime * result + y
+        return result
+    }
 
-	/* (non-Javadoc)
+    /* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PointI2 other = (PointI2) obj;
-		if (x != other.x)
-			return false;
-		if (y != other.y)
-			return false;
-		return true;
-	}
+    override fun equals(obj: Any?): Boolean {
+        if (this === obj) return true
+        if (obj == null) return false
+        if (javaClass != obj.javaClass) return false
+        val other = obj as PointI2
+        if (x != other.x) return false
+        return if (y != other.y) false else true
+    }
 
-	public PointI2()
-	{
-		
-	}
-	
-	public PointI2(int x, int y)
-	{
-		this.x=x;
-		this.y=y;
-		
-	}
-	
-	public int x;
-	public int y;	
-	
-	public float distance(PointI2 point2)
-	{
-		return sqrt(power2(point2.x-x))+(power2(point2.y-y));
-	}
-	
-	public float distance2(PointI2 point2)
-	{
-		return abs(power2(point2.x-x))+(power2(point2.y-y));
-	}
-	
+    constructor() {}
 
-	/* (non-Javadoc)
+    constructor(x: Int, y: Int) {
+        this.x = x
+        this.y = y
+    }
+
+    var x = 0
+    var y = 0
+
+    fun distance(point2: PointI2): Float {
+        return sqrt((power2I(point2.x - x) + power2I(point2.y - y)).toFloat())
+    }
+
+    fun distance2(point2: PointI2): Float {
+        return abs((power2I(point2.x - x) + power2I(point2.y - y)).toFloat())
+    }
+
+    /* (non-Javadoc)
 	 * @see com.abubusoft.xenon.core.util.Copy#copy()
 	 */
-	public PointI2 copy()
-	{
-		return new PointI2(x,y);
-	}
+    fun copy(): PointI2 {
+        return PointI2(x, y)
+    }
 
-	/**
-	 * Alternativa al new
-	 * 
-	 * @param x
-	 * 		x
-	 * @param y
-	 * 		y
-	 * @return
-	 * 		nuovo punto con le coordinate impostate
-	 */
-	public static PointI2 set(int x, int y) {
-		return new PointI2(x, y);
-	}
-	
-	/**
-	 * Imposta le coordinate del punto
-	 * 
-	 * @param xValue
-	 * @param yValue
-	 */
-	public void setCoords(int xValue, int yValue)
-	{
-		this.x=xValue;
-		this.y=yValue;
-	}
-	
-	/**
-	 * Aggiunge alle coordinate del punto
-	 * 
-	 * @param xValue
-	 * @param yValue
-	 */
-	public void addCoords(int xValue, int yValue)
-	{
-		this.x+=xValue;
-		this.y+=yValue;
-	}
+    /**
+     * Imposta le coordinate del punto
+     *
+     * @param xValue
+     * @param yValue
+     */
+    fun setCoords(xValue: Int, yValue: Int) {
+        x = xValue
+        y = yValue
+    }
 
-	/**
-	 * Copia il punto in un altro punto
-	 * 
-	 * @param destination
-	 */
-	public void copyInto(PointI2 destination) {
-		destination.x=x;
-		destination.y=y;
-		
-	}
+    /**
+     * Aggiunge alle coordinate del punto
+     *
+     * @param xValue
+     * @param yValue
+     */
+    fun addCoords(xValue: Int, yValue: Int) {
+        x += xValue
+        y += yValue
+    }
+
+    /**
+     * Copia il punto in un altro punto
+     *
+     * @param destination
+     */
+    fun copyInto(destination: PointI2) {
+        destination.x = x
+        destination.y = y
+    }
+
+    companion object {
+        /**
+         * Alternativa al new
+         *
+         * @param x
+         * x
+         * @param y
+         * y
+         * @return
+         * nuovo punto con le coordinate impostate
+         */
+        operator fun set(x: Int, y: Int): PointI2 {
+            return PointI2(x, y)
+        }
+    }
 }

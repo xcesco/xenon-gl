@@ -37,6 +37,8 @@ import com.abubusoft.xenon.core.sensor.orientation.*
  * </pre>
  *
  * @author Francesco Benincasa
+ *
+ * <a href="https://github.com/xcesco/xenon-gl/wiki/Sensors">vedi wiki</a>
  */
 object ElioSensorManager : SensorEventListener {
     /**

@@ -1,32 +1,25 @@
 /**
- * 
+ *
  */
-package com.abubusoft.xenon.math;
+package com.abubusoft.xenon.math
 
-import com.abubusoft.xenon.engine.Phase;
-import com.abubusoft.xenon.engine.SharedData;
-import com.abubusoft.xenon.math.Vector3;
+import com.abubusoft.xenon.engine.Phase
+import com.abubusoft.xenon.engine.SharedData
 
 /**
  * @author Francesco Benincasa
- *
  */
-public class SharedVector3 implements SharedData {
-	
-	Vector3 values[]=new Vector3[2];
+class SharedVector3 : SharedData {
+    var values = arrayOfNulls<Vector3>(2)
+    override fun update() {
+        values[0]!!.copyInto(values[1]!!)
+    }
 
-	@Override
-	public void update() {
-		values[0].copyInto(values[1]);
-	}
-	
-	public Vector3 get(Phase phase)
-	{
-		return values[phase.ordinal()];
-	}
+    operator fun get(phase: Phase): Vector3? {
+        return values[phase.ordinal]
+    }
 
-	public Vector3 get()
-	{
-		return values[Phase.LOGIC.ordinal()];
-	}
+    fun get(): Vector3? {
+        return values[Phase.LOGIC.ordinal]
+    }
 }

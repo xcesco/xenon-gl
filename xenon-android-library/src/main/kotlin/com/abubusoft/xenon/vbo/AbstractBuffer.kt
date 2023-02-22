@@ -7,7 +7,7 @@ import com.abubusoft.xenon.mesh.QuadMesh
 import java.io.Serializable
 
 abstract class AbstractBuffer : SharedData, Serializable {
-    internal constructor(vertexCountValue: Int, vertexDimensionValue: Int, allocationValue: BufferAllocationType?) {
+    internal constructor(vertexCountValue: Int, vertexDimensionValue: Int, allocationValue: BufferAllocationType) {
         allocation = allocationValue
         vertexCount = vertexCountValue
         vertexDimension = vertexDimensionValue
@@ -20,15 +20,9 @@ abstract class AbstractBuffer : SharedData, Serializable {
     }
 
     /**
-     *
-     *
      * Indica se è stato già fatto il primo update.
      *
-     *
-     *
-     *
      * Se `true` indica se deve essere fatto il prima update.
-     *
      */
     @BindDisabled
     @Transient
@@ -86,20 +80,14 @@ abstract class AbstractBuffer : SharedData, Serializable {
         } else true
 
     /**
-     *
-     *
      * Sposta il cursore di n posizioni. Il nextVertex viene moltiplicato per le dimensioni dei vertici.
-     *
      */
     fun cursorMove(nextVertex: Int) {
         cursor += nextVertex * vertexDimension
     }
 
     /**
-     *
-     *
      * Legge il cursore attuale. Si può usare direttamente l'attributo cursor.
-     *
      *
      * @return valore cursori
      */
@@ -116,7 +104,7 @@ abstract class AbstractBuffer : SharedData, Serializable {
      * tipo di buffer. Messo qua da options per comodità
      */
     @Bind
-    var allocation: BufferAllocationType? = null
+    lateinit var allocation: BufferAllocationType
 
     /**
      * costruisce in base ai parametri già definiti nel buffer il buffer interno.

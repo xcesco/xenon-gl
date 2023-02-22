@@ -1,18 +1,12 @@
 /**
- * 
- */
-package com.abubusoft.xenon.texture;
-
-/**
- * <p></p>
- * 
- * @author Francesco Benincasa
  *
  */
-public class CubeTexture extends Texture {
+package com.abubusoft.xenon.texture
 
-	CubeTexture(String name, int bindingId) {
-		super(name, bindingId);
-	}
-
-}
+/**
+ *
+ *
+ *
+ * @author Francesco Benincasa
+ */
+class CubeTexture internal constructor(name: String?, bindingId: Int) : Texture(name, bindingId)

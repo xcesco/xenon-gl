@@ -13,7 +13,9 @@ object BitmapManager {
     /**
      * indica se il bitmap manager è abilitato
      */
+    @JvmStatic
     var isEnabled = false
+
     private val bitmapList: MutableList<SoftReference<Bitmap>>
     private val stackList: MutableList<Array<StackTraceElement>>
 
@@ -29,6 +31,7 @@ object BitmapManager {
      * @param source
      * @return
      */
+    @JvmStatic
     fun wrap(source: Bitmap): Bitmap {
         if (isEnabled) {
             bitmapList.add(SoftReference(source))
@@ -40,6 +43,7 @@ object BitmapManager {
     /**
      * pulisce tutte le bitmap ancora in piedi
      */
+    @JvmStatic
     fun release() {
         var bitmap: Bitmap?
         var counter = 0
@@ -58,6 +62,7 @@ object BitmapManager {
      * @param source
      * @return
      */
+    @JvmStatic
     fun wrapBitmap(source: Bitmap): Bitmap {
         return wrap(source)
     }
