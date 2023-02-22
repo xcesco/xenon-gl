@@ -1,51 +1,42 @@
 /**
- * 
+ *
  */
-package com.abubusoft.xenon.mesh.tiledmaps;
-
-import java.util.ArrayList;
+package com.abubusoft.xenon.mesh.tiledmaps
 
 /**
  * @author Francesco Benincasa
- *
  */
-public class ObjClass extends ObjBase {
-	
-	public ObjClass()
-	{
-		category=CategoryType.CLASS;
-	}
-	
-	/**
-	 * layer di appartenenza dello shape
-	 */
-	public TiledLayer shapeLayer;
+class ObjClass : ObjBase() {
+    /**
+     * layer di appartenenza dello shape
+     */
+    var shapeLayer: TiledLayer? = null
 
-	/**
-	 * prima colonna da considerare per lo shape
-	 */
-	public int shapeColBegin;
+    /**
+     * prima colonna da considerare per lo shape
+     */
+    var shapeColBegin = 0
+    var shapeColSize = 0
+    var shapeRowBegin = 0
+    var shapeRowSize = 0
 
-	public int shapeColSize;
+    /**
+     * pixel da considerare in orizzontale per collocare lo shape rispetto alla posizione delle tile
+     */
+    var shapeColOffset = 0
 
-	public int shapeRowBegin;
+    /**
+     * pixel da considerare in verticale per collocare lo shape rispetto alla posizione delle tile
+     */
+    var shapeRowOffset = 0
 
-	public int shapeRowSize;
+    /**
+     *
+     * Elenco delle parti che compongono l'elemento.
+     */
+    var parts = ArrayList<ObjDefinition>()
 
-	/**
-	 * pixel da considerare in orizzontale per collocare lo shape rispetto alla posizione delle tile
-	 */
-	public int shapeColOffset;
-
-	/**
-	 * pixel da considerare in verticale per collocare lo shape rispetto alla posizione delle tile
-	 */
-	public int shapeRowOffset;
-
-	/**
-	 * <p>Elenco delle parti che compongono l'elemento.</p>
-	 */
-	public ArrayList<ObjDefinition> parts=new ArrayList<>();
-	
-	
+    init {
+        category = CategoryType.CLASS
+    }
 }

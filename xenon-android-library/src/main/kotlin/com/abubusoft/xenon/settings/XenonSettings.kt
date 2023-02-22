@@ -1,96 +1,88 @@
-package com.abubusoft.xenon.settings;
+package com.abubusoft.xenon.settings
 
-import com.abubusoft.kripton.annotation.Bind;
-import com.abubusoft.kripton.annotation.BindType;
-import com.abubusoft.kripton.annotation.BindXml;
-import com.abubusoft.kripton.xml.XmlType;
+import com.abubusoft.kripton.annotation.Bind
+import com.abubusoft.kripton.annotation.BindType
+import com.abubusoft.kripton.annotation.BindXml
+import com.abubusoft.kripton.xml.XmlType
 
 @BindType("settings")
-public class XenonSettings {
-	
-	public XenonSettings()
-	{
-		application=new ApplicationSettings();
-	}
-	
-	@Bind
-	@BindXml(xmlType=XmlType.ATTRIBUTE)
-	public String version="1.0.0";
+class XenonSettings {
+    @Bind
+    @BindXml(xmlType = XmlType.ATTRIBUTE)
+    var version = "1.0.0"
 
-	@Bind
-	public ApplicationSettings application=new ApplicationSettings();
-	
-	@Bind
-	public ViewFrustumSettings viewFrustum=new ViewFrustumSettings();
-	
-	@Bind
-	public OpenGLSettings openGL=new OpenGLSettings();
-	
-	@Bind
-	public LoggerSettings logger=new LoggerSettings();
-		
-	/**
-	 * Impostazioni standard per una grafica did tipo 2d (simulata)
-	 */
-	public static XenonSettings configAsWorld2D() {
-		XenonSettings instance = new XenonSettings();
+    @Bind
+    var application = ApplicationSettings()
 
-		// indica se disegnare in safe mode
-		instance.openGL.safeMode=true;
-		
-		instance.viewFrustum.projection = ProjectionType.ORTHOGONAL;
-		instance.viewFrustum.align = ViewFrustumAlignType.HEIGHT_ALIGN;		
+    @Bind
+    var viewFrustum = ViewFrustumSettings()
 
-		// vale solo per il 2D
-		instance.viewFrustum.size = 1000.0f;
+    @Bind
+    var openGL = OpenGLSettings()
 
-		// non serve
-		instance.viewFrustum.fieldOfView = 0;
+    @Bind
+    var logger = LoggerSettings()
 
-		instance.viewFrustum.zNear = -10.0f;
-		instance.viewFrustum.zFar = 10.0f;
+    init {
+        application = ApplicationSettings()
+    }
 
-		instance.openGL.version=1;
-		instance.openGL.debug = false;
-		instance.openGL.maxFPS = 30;
+    companion object {
+        /**
+         * Impostazioni standard per una grafica did tipo 2d (simulata)
+         */
+        fun configAsWorld2D(): XenonSettings {
+            val instance = XenonSettings()
 
-		// impostiamo i listener di default
-		instance.application.gestureListenerClazz = null;
-		
-		return instance;
-	}
+            // indica se disegnare in safe mode
+            instance.openGL.safeMode = true
+            instance.viewFrustum.projection = ProjectionType.ORTHOGONAL
+            instance.viewFrustum.align = ViewFrustumAlignType.HEIGHT_ALIGN
 
-	/**
-	 * @return
-	 */
-	public static XenonSettings configAsWorld3D() {
-		XenonSettings instance = new XenonSettings();
+            // vale solo per il 2D
+            instance.viewFrustum.size = 1000.0f
 
-		// indica se disegnare in safe mode
-		instance.openGL.safeMode=true;
-		
-		// parametri non devono essere resettati
-		instance.application.resetConfig = false;
+            // non serve
+            instance.viewFrustum.fieldOfView = 0f
+            instance.viewFrustum.zNear = -10.0f
+            instance.viewFrustum.zFar = 10.0f
+            instance.openGL.version = 1
+            instance.openGL.debug = false
+            instance.openGL.maxFPS = 30
 
-		instance.viewFrustum.projection = ProjectionType.PERSPECTIVE;
-		instance.viewFrustum.align = ViewFrustumAlignType.HEIGHT_ALIGN;
+            // impostiamo i listener di default
+            instance.application.gestureListenerClazz = null
+            return instance
+        }
 
-		// vale solo per il 2D
-		instance.viewFrustum.size = 0.0f;
+        /**
+         * @return
+         */
+        fun configAsWorld3D(): XenonSettings {
+            val instance = XenonSettings()
 
-		// non serve
-		instance.viewFrustum.fieldOfView = 60f;
-		instance.viewFrustum.zNear = 10f;
-		instance.viewFrustum.zFar = 3000f;
+            // indica se disegnare in safe mode
+            instance.openGL.safeMode = true
 
-		instance.openGL.version=1;
-		instance.openGL.debug = false;
-		instance.openGL.maxFPS = 30;
+            // parametri non devono essere resettati
+            instance.application.resetConfig = false
+            instance.viewFrustum.projection = ProjectionType.PERSPECTIVE
+            instance.viewFrustum.align = ViewFrustumAlignType.HEIGHT_ALIGN
 
-		// impostiamo i listener di default
-		instance.application.gestureListenerClazz = null;
+            // vale solo per il 2D
+            instance.viewFrustum.size = 0.0f
 
-		return instance;
-	}
+            // non serve
+            instance.viewFrustum.fieldOfView = 60f
+            instance.viewFrustum.zNear = 10f
+            instance.viewFrustum.zFar = 3000f
+            instance.openGL.version = 1
+            instance.openGL.debug = false
+            instance.openGL.maxFPS = 30
 
+            // impostiamo i listener di default
+            instance.application.gestureListenerClazz = null
+            return instance
+        }
+    }
 }

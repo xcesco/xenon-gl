@@ -1,51 +1,39 @@
-package com.abubusoft.xenon.render.effects;
+package com.abubusoft.xenon.render.effects
 
-import com.abubusoft.xenon.opengl.XenonGL;
-import com.abubusoft.xenon.shader.Shader;
-import com.abubusoft.xenon.shader.ShaderBuilder;
-import com.abubusoft.xenon.R;
+import android.opengl.GLES20
+import com.abubusoft.xenon.R
+import com.abubusoft.xenon.opengl.XenonGL.checkGlError
+import com.abubusoft.xenon.shader.Shader
+import com.abubusoft.xenon.shader.ShaderBuilder.Companion.build
 
-import android.opengl.GLES20;
+class WaveShader : Shader() {
+    private var waveAmountPtr = 0
+    private var waveDistortionPtr = 0
+    private var waveSpeedPtr = 0
 
-public class WaveShader extends Shader {
+    init {
+        builder = build(R.raw.effect_wave_vertex, R.raw.effect_wave_fragment, null)
+    }
 
-	public WaveShader() {
-		super();
+    override fun assignPtrs() {
+        super.assignPtrs()
+        waveAmountPtr = GLES20.glGetUniformLocation(programId, "u_wave_amount")
+        waveDistortionPtr = GLES20.glGetUniformLocation(programId, "u_wave_distortion")
+        waveSpeedPtr = GLES20.glGetUniformLocation(programId, "u_wave_speed")
+    }
 
-		builder = ShaderBuilder.build(R.raw.effect_wave_vertex, R.raw.effect_wave_fragment, null);
-	}
+    fun setWaveAmount(value: Float) {
+        GLES20.glUniform1f(waveAmountPtr, value)
+        checkGlError("Shader (id=$programId) setWaveAmount")
+    }
 
-	private int waveAmountPtr;
-	
-	private int waveDistortionPtr;
+    fun setWaveDistortion(value: Float) {
+        GLES20.glUniform1f(waveDistortionPtr, value)
+        checkGlError("Shader (id=$programId) setWaveDistortion")
+    }
 
-	private int waveSpeedPtr;
-
-	@Override
-	protected void assignPtrs() {
-		super.assignPtrs();
-		
-		waveAmountPtr = GLES20.glGetUniformLocation(programId, "u_wave_amount");
-		waveDistortionPtr = GLES20.glGetUniformLocation(programId, "u_wave_distortion");
-		waveSpeedPtr= GLES20.glGetUniformLocation(programId, "u_wave_speed");
-		
-	}
-
-	public void setWaveAmount(float value) {
-		GLES20.glUniform1f(waveAmountPtr, value);
-		XenonGL.checkGlError("Shader (id="+programId+") setWaveAmount");
-	}
-
-
-	public void setWaveDistortion(float value) {
-		GLES20.glUniform1f(waveDistortionPtr, value);
-		XenonGL.checkGlError("Shader (id="+programId+") setWaveDistortion");
-	}
-	
-
-	public void setWaveSpeed(float value) {
-		GLES20.glUniform1f(waveSpeedPtr, value);
-		XenonGL.checkGlError("Shader (id="+programId+")  setWaveSpeed");
-	}
+    fun setWaveSpeed(value: Float) {
+        GLES20.glUniform1f(waveSpeedPtr, value)
+        checkGlError("Shader (id=$programId)  setWaveSpeed")
+    }
 }
-

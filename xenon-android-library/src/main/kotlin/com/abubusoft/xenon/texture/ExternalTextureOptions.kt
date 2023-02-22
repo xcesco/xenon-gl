@@ -1,126 +1,123 @@
-package com.abubusoft.xenon.texture;
+package com.abubusoft.xenon.texture
 
-import android.graphics.SurfaceTexture;
-import android.graphics.SurfaceTexture.OnFrameAvailableListener;
-import android.media.MediaPlayer;
+import android.graphics.SurfaceTexture.OnFrameAvailableListener
+import android.media.MediaPlayer
 
 /**
  * Opzioni per la creazione di una texture esterna.
- * 
- * @author xcesco
  *
+ * @author xcesco
  */
-public class ExternalTextureOptions {
-	/**
-	 * nome della texture
-	 */
-	public String name = "[ExternalTexture noname]";
+class ExternalTextureOptions {
+    /**
+     * nome della texture
+     */
+    var name = "[ExternalTexture noname]"
 
-	/**
-	 * associato alla camera
-	 */
-	public SurfaceTexture.OnFrameAvailableListener onFrameAvailableListener;
+    /**
+     * associato alla camera
+     */
+    var onFrameAvailableListener: OnFrameAvailableListener? = null
 
-	/**
-	 * media player
-	 */
-	public MediaPlayer mediaPlayer;
+    /**
+     * media player
+     */
+    var mediaPlayer: MediaPlayer? = null
 
-	/**
-	 * dimensioni finali della texture
-	 */
-	public TextureSizeType textureSize;
+    /**
+     * dimensioni finali della texture
+     */
+    var textureSize: TextureSizeType? = null
 
-	/**
-	 * Rapporto tra width e height della texture da considerare come valido.
-	 * Permette di selezionare quanta parte della texture considerare come
-	 * buona.
-	 */
-	public double aspectRatio;
+    /**
+     * Rapporto tra width e height della texture da considerare come valido.
+     * Permette di selezionare quanta parte della texture considerare come
+     * buona.
+     */
+    var aspectRatio = 0.0
 
-	/**
-	 * Fluent interface per textureSize.
-	 * 
-	 * @param textureSizeValue
-	 * @return
-	 */
-	public ExternalTextureOptions size(TextureSizeType value) {
-		textureSize = value;
-		return this;
-	}
+    /**
+     * Fluent interface per textureSize.
+     *
+     * @param textureSizeValue
+     * @return
+     */
+    fun size(value: TextureSizeType?): ExternalTextureOptions {
+        textureSize = value
+        return this
+    }
 
-	/**
-	 * Fluent interface per aspectRatio.
-	 * 
-	 * @param aspectRatioValue
-	 * @return
-	 */
-	public ExternalTextureOptions aspectRatio(TextureAspectRatioType value) {
-		aspectRatio = value.aspectXY;
-		return this;
-	}
+    /**
+     * Fluent interface per aspectRatio.
+     *
+     * @param aspectRatioValue
+     * @return
+     */
+    fun aspectRatio(value: TextureAspectRatioType): ExternalTextureOptions {
+        aspectRatio = value.aspectXY
+        return this
+    }
 
-	/**
-	 * Fluent interface per aspectRatio.
-	 * 
-	 * @param aspectRatioValue
-	 * @return this
-	 */
-	public ExternalTextureOptions aspectRatio(double value) {
-		aspectRatio = value;
-		return this;
-	}
+    /**
+     * Fluent interface per aspectRatio.
+     *
+     * @param aspectRatioValue
+     * @return this
+     */
+    fun aspectRatio(value: Double): ExternalTextureOptions {
+        aspectRatio = value
+        return this
+    }
 
-	public static ExternalTextureOptions build() {
-		return (new ExternalTextureOptions()).size(TextureSizeType.SIZE_UNBOUND).aspectRatio(TextureAspectRatioType.RATIO1_1);
-	}
+    /**
+     *
+     *
+     * Crea una copia della configurazione
+     *
+     *
+     * @return
+     */
+    fun copy(src: ExternalTextureOptions): ExternalTextureOptions {
+        val nuovo = build()
+        nuovo.aspectRatio = src.aspectRatio
+        nuovo.textureSize = src.textureSize
+        nuovo.mediaPlayer = src.mediaPlayer
+        nuovo.onFrameAvailableListener = src.onFrameAvailableListener
+        return nuovo
+    }
 
-	/**
-	 * <p>
-	 * Crea una copia della configurazione
-	 * </p>
-	 * 
-	 * @return
-	 */
-	public ExternalTextureOptions copy(ExternalTextureOptions src) {
-		ExternalTextureOptions nuovo = build();
+    /**
+     * Fluent interface per name
+     *
+     * @param value
+     * @return
+     */
+    fun name(value: String): ExternalTextureOptions {
+        name = value
+        return this
+    }
 
-		nuovo.aspectRatio = src.aspectRatio;
-		nuovo.textureSize = src.textureSize;
-		nuovo.mediaPlayer = src.mediaPlayer;
-		nuovo.onFrameAvailableListener = src.onFrameAvailableListener;
+    fun mediaPlayer(value: MediaPlayer?): ExternalTextureOptions {
+        mediaPlayer = value
+        return this
+    }
 
-		return nuovo;
-	}
+    fun onFrameAvailableListener(value: OnFrameAvailableListener?): ExternalTextureOptions {
+        onFrameAvailableListener = value
+        return this
+    }
 
-	/**
-	 * Fluent interface per name
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public ExternalTextureOptions name(String value) {
-		name = value;
-		return this;
-	}
+    fun toTextureOptions(): TextureOptions {
+        val options: TextureOptions = TextureOptions.Companion.build()
+        options.aspectRatio = aspectRatio
+        options.name = name
+        options.textureSize = textureSize
+        return options
+    }
 
-	public ExternalTextureOptions mediaPlayer(MediaPlayer value) {
-		mediaPlayer = value;
-		return this;
-	}
-
-	public ExternalTextureOptions onFrameAvailableListener(OnFrameAvailableListener value) {
-		onFrameAvailableListener = value;
-		return this;
-	}
-
-	public TextureOptions toTextureOptions() {
-		TextureOptions options = TextureOptions.build();
-
-		options.aspectRatio = this.aspectRatio;
-		options.name = this.name;
-		options.textureSize = this.textureSize;
-
-		return options;
-	}
+    companion object {
+        fun build(): ExternalTextureOptions {
+            return ExternalTextureOptions().size(TextureSizeType.SIZE_UNBOUND).aspectRatio(TextureAspectRatioType.RATIO1_1)
+        }
+    }
 }

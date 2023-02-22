@@ -60,7 +60,7 @@ object DeviceInfo {
     }
 
     fun retrieveRAM(): Long {
-        val context = XenonBeanContext.getContext()
+        val context = XenonBeanContext.context
         val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val memoryInfo = ActivityManager.MemoryInfo()
         activityManager.getMemoryInfo(memoryInfo)

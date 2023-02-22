@@ -46,7 +46,7 @@ object CubeTextureBinder {
         lowerZ: Int,
         options: TextureOptions,
         loaderOptions: TextureReplaceOptions
-    ): TextureInfo {
+    ): TextureInfo? {
         return if (!loaderOptions.asyncLoad) {
             // al textureIndex associamo una texture di tipo cube map
             GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP, textureBindingId)
@@ -96,8 +96,8 @@ object CubeTextureBinder {
             result.dimension = dimension
             result
         } else {
-            AsyncOperationManager.instance().load(texture!!, object : AsyncTextureInfoLoader {
-                override fun load(texture: Texture?): TextureInfo? {
+            AsyncOperationManager.load(texture!!, object : AsyncTextureInfoLoader {
+                override fun load(texture: Texture): TextureInfo? {
                     // loaderOptions.asyncLoad(false) perchè il metodo deve
                     // essere invocato in sync mode
                     return bindTextureFromResourceId(

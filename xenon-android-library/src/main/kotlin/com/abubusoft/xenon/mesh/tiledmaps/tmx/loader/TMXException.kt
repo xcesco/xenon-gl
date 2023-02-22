@@ -11,26 +11,15 @@
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package com.abubusoft.xenon.mesh.tiledmaps.tmx.loader;
+package com.abubusoft.xenon.mesh.tiledmaps.tmx.loader
 
-public class TMXException extends RuntimeException {
+class TMXException : RuntimeException {
+    constructor() : super() {}
+    constructor(detailMessage: String?) : super(detailMessage) {}
+    constructor(throwable: Throwable?) : super(throwable) {}
+    constructor(detailMessage: String?, throwable: Throwable?) : super(detailMessage, throwable) {}
 
-        private static final long serialVersionUID = 7317253448136723690L;
-
-        public TMXException() {
-                super();
-        }
-
-        public TMXException(String detailMessage) {
-                super(detailMessage);
-        }
-
-        public TMXException(Throwable throwable) {
-                super(throwable);
-        }
-        
-        public TMXException(String detailMessage, Throwable throwable) {
-                super(detailMessage, throwable);
-        }
-
+    companion object {
+        private const val serialVersionUID = 7317253448136723690L
+    }
 }

@@ -1,38 +1,31 @@
-package com.abubusoft.xenon.settings;
+package com.abubusoft.xenon.settings
 
-import com.abubusoft.xenon.core.util.IOUtility;
-
-import com.abubusoft.kripton.KriptonBinder;
-
-import android.content.Context;
+import android.content.Context
+import com.abubusoft.kripton.KriptonBinder
+import com.abubusoft.xenon.core.util.IOUtility.readRawTextFile
 
 /**
  * Reader dei settings dell'applicazione.
- * 
- * @author Francesco Benincasa
  *
+ * @author Francesco Benincasa
  */
-public abstract class ArgonSettingsReader {
-
-	/**
-	 * Legge un file xml dalla cartella raw e lo trasforma in una classe XenonSettings.
-	 * 
-	 * @param
-	 * 		context
-	 * @param
-	 * 		argonSettingsId
-	 * @return
-	 * 		argonSettings
-	 */
-	public static XenonSettings readFromRawXml(Context context, int argonSettingsId) {
-		try {
-			XenonSettings settings=KriptonBinder.xmlBind().parse(IOUtility.readRawTextFile(context, argonSettingsId), XenonSettings.class);
-			
-			return settings;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
+object ArgonSettingsReader {
+    /**
+     * Legge un file xml dalla cartella raw e lo trasforma in una classe XenonSettings.
+     *
+     * @param
+     * context
+     * @param
+     * argonSettingsId
+     * @return
+     * argonSettings
+     */
+    fun readFromRawXml(context: Context?, argonSettingsId: Int): XenonSettings? {
+        try {
+            return KriptonBinder.xmlBind().parse(readRawTextFile(context!!, argonSettingsId), XenonSettings::class.java)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
 }

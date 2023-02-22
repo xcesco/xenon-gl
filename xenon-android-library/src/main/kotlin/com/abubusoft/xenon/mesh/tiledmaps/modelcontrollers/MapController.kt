@@ -1,73 +1,76 @@
-package com.abubusoft.xenon.mesh.tiledmaps.modelcontrollers;
+package com.abubusoft.xenon.mesh.tiledmaps.modelcontrollers
 
-import com.abubusoft.xenon.math.Matrix4x4;
-import com.abubusoft.xenon.math.Point2;
-import com.abubusoft.xenon.mesh.tiledmaps.TiledMapPositionType;
+import com.abubusoft.xenon.math.Matrix4x4
+import com.abubusoft.xenon.math.Point2
+import com.abubusoft.xenon.mesh.tiledmaps.TiledMapPositionType
 
-public interface MapController {
+interface MapController {
+    val matrixModelViewProjection: Matrix4x4
 
-	Matrix4x4 getMatrixModelViewProjection();
-	
-	/**
-	 * <p>
-	 * Effettua lo scroll della tilemap, partendo da uno scroll lato schermo.
-	 * </p>
-	 * 
-	 * @param screenDistanceX
-	 * @param screenDistanceY
-	 */
-	public void scrollFromScreen(float screenDistanceX, float screenDistanceY);
+    /**
+     *
+     *
+     * Effettua lo scroll della tilemap, partendo da uno scroll lato schermo.
+     *
+     *
+     * @param screenDistanceX
+     * @param screenDistanceY
+     */
+    fun scrollFromScreen(screenDistanceX: Float, screenDistanceY: Float)
 
-	/**
-	 * <p>
-	 * Effettua lo scroll della tilemap con uno spostamento calcolto rispetto allo schermo. Le distanze vengono quindi modificate.
-	 * </p>
-	 * 
-	 * @param distanceX
-	 * @param distanceY
-	 */
-	public void scroll(float distanceX, float distanceY);
+    /**
+     *
+     *
+     * Effettua lo scroll della tilemap con uno spostamento calcolto rispetto allo schermo. Le distanze vengono quindi modificate.
+     *
+     *
+     * @param distanceX
+     * @param distanceY
+     */
+    fun scroll(distanceX: Float, distanceY: Float)
 
-	/**
-	 * <p>
-	 * Effettua lo spostamento della mappa.
-	 * </p>
-	 * 
-	 * <p>
-	 * Le coordinate sono espresse con il sistema di riferimento degli oggetti, ovvero quello che ha come origine il punto in alto a sinistra della mappa (con startY verso il
-	 * basso).
-	 * </p>
-	 * 
-	 * @param x
-	 * @param y
-	 * @param positionType
-	 */
-	public void position(float x, float y, TiledMapPositionType positionType);
+    /**
+     *
+     *
+     * Effettua lo spostamento della mappa.
+     *
+     *
+     *
+     *
+     * Le coordinate sono espresse con il sistema di riferimento degli oggetti, ovvero quello che ha come origine il punto in alto a sinistra della mappa (con startY verso il
+     * basso).
+     *
+     *
+     * @param x
+     * @param y
+     * @param positionType
+     */
+    fun position(x: Float, y: Float, positionType: TiledMapPositionType?)
 
-	/**
-	 * Converte un punto dello schermo nelle coordinate 
-	 * @param screenX
-	 * @param screenY
-	 * 
-	 * @return
-	 */
-	public Point2 touch(float screenX, float screenY);
-	
-	/**
-	 * <p>
-	 * Effettua lo spostamento della mappa.
-	 * </p>
-	 * 
-	 * <p>
-	 * Le coordinate sono espresse con il sistema di riferimento dello schermo, quindi le coordinate devo essere convertite.
-	 * </p>
-	 * 
-	 * @param screenX
-	 * @param screenY
-	 */
-	public void positionFromScreen(float screenX, float screenY, TiledMapPositionType positionType);
+    /**
+     * Converte un punto dello schermo nelle coordinate
+     * @param screenX
+     * @param screenY
+     *
+     * @return
+     */
+    fun touch(screenX: Float, screenY: Float): Point2
 
-	public void zoom(float value);
-	
-	public void position(float x, float y);
+    /**
+     *
+     *
+     * Effettua lo spostamento della mappa.
+     *
+     *
+     *
+     *
+     * Le coordinate sono espresse con il sistema di riferimento dello schermo, quindi le coordinate devo essere convertite.
+     *
+     *
+     * @param screenX
+     * @param screenY
+     */
+    fun positionFromScreen(screenX: Float, screenY: Float, positionType: TiledMapPositionType?)
+    fun zoom(value: Float)
+    fun position(x: Float, y: Float)
 }

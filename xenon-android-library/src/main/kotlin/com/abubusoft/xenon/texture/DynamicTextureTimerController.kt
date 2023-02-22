@@ -1,72 +1,69 @@
-package com.abubusoft.xenon.texture;
+package com.abubusoft.xenon.texture
 
-import com.abubusoft.xenon.misc.NormalizedTimer;
-import com.abubusoft.xenon.misc.NormalizedTimer.TypeNormalizedTimer;
-import com.abubusoft.xenon.texture.DynamicTexture.DynamicTextureController;
-import com.abubusoft.kripton.android.Logger;
+import com.abubusoft.kripton.android.Logger
+import com.abubusoft.xenon.misc.NormalizedTimer
+import com.abubusoft.xenon.misc.NormalizedTimer.TypeNormalizedTimer
+import com.abubusoft.xenon.texture.DynamicTexture.DynamicTextureController
 
 /**
- * <p>
+ *
+ *
  * Questa implementazione del controller consente di controllare il
  * caricamento delle texture mediante un touchTimer.
- * </p>
- * 
- * <p>
+ *
+ *
+ *
+ *
  * Questo meccanismo è quello che penso sia quello più standard, per questo
  * motivo è stato implemetato.
- * </p>
- * 
+ *
+ *
  * @author Francesco Benincasa
- * 
  */
-public class DynamicTextureTimerController implements DynamicTextureController {
+class DynamicTextureTimerController(durationInMills: Long) : DynamicTextureController {
+    /**
+     * touchTimer usato per monitorare il tempo.
+     */
+    var timer: NormalizedTimer
 
-	/**
-	 * touchTimer usato per monitorare il tempo.
-	 */
-	NormalizedTimer timer;
-	
-	/**
-	 * flag usato per indicare il fatto che il load della texture è pronto.
-	 */
-	boolean readyToLoad;
+    /**
+     * flag usato per indicare il fatto che il load della texture è pronto.
+     */
+    var readyToLoad: Boolean
 
-	/**
-	 * <p>Costruttore</p>
-	 * 
-	 * @param durationInMills
-	 */
-	public DynamicTextureTimerController(long durationInMills) {
-		timer = new NormalizedTimer(TypeNormalizedTimer.ONE_TIME, durationInMills);
-		readyToLoad=true;
-		timer.start();
-	}
+    /**
+     *
+     * Costruttore
+     *
+     * @param durationInMills
+     */
+    init {
+        timer = NormalizedTimer(TypeNormalizedTimer.ONE_TIME, durationInMills)
+        readyToLoad = true
+        timer.start()
+    }
 
-	@Override
-	public boolean onCheckForUpdate(long enlapsedTime) {
-		// aggiorniamo il touchTimer
-		timer.update(enlapsedTime);
-		if (timer.getNormalizedEnlapsedTime() == 1f && readyToLoad) {
-			Logger.info("Ready for load another texture");
-			readyToLoad = false;
-			return true;
-		} else {
-			return false;
-		}
-	}
+    override fun onCheckForUpdate(enlapsedTime: Long): Boolean {
+        // aggiorniamo il touchTimer
+        timer.update(enlapsedTime)
+        return if (timer.normalizedEnlapsedTime == 1f && readyToLoad) {
+            Logger.info("Ready for load another texture")
+            readyToLoad = false
+            true
+        } else {
+            false
+        }
+    }
 
-	@Override
-	public void onTextureReady(Texture texture) {
-		// eseguito quando viene la texture viene caricata.
-		Logger.info("Texture loaded");
-		readyToLoad = true;
-		timer.start();
-	}
+    override fun onTextureReady(texture: Texture?) {
+        // eseguito quando viene la texture viene caricata.
+        Logger.info("Texture loaded")
+        readyToLoad = true
+        timer.start()
+    }
 
-	@Override
-	public boolean forceUpdate() {
-		// non possiamo forzare
-		return false;
-	}
-
+    override fun forceUpdate(): Boolean {
+        // non possiamo forzare
+        return false
+    }
 }

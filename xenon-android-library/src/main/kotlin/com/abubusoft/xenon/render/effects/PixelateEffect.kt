@@ -1,30 +1,19 @@
 /**
- * 
- */
-package com.abubusoft.xenon.render.effects;
-
-import com.abubusoft.xenon.render.AbstractEffect;
-import com.abubusoft.xenon.render.UseShader;
-
-/**
- * 
- * @author Francesco Benincasa
  *
  */
-@UseShader(PixelateShader.class)
-public class PixelateEffect extends AbstractEffect<PixelateShader> {
-	
-	public PixelateEffect()
-	{
-		pixelAmount=200f;
-	}
+package com.abubusoft.xenon.render.effects
 
-	public float pixelAmount;
-	
-	@Override
-	protected void updateShader(PixelateShader shader, long enlapsedTime, float speedAdapter) {
-		shader.setPixelAmount(pixelAmount);
-		
-	}
-		
+import com.abubusoft.xenon.render.AbstractEffect
+import com.abubusoft.xenon.render.UseShader
+
+/**
+ *
+ * @author Francesco Benincasa
+ */
+@UseShader(PixelateShader::class)
+class PixelateEffect : AbstractEffect<PixelateShader?>() {
+    var pixelAmount = 200f
+    protected override fun updateShader(shader: PixelateShader, enlapsedTime: Long, speedAdapter: Float) {
+        shader.setPixelAmount(pixelAmount)
+    }
 }

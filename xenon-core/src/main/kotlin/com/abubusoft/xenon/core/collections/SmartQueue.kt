@@ -153,12 +153,11 @@ class SmartQueue<E> @JvmOverloads constructor(capacity: Int = DEFAULT_CAPACITY) 
      * @throws NoSuchElementException
      * se la coda è vuota
      */
-    fun pop(): E? {
-        var value: E? = null
+    fun pop(): E {
         if (size == 0) {
             throw NoSuchElementException()
         }
-        value = head?.value
+        val value = head?.value!!
         if (size == 1) {
             val t: Item<E>? = head
             head = null

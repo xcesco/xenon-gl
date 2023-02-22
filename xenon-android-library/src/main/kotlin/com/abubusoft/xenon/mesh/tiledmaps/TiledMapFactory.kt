@@ -1,85 +1,79 @@
-package com.abubusoft.xenon.mesh.tiledmaps;
+package com.abubusoft.xenon.mesh.tiledmaps
 
-import java.io.IOException;
-
-import com.abubusoft.xenon.mesh.tiledmaps.tmx.loader.TMXException;
-import com.abubusoft.xenon.mesh.tiledmaps.tmx.loader.TMXLoaderHandler;
-import com.abubusoft.xenon.mesh.tiledmaps.tmx.loader.TMXLoaderType;
-import com.abubusoft.xenon.texture.TextureFilterType;
-import com.abubusoft.xenon.core.util.ResourceUtility;
-
-import android.content.Context;
+import android.content.Context
+import com.abubusoft.xenon.core.util.ResourceUtility.resolveAddress
+import com.abubusoft.xenon.mesh.tiledmaps.tmx.loader.TMXException
+import com.abubusoft.xenon.mesh.tiledmaps.tmx.loader.TMXLoaderHandler
+import com.abubusoft.xenon.mesh.tiledmaps.tmx.loader.TMXLoaderType
+import com.abubusoft.xenon.texture.TextureFilterType
+import java.io.IOException
 
 /**
  * Factory delle tiled map, una mappa suddivisa in mattonelle.
- * 
+ *
  * @author Francesco Benincasa
- * 
  */
-public abstract class TiledMapFactory {
+object TiledMapFactory {
+    /**
+     * Carica da una resource
+     *
+     * @param filename
+     * @param context
+     * @return
+     * @throws TMXException
+     */
+    @Throws(TMXException::class)
+    fun loadFromResources(context: Context, resourceName: String?, textureFilter: TextureFilterType?): TiledMap? {
+        val resId = resolveAddress(context, resourceName!!)
+        val tiledMap = loadFromResources(context, resId, textureFilter)
 
-	/**
-	 * Carica da una resource
-	 * 
-	 * @param filename
-	 * @param context
-	 * @return
-	 * @throws TMXException
-	 */
-	public static TiledMap loadFromResources(Context context, String resourceName, TextureFilterType textureFilter) throws TMXException {
-		int resId = ResourceUtility.resolveAddress(context, resourceName);
-		TiledMap tiledMap = loadFromResources(context, resId, textureFilter);
-		
-		// creaiamo shader
-		tiledMap.init(context);
+        // creaiamo shader
+        tiledMap!!.init(context)
+        return tiledMap
+    }
 
-		return tiledMap;
-	}
+    /**
+     * Carica da un
+     *
+     * @param filename
+     * @param context
+     * @return
+     * @throws TMXException
+     */
+    @Throws(TMXException::class)
+    fun loadFromAsset(context: Context, filename: String?, textureFilter: TextureFilterType?): TiledMap? {
+        return try {
+            val loader = TMXLoaderHandler()
+            val tiledMap = loader.load(context, context.assets.open(filename!!), TMXLoaderType.ASSET_LOADER, textureFilter)
 
-	/**
-	 * Carica da un
-	 * 
-	 * @param filename
-	 * @param context
-	 * @return
-	 * @throws TMXException
-	 */
-	public static TiledMap loadFromAsset(Context context, String filename, TextureFilterType textureFilter) throws TMXException {
-		try {
-			TMXLoaderHandler loader = new TMXLoaderHandler();
-			TiledMap tiledMap = loader.load(context, context.getAssets().open(filename), TMXLoaderType.ASSET_LOADER, textureFilter);
-			
-			// creaiamo shader
-			tiledMap.init(context);
+            // creaiamo shader
+            tiledMap!!.init(context)
+            tiledMap
+        } catch (e: IOException) {
+            throw TMXException(e)
+        }
+    }
 
-			return tiledMap;
-		} catch (IOException e) {
-			throw new TMXException(e);
-		}
-	}
+    /**
+     * Carica da una resource
+     *
+     * @param context
+     * @param sourceId
+     * @param textureFilter
+     * @return
+     * @throws TMXException
+     */
+    @Throws(TMXException::class)
+    fun loadFromResources(context: Context, sourceId: Int, textureFilter: TextureFilterType?): TiledMap? {
+        return try {
+            val loader = TMXLoaderHandler()
+            val tiledMap = loader.load(context, context.resources.openRawResource(sourceId), TMXLoaderType.RES_LOADER, textureFilter)
 
-	/**
-	 * Carica da una resource
-	 *
-	 * @param context
-	 * @param sourceId
-	 * @param textureFilter
-	 * @return
-	 * @throws TMXException
-	 */
-	public static TiledMap loadFromResources(Context context, int sourceId, TextureFilterType textureFilter) throws TMXException {
-		try {
-			TMXLoaderHandler loader = new TMXLoaderHandler();
-
-			TiledMap tiledMap = loader.load(context, context.getResources().openRawResource(sourceId), TMXLoaderType.RES_LOADER, textureFilter);
-			
-			// creaiamo shader
-			tiledMap.init(context);
-
-			return tiledMap;
-
-		} catch (Exception e) {
-			throw new TMXException(e);
-		}
-	}
+            // creaiamo shader
+            tiledMap!!.init(context)
+            tiledMap
+        } catch (e: Exception) {
+            throw TMXException(e)
+        }
+    }
 }

@@ -1,21 +1,17 @@
 /**
- * 
+ *
  */
-package com.abubusoft.xenon.mesh.persistence;
+package com.abubusoft.xenon.mesh.persistence
 
-import java.io.File;
-
-import com.abubusoft.xenon.mesh.Mesh;
-import com.abubusoft.xenon.mesh.persistence.wavefront.WavefrontExporter;
+import com.abubusoft.xenon.mesh.Mesh
+import com.abubusoft.xenon.mesh.persistence.wavefront.WavefrontExporter
+import java.io.File
 
 /**
  * @author Francesco Benincasa
- *
  */
-public abstract class MeshExporter {
-
-	public static boolean exportWavefront(File file, Mesh mesh)
-	{
-		return WavefrontExporter.export(file, mesh);
-	}
+object MeshExporter {
+    fun exportWavefront(file: File?, mesh: Mesh?): Boolean {
+        return WavefrontExporter.export(file, mesh!!)
+    }
 }

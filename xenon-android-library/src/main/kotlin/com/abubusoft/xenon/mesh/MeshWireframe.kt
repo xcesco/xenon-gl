@@ -1,43 +1,34 @@
 /**
- * 
+ *
  */
-package com.abubusoft.xenon.mesh;
+package com.abubusoft.xenon.mesh
 
-import java.io.Serializable;
-
-import com.abubusoft.kripton.annotation.BindType;
+import com.abubusoft.kripton.annotation.BindType
+import java.io.Serializable
 
 /**
  * Rappresenta un oggetto wireframe
- * 
- * @author Francesco Benincasa
  *
+ * @author Francesco Benincasa
  */
 @BindType
-public class MeshWireframe extends Mesh implements Serializable {
-	
-	MeshWireframe()
-	{
-		
-	}
-	
-	MeshWireframe(Mesh input)
-	{
-		type=input.type;
-		
-		// impostiamo boundingbox
-		boundingBox.set(input.boundingBox.width, input.boundingBox.height, input.boundingBox.depth);
-		
-		this.boundingSphereRadius=input.boundingSphereRadius;
-		
-		// impostiamo vertici e texture
-		this.vertexCount=input.vertexCount;
-		this.vertices=input.vertices;
-		
-		this.texturesCount=input.texturesCount;
-		this.textures=input.textures;
-	}
+class MeshWireframe : Mesh, Serializable {
+    internal constructor() {}
+    internal constructor(input: Mesh) {
+        type = input.type
 
-	private static final long serialVersionUID = -8580829785311186419L;
+        // impostiamo boundingbox
+        boundingBox[input.boundingBox.width, input.boundingBox.height] = input.boundingBox.depth
+        boundingSphereRadius = input.boundingSphereRadius
 
+        // impostiamo vertici e texture
+        vertexCount = input.vertexCount
+        vertices = input.vertices
+        texturesCount = input.texturesCount
+        textures = input.textures
+    }
+
+    companion object {
+        private const val serialVersionUID = -8580829785311186419L
+    }
 }

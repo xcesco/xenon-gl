@@ -48,7 +48,7 @@ object AsyncOperationManager {
     var isEnabled = false
 
     interface AsyncTextureInfoLoader {
-        fun load(texture: Texture?): TextureInfo?
+        fun load(texture: Texture): TextureInfo?
     }
 
     class TextureLoaderThread : Thread("GLThread-AsyncOperation") {
@@ -72,9 +72,6 @@ object AsyncOperationManager {
                     Logger.debug("async texture load stopped ")
                     content.texture.updateInfo(content.execute.load(content.texture))
                     Logger.debug("async texture load ended in %s ms", now() - start1)
-
-                    // egl.eglMakeCurrent(display, defaultSurface,
-                    // defaultSurface, screenContext);
 
                     // distruggiamo subiot
                     // egl.eglDestroySurface(display, surfaceForTextureLoad);
@@ -104,6 +101,7 @@ object AsyncOperationManager {
      * @param display
      * @param eglConfig
      */
+    @JvmStatic
     fun init(
         egl: EGL10,
         renderContext: javax.microedition.khronos.egl.EGLContext?,
@@ -130,7 +128,7 @@ object AsyncOperationManager {
         }
     }
 
-    var EGL_CONTEXT_CLIENT_VERSION = 0x3098
+    const val EGL_CONTEXT_CLIENT_VERSION = 0x3098
 
     /**
      *
@@ -143,6 +141,7 @@ object AsyncOperationManager {
      * @param display
      * @param eglConfig
      */
+    @JvmStatic
     //TODO da fixare
     fun init(renderContext: EGLContext?, display: EGLDisplay?, eglConfig: EGLConfig?) {
         // la versione usata è la 2!
@@ -165,11 +164,13 @@ object AsyncOperationManager {
         }
     }
 
+    @JvmStatic
     fun destroy(egl: EGL10): Boolean {
         return egl.eglDestroyContext(display, textureContext)
     }
 
     //TODO da fixare
+    @JvmStatic
     fun destroy(): Boolean {
         //return EGL14.eglDestroyContext(display, textureContext);
         return false
@@ -187,6 +188,7 @@ object AsyncOperationManager {
      * @param texture
      * @param listener
     </T> */
+    @JvmStatic
     fun load(texture: Texture, execute: AsyncTextureInfoLoader, listener: TextureAsyncLoaderListener?): TextureInfo? {
         return if (isEnabled) {
             val content = MessageContent(texture, execute, listener)

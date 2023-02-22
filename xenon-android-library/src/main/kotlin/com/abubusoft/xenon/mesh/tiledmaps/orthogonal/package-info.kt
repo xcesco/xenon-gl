@@ -1,7 +1,71 @@
 /**
- * Gestione delle mappe di tipo ortogonale 
- * 
- * @author xcesco
+ * Gestione delle mappe di tipo ortogonale
  *
+ * @author xcesco
  */
-package com.abubusoft.xenon.mesh.tiledmaps.orthogonal;
+package com.abubusoft.xenon.mesh.tiledmaps.orthogonal
+
+import com.abubusoft.xenon.math.Point2.setCoords
+import com.abubusoft.xenon.math.Matrix4x4.translate
+import com.abubusoft.xenon.mesh.modifiers.TextureQuadModifier.setTextureCoords
+import com.abubusoft.xenon.math.Matrix4x4.buildIdentityMatrix
+import com.abubusoft.xenon.math.Matrix4x4.multiply
+import com.abubusoft.xenon.shader.ShaderTiledMap.setOpacity
+import com.abubusoft.xenon.shader.Shader.setVertexCoordinatesArray
+import com.abubusoft.xenon.shader.Shader.setTextureCoordinatesArray
+import com.abubusoft.xenon.shader.Shader.setModelViewProjectionMatrix
+import com.abubusoft.xenon.math.Matrix4x4.asFloatBuffer
+import com.abubusoft.xenon.shader.Shader.setIndexBuffer
+import com.abubusoft.xenon.shader.Shader.unsetIndexBuffer
+import com.abubusoft.xenon.math.XenonMath.zDistanceForSquare
+import com.abubusoft.xenon.mesh.modifiers.VertexQuadModifier.setVertexCoords
+import com.abubusoft.xenon.vbo.VertexBuffer.update
+import com.abubusoft.xenon.math.Matrix4x4.build
+import com.abubusoft.xenon.shader.Shader.use
+import com.abubusoft.xenon.mesh.tiledmaps.internal.TiledLayerHandler.setTextureSelector
+import com.abubusoft.xenon.math.Matrix4x4.buildTranslationMatrix
+import com.abubusoft.xenon.shader.ShaderTiledMap.setTextureSelectorArray
+import com.abubusoft.xenon.vbo.AbstractBuffer.cursorReset
+import com.abubusoft.xenon.mesh.modifiers.IndexQuadModifier.setIndexes
+import com.abubusoft.xenon.vbo.AbstractBuffer.cursorMove
+import com.abubusoft.xenon.vbo.IndexBuffer.update
+import com.abubusoft.xenon.vbo.TextureBuffer.update
+import com.abubusoft.xenon.math.Point2
+import com.abubusoft.xenon.mesh.tiledmaps.TiledMap
+import com.abubusoft.xenon.mesh.tiledmaps.ObjBase
+import com.abubusoft.xenon.mesh.tiledmaps.orthogonal.OrthogonalHelper
+import com.abubusoft.xenon.math.Matrix4x4
+import com.abubusoft.xenon.mesh.tiledmaps.ImageLayer
+import com.abubusoft.xenon.mesh.tiledmaps.internal.ImageLayerHandler
+import com.abubusoft.xenon.shader.ShaderTiledMap
+import com.abubusoft.xenon.mesh.tiledmaps.ImageLayer.FillModeType
+import com.abubusoft.xenon.mesh.modifiers.TextureQuadModifier
+import com.abubusoft.xenon.vbo.BufferAllocationType
+import android.opengl.GLES20
+import com.abubusoft.xenon.mesh.tiledmaps.modelcontrollers.AbstractMapController
+import com.abubusoft.xenon.mesh.tiledmaps.modelcontrollers.MapController
+import com.abubusoft.xenon.core.Uncryptable
+import com.abubusoft.xenon.mesh.tiledmaps.internal.AbstractMapHandler
+import com.abubusoft.xenon.mesh.tiledmaps.orthogonal.OrthogonalMapController
+import com.abubusoft.xenon.mesh.tiledmaps.internal.TiledMapView
+import com.abubusoft.xenon.mesh.tiledmaps.TiledMapOptions
+import com.abubusoft.xenon.ScreenInfo
+import com.abubusoft.xenon.opengl.XenonGL
+import com.abubusoft.xenon.mesh.tiledmaps.TiledMapFillScreenType
+import com.abubusoft.xenon.math.XenonMath
+import com.abubusoft.xenon.vbo.BufferManager
+import com.abubusoft.xenon.vbo.VertexBuffer
+import com.abubusoft.xenon.mesh.modifiers.VertexQuadModifier
+import com.abubusoft.xenon.mesh.tiledmaps.TiledLayer
+import com.abubusoft.xenon.mesh.tiledmaps.orthogonal.OrthogonalTiledLayerHandler
+import com.abubusoft.xenon.mesh.tiledmaps.orthogonal.OrthogonalImageLayerHandler
+import com.abubusoft.xenon.mesh.tiledmaps.ObjectLayer
+import com.abubusoft.xenon.mesh.tiledmaps.orthogonal.OrthogonalObjectLayerHandler
+import com.abubusoft.xenon.mesh.tiledmaps.internal.LayerOffsetHolder
+import com.abubusoft.xenon.mesh.tiledmaps.internal.ObjectLayerHandler
+import com.abubusoft.xenon.mesh.tiledmaps.internal.TiledLayerHandler
+import com.abubusoft.xenon.mesh.tiledmaps.ObjClass
+import com.abubusoft.xenon.mesh.MeshGrid
+import com.abubusoft.xenon.vbo.IndexBuffer
+import com.abubusoft.xenon.mesh.modifiers.IndexQuadModifier
+import com.abubusoft.xenon.mesh.MeshDrawModeType

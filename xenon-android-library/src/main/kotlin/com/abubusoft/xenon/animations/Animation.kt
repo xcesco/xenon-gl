@@ -12,7 +12,7 @@ import com.abubusoft.kripton.annotation.BindXml
  *
  * @param <K>
 </K> */
-open class Animation<K : KeyFrame?> {
+open class Animation<K : KeyFrame> {
     /**
      * Sequenza di frame
      */

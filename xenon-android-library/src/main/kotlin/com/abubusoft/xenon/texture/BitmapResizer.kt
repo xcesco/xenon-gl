@@ -11,7 +11,8 @@ import com.abubusoft.xenon.math.XenonMath.isGreater
 import com.abubusoft.xenon.math.XenonMath.isLess
 
 /**
- * wrapped
+ * Wrapped
+ *
  * @author Francesco Benincasa
  */
 object BitmapResizer {

@@ -1,40 +1,36 @@
-package com.abubusoft.xenon.mesh.tiledmaps.tmx.loader;
+package com.abubusoft.xenon.mesh.tiledmaps.tmx.loader
 
-import com.abubusoft.xenon.mesh.tiledmaps.TileSet;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+import com.abubusoft.xenon.mesh.tiledmaps.TileSet
+import org.xml.sax.Attributes
+import org.xml.sax.SAXException
+import org.xml.sax.helpers.DefaultHandler
 
-public class TMXTileSetLoader extends DefaultHandler {
+class TMXTileSetLoader : DefaultHandler() {
+    /**
+     * tileSet da caricare
+     */
+    var tileSet: TileSet? = null
+    @Throws(SAXException::class)
+    override fun startDocument() {
+    }
 
-	/**
-	 * tileSet da caricare
-	 */
-	public TileSet tileSet;
-	
-	@Override
-	public void startDocument() throws SAXException {
-		
-	}
+    @Throws(SAXException::class)
+    override fun endDocument() {
+        super.endDocument()
+    }
 
-	@Override
-	public void endDocument() throws SAXException {
-		super.endDocument();
-	}
+    @Throws(SAXException::class)
+    override fun startElement(uri: String, localName: String, qName: String, attributes: Attributes) {
+        super.startElement(uri, localName, qName, attributes)
+    }
 
-	@Override
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-		super.startElement(uri, localName, qName, attributes);
-	}
+    @Throws(SAXException::class)
+    override fun endElement(uri: String, localName: String, qName: String) {
+        super.endElement(uri, localName, qName)
+    }
 
-	@Override
-	public void endElement(String uri, String localName, String qName) throws SAXException {
-		super.endElement(uri, localName, qName);
-	}
-
-	@Override
-	public void characters(char[] ch, int start, int length) throws SAXException {
-		super.characters(ch, start, length);
-	}
-
+    @Throws(SAXException::class)
+    override fun characters(ch: CharArray, start: Int, length: Int) {
+        super.characters(ch, start, length)
+    }
 }

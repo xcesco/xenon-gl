@@ -1,257 +1,245 @@
-package com.abubusoft.xenon.mesh.tiledmaps;
+package com.abubusoft.xenon.mesh.tiledmaps
 
-import java.util.ArrayList;
-import java.util.Locale;
-
-import com.abubusoft.xenon.math.XenonMath;
-import com.abubusoft.xenon.mesh.tiledmaps.internal.AbstractLayerHandler;
-import com.abubusoft.xenon.mesh.tiledmaps.internal.LayerDrawer;
-import com.abubusoft.xenon.mesh.tiledmaps.internal.TiledMapView;
-import com.abubusoft.xenon.mesh.tiledmaps.tmx.LayerAttributes;
-import com.abubusoft.xenon.mesh.tiledmaps.tmx.loader.SAXUtil;
-import com.abubusoft.xenon.mesh.tiledmaps.tmx.loader.TMXPredefinedProperties;
-import com.abubusoft.xenon.texture.AtlasTexture;
-import org.xml.sax.Attributes;
+import com.abubusoft.xenon.math.XenonMath.clamp
+import com.abubusoft.xenon.mesh.tiledmaps.internal.AbstractLayerHandler
+import com.abubusoft.xenon.mesh.tiledmaps.internal.LayerDrawer
+import com.abubusoft.xenon.mesh.tiledmaps.internal.TiledMapView
+import com.abubusoft.xenon.mesh.tiledmaps.tmx.LayerAttributes
+import com.abubusoft.xenon.mesh.tiledmaps.tmx.loader.SAXUtil.getFloat
+import com.abubusoft.xenon.mesh.tiledmaps.tmx.loader.SAXUtil.getInt
+import com.abubusoft.xenon.mesh.tiledmaps.tmx.loader.SAXUtil.getString
+import com.abubusoft.xenon.mesh.tiledmaps.tmx.loader.TMXPredefinedProperties
+import com.abubusoft.xenon.texture.AtlasTexture
+import org.xml.sax.Attributes
 
 /**
- * <p>
+ *
+ *
  * Rappresentazione di base dei layer.
- * </p>
- * 
+ *
+ *
  * @author Francesco Benincasa
- * 
  */
-public abstract class Layer extends PropertiesCollector {
+abstract class Layer(
+    /**
+     *
+     *
+     * Tipo di layer.
+     *
+     */
+    val type: LayerType,
+    /**
+     * riferimento alla tiled map
+     */
+    val tiledMap: TiledMap, atts: Attributes?
+) : PropertiesCollector() {
+    /**
+     * Configura l'handler del layer
+     *
+     * @param handler
+     */
+    protected abstract fun buildHandler(handler: AbstractLayerHandler<*>?)
 
-	/**
-	 * Configura l'handler del layer
-	 * 
-	 * @param handler
-	 */
-	protected abstract void buildHandler(AbstractLayerHandler<?> handler);
+    /**
+     * Restituisce l'oggetto necessario a disegnare il layer stesso. Tipicamente è l'handler stesso.
+     *
+     * @return drawer
+     */
+    abstract fun drawer(): LayerDrawer?
 
-	/**
-	 * Restituisce l'oggetto necessario a disegnare il layer stesso. Tipicamente è l'handler stesso.
-	 * 
-	 * @return drawer
-	 */
-	public abstract LayerDrawer drawer();
+    /**
+     *
+     *
+     * Tipo di layer.
+     *
+     *
+     * @author Francesco Benincasa
+     */
+    enum class LayerType {
+        /**
+         *
+         *
+         * Il layer visualizza un'immagine
+         *
+         */
+        IMAGE,
 
-	/**
-	 * <p>
-	 * Tipo di layer.
-	 * </p>
-	 * 
-	 * @author Francesco Benincasa
-	 * 
-	 */
-	public enum LayerType {
-			/**
-			 * <p>
-			 * Il layer visualizza un'immagine
-			 * </p>
-			 */
-			IMAGE,
-			/**
-			 * <p>
-			 * Il layer visualizza un'insieme di tile.
-			 * </p>
-			 */
-			TILED,
+        /**
+         *
+         *
+         * Il layer visualizza un'insieme di tile.
+         *
+         */
+        TILED,
 
-			/**
-			 * <p>
-			 * Il lavyer contiene degli oggetti
-			 * </p>
-			 */
-			OBJECTS;
-	};
+        /**
+         *
+         *
+         * Il lavyer contiene degli oggetti
+         *
+         */
+        OBJECTS
+    }
 
-	/**
-	 * <p>
-	 * Inizializza tutte le proprietà che i vari tipi di layer hanno in comune, a prescindere dal loro tipo. Il nome viene messo in lowercase
-	 * </p>
-	 * 
-	 * @param layerType
-	 * @param tiledMap
-	 * @param atts
-	 */
-	public Layer(LayerType layerType, TiledMap tiledMap, Attributes atts) {
-		this.type = layerType;
-		this.tiledMap = tiledMap;
-		this.name = SAXUtil.getString(atts, LayerAttributes.NAME).toLowerCase(Locale.ENGLISH);
-		this.visible = SAXUtil.getInt(atts, TMXPredefinedProperties.VISIBLE, 1) == 1;
-		this.opacity = SAXUtil.getFloat(atts, LayerAttributes.OPACITY, 1f);
-		this.textureList = new ArrayList<AtlasTexture>();
+    /**
+     *
+     *
+     * Indica se il layer deve essere rimosso.
+     *
+     *
+     *
+     *  * Quelli che contengono nel nome **preview**
+     *  * Quelli che hanno una proprietà di nome **preview** = true
+     *
+     *
+     * @return true se il layer deve essere rimosso
+     */
+    val isPreviewLayer: Boolean
+        get() = "true" == properties[TMXPredefinedProperties.PREVIEW] || name.contains(TMXPredefinedProperties.PREVIEW)
 
-		// istanziamo l'handler in base al tipo di orientation della mappa ed al tipo di layer
-		switch (layerType) {
-		case TILED:
-			buildHandler(tiledMap.handler.buildTiledLayerHandler((TiledLayer) this));
-			break;
-		case IMAGE:
-			buildHandler(tiledMap.handler.buildImageLayerHandler((ImageLayer) this));
-			break;
-		case OBJECTS:
-			buildHandler(tiledMap.handler.buildObjectLayerHandler((ObjectLayer) this));
-			break;
-		default:
-			throw (new RuntimeException("Layer type " + layerType + " is not supported"));
-		}
+    /**
+     *
+     *
+     * Nome del layer. Non può essere cambiato.
+     *
+     */
+    val name: String
 
-	}
+    /**
+     *
+     *
+     * Lista ordinata di texture
+     *
+     */
+    var textureList: ArrayList<AtlasTexture>
+    /**
+     * Indica se è visualizzabile o meno
+     *
+     * @return true se il layer è visibile
+     */
+    /**
+     * indica se visibile
+     */
+    open var isDrawable: Boolean
 
-	/**
-	 * <p>
-	 * Indica se il layer deve essere rimosso.
-	 * </p>
-	 * 
-	 * <ul>
-	 * <li>Quelli che contengono nel nome <b>preview</b></li>
-	 * <li>Quelli che hanno una proprietà di nome <b>preview</b> = true</li>
-	 * </ul>
-	 * 
-	 * @return true se il layer deve essere rimosso
-	 */
-	public boolean isPreviewLayer() {
-		return ("true".equals(properties.get(TMXPredefinedProperties.PREVIEW))) || (name.contains(TMXPredefinedProperties.PREVIEW));
-	}
+    /**
+     *
+     *
+     * Livello di opacità del layer, da 0 a 1. Agisce solo a livello di channel Alpha.
+     *
+     */
+    var opacity: Float
 
-	/**
-	 * <p>
-	 * Nome del layer. Non può essere cambiato.
-	 * </p>
-	 */
-	public final String name;
+    /**
+     * percentuale di speed startX da 0 a 1. Deve essere float
+     */
+    var speedPercentageX = 1.0f
 
-	/**
-	 * <p>
-	 * Lista ordinata di texture
-	 * </p>
-	 */
-	public ArrayList<AtlasTexture> textureList;
+    /**
+     * percentuale di speed startY da 0 a 1. Deve essere float
+     */
+    var speedPercentageY = 1.0f
 
-	/**
-	 * <p>
-	 * Tipo di layer.
-	 * </p>
-	 */
-	public final LayerType type;
+    /**
+     * offset del layer rispetto alla posizione iniziale X. In pixel
+     */
+    var layerOffsetX = 0f
 
-	/**
-	 * indica se visibile
-	 */
-	public boolean visible;
+    /**
+     * offset del layer rispetto alla posizione iniziale Y. In pixel
+     */
+    var layerOffsetY = 0f
 
-	/**
-	 * <p>
-	 * Livello di opacità del layer, da 0 a 1. Agisce solo a livello di channel Alpha.
-	 * </p>
-	 */
-	public float opacity;
+    /**
+     *
+     *
+     * marca il layer per essere rimosso se impostato a true
+     *
+     */
+    var discard = false
 
-	/**
-	 * riferimento alla tiled map
-	 */
-	public final TiledMap tiledMap;
+    /**
+     *
+     *
+     * Inizializza tutte le proprietà che i vari tipi di layer hanno in comune, a prescindere dal loro tipo. Il nome viene messo in lowercase
+     *
+     *
+     * @param layerType
+     * @param tiledMap
+     * @param atts
+     */
+    init {
+        name = getString(atts!!, LayerAttributes.NAME).lowercase()
+        isDrawable = getInt(atts, TMXPredefinedProperties.VISIBLE, 1) == 1
+        opacity = getFloat(atts, LayerAttributes.OPACITY, 1f)
+        textureList = ArrayList()
+        when (type) {
+            LayerType.TILED -> buildHandler(tiledMap.handler!!.buildTiledLayerHandler(this as TiledLayer))
+            LayerType.IMAGE -> buildHandler(tiledMap.handler!!.buildImageLayerHandler(this as ImageLayer))
+            LayerType.OBJECTS -> buildHandler(tiledMap.handler!!.buildObjectLayerHandler(this as ObjectLayer))
+            else -> throw RuntimeException("Layer type $type is not supported")
+        }
+    }
 
-	/**
-	 * percentuale di speed startX da 0 a 1. Deve essere float
-	 */
-	public float speedPercentageX = 1.0f;
+    /**
+     * Effettua lo scroll del layer
+     *
+     *
+     * Dobbiamo convertire le dimensioni della mappa in coordinate view riferite al layer.
+     *
+     * @param mapOffsetX
+     * @param mapOffsetY
+     */
+    fun scroll(mapOffsetX: Float, mapOffsetY: Float) {
+        layerOffsetX += mapOffsetX * speedPercentageX
+        if (tiledMap.scrollHorizontalLocked) {
+            //screenOffsetX=XenonMath.clamp(screenOffsetX, 0f, tiledMap.mapWidth - tiledMap.view.windowWidth);
+            layerOffsetX = clamp(layerOffsetX, 0f, tiledMap.view.mapMaxPositionValueX)
+        }
+        // modulo
+        layerOffsetX = layerOffsetX % tiledMap.mapWidth
+        layerOffsetY += mapOffsetY * speedPercentageY
+        if (tiledMap.scrollVerticalLocked) {
+            //screenOffsetY=XenonMath.clamp(screenOffsetY, 0f, tiledMap.mapHeight - tiledMap.view.windowHeight);
+            layerOffsetY = clamp(layerOffsetY, 0f, tiledMap.view.mapMaxPositionValueY)
+        }
+        // modulo
+        layerOffsetY = layerOffsetY % tiledMap.mapHeight
+    }
 
-	/**
-	 * percentuale di speed startY da 0 a 1. Deve essere float
-	 */
-	public float speedPercentageY = 1.0f;
+    /**
+     *
+     * Effettua il posizionamento del layer. Siccome la posizione è modulo dimension, rimaniamo sempre nei limiti della mappa.
+     *
+     *
+     * Dobbiamo convertire le dimensioni della mappa in coordinate view riferite al layer.
+     *
+     * @param mapDistanceX
+     * distanza nel sistema mappa
+     * @param mapDistanceY
+     * distanza nel sistema mappa
+     */
+    fun position(mapDistanceX: Float, mapDistanceY: Float) {
+        layerOffsetX = mapDistanceX * speedPercentageX
 
-	/**
-	 * offset del layer rispetto alla posizione iniziale X. In pixel
-	 */
-	public float layerOffsetX;
+        // se ci sono i lock, vediamo di rispettarli.
+        if (tiledMap.scrollHorizontalLocked) {
+            //screenOffsetX=XenonMath.clamp(screenOffsetX, 0f, tiledMap.mapWidth - tiledMap.view.windowWidth);
+            layerOffsetX = clamp(layerOffsetX, 0f, tiledMap.view.mapMaxPositionValueX)
+        }
+        layerOffsetY = mapDistanceY * speedPercentageY
+        if (tiledMap.scrollVerticalLocked) {
+            //screenOffsetY=XenonMath.clamp(screenOffsetY, 0f, tiledMap.mapHeight - tiledMap.view.windowHeight);
+            layerOffsetY = clamp(layerOffsetY, 0f, tiledMap.view.mapMaxPositionValueY)
+        }
+    }
 
-	/**
-	 * offset del layer rispetto alla posizione iniziale Y. In pixel
-	 */
-	public float layerOffsetY;
-
-	/**
-	 * <p>
-	 * marca il layer per essere rimosso se impostato a true
-	 * </p>
-	 */
-	public boolean discard;
-
-	/**
-	 * Effettua lo scroll del layer
-	 * 
-	 * <p>Dobbiamo convertire le dimensioni della mappa in coordinate view riferite al layer.</p>
-	 * 
-	 * @param mapOffsetX
-	 * @param mapOffsetY
-	 */
-	public void scroll(float mapOffsetX, float mapOffsetY) {
-		layerOffsetX += mapOffsetX * speedPercentageX;
-		if (tiledMap.scrollHorizontalLocked) {
-			//screenOffsetX=XenonMath.clamp(screenOffsetX, 0f, tiledMap.mapWidth - tiledMap.view.windowWidth);
-			layerOffsetX= XenonMath.clamp(layerOffsetX, 0f, tiledMap.view.mapMaxPositionValueX);
-		}
-		// modulo
-		layerOffsetX = layerOffsetX % tiledMap.mapWidth;
-
-		layerOffsetY += mapOffsetY * speedPercentageY;
-		if (tiledMap.scrollVerticalLocked) {
-			//screenOffsetY=XenonMath.clamp(screenOffsetY, 0f, tiledMap.mapHeight - tiledMap.view.windowHeight);
-			layerOffsetY= XenonMath.clamp(layerOffsetY, 0f, tiledMap.view.mapMaxPositionValueY);
-		}
-		// modulo
-		layerOffsetY = layerOffsetY % tiledMap.mapHeight;
-	}
-
-	/**
-	 * <p>Effettua il posizionamento del layer. Siccome la posizione è modulo dimension, rimaniamo sempre nei limiti della mappa.</p>
-	 * 
-	 * <p>Dobbiamo convertire le dimensioni della mappa in coordinate view riferite al layer.</p>
-	 * 
-	 * @param mapDistanceX
-	 * 		distanza nel sistema mappa
-	 * @param mapDistanceY
-	 * 		distanza nel sistema mappa
-	 */
-	public void position(float mapDistanceX, float mapDistanceY) {
-		layerOffsetX = (mapDistanceX * speedPercentageX);		
-
-		// se ci sono i lock, vediamo di rispettarli.
-		if (tiledMap.scrollHorizontalLocked) {
-			//screenOffsetX=XenonMath.clamp(screenOffsetX, 0f, tiledMap.mapWidth - tiledMap.view.windowWidth);
-			layerOffsetX= XenonMath.clamp(layerOffsetX, 0f, tiledMap.view.mapMaxPositionValueX);
-		}
-		
-		layerOffsetY = (mapDistanceY * speedPercentageY);
-		if (tiledMap.scrollVerticalLocked) {
-			//screenOffsetY=XenonMath.clamp(screenOffsetY, 0f, tiledMap.mapHeight - tiledMap.view.windowHeight);
-			layerOffsetY= XenonMath.clamp(layerOffsetY, 0f, tiledMap.view.mapMaxPositionValueY);
-		}
-				
-	}
-
-	/**
-	 * Indica se è visualizzabile o meno
-	 * 
-	 * @return true se il layer è visibile
-	 */
-	public boolean isDrawable() {
-		return visible;
-	}
-
-	/**
-	 * Da invocare quando creo la finestra
-	 * 
-	 * @param view
-	 *            view appena costruita
-	 */
-	public abstract void onBuildView(TiledMapView view);
-	
-	public abstract TiledMapView view();
-
+    /**
+     * Da invocare quando creo la finestra
+     *
+     * @param view
+     * view appena costruita
+     */
+    abstract fun onBuildView(view: TiledMapView)
+    abstract fun view(): TiledMapView?
 }

@@ -1,71 +1,77 @@
 /**
- * 
- */
-package com.abubusoft.xenon.texture;
-
-/**
- * <p>Opzioni relative alla sostituzione delle texture. Serve fondamentalmente
- * ad indicare il fatto che la texture venga caricata in modo asincrono o in 
- * modo sincrono.</p>
- * 
- * @author Francesco Benincasa
  *
  */
-public class TextureReplaceOptions {
-	/**
-	 * <p>Build delle opzioni. configurazione di default:</p>
-	 * 
-	 * asyncLoad(false)
-	 * 
-	 * @return
-	 */
-	public static TextureReplaceOptions build() {
-		// configurazione di default
-		return (new TextureReplaceOptions()).asyncLoad(false);
-	}
-	
-	/**
-	 * <p>
-	 * Carica la bitmap in async mode
-	 * </p>
-	 */
-	public boolean asyncLoad;
+package com.abubusoft.xenon.texture
 
-	/**
-	 * <p>
-	 * Listener
-	 * </p>
-	 */
-	public TextureAsyncLoaderListener asyncLoaderListener;
-	
-	/**
-	 * Fluent interface per asyncLoad.
-	 * 
-	 * @param textureSizeValue
-	 * @return
-	 */
-	public TextureReplaceOptions asyncLoad(boolean value) {
-		asyncLoad = value;
-		return this;
-	}
+/**
+ *
+ * Opzioni relative alla sostituzione delle texture. Serve fondamentalmente
+ * ad indicare il fatto che la texture venga caricata in modo asincrono o in
+ * modo sincrono.
+ *
+ * @author Francesco Benincasa
+ */
+class TextureReplaceOptions {
+    /**
+     *
+     *
+     * Carica la bitmap in async mode
+     *
+     */
+    var asyncLoad = false
 
-	/**
-	 * Fluent interface per asyncLoad.
-	 * 
-	 * @param textureSizeValue
-	 * @return
-	 */
-	public TextureReplaceOptions asyncLoaderListener(TextureAsyncLoaderListener value) {
-		asyncLoad = asyncLoad || value != null;
-		asyncLoaderListener = value;
-		return this;
-	}
+    /**
+     *
+     *
+     * Listener
+     *
+     */
+    var asyncLoaderListener: TextureAsyncLoaderListener? = null
 
-	/**
-	 * <p>Effettua una copia di questa istanza.
-	 * @return
-	 */
-	public TextureReplaceOptions copy() {
-		return build().asyncLoad(this.asyncLoad).asyncLoaderListener(this.asyncLoaderListener);
-	}
+    /**
+     * Fluent interface per asyncLoad.
+     *
+     * @param textureSizeValue
+     * @return
+     */
+    fun asyncLoad(value: Boolean): TextureReplaceOptions {
+        asyncLoad = value
+        return this
+    }
+
+    /**
+     * Fluent interface per asyncLoad.
+     *
+     * @param textureSizeValue
+     * @return
+     */
+    fun asyncLoaderListener(value: TextureAsyncLoaderListener?): TextureReplaceOptions {
+        asyncLoad = asyncLoad || value != null
+        asyncLoaderListener = value
+        return this
+    }
+
+    /**
+     *
+     * Effettua una copia di questa istanza.
+     * @return
+     */
+    fun copy(): TextureReplaceOptions {
+        return build().asyncLoad(asyncLoad).asyncLoaderListener(asyncLoaderListener)
+    }
+
+    companion object {
+        /**
+         *
+         * Build delle opzioni. configurazione di default:
+         *
+         * asyncLoad(false)
+         *
+         * @return
+         */
+        fun build(): TextureReplaceOptions {
+            // configurazione di default
+            return TextureReplaceOptions().asyncLoad(false)
+        }
+    }
 }

@@ -1,32 +1,31 @@
-package com.abubusoft.xenon.mesh.modifiers;
+package com.abubusoft.xenon.mesh.modifiers
 
-import com.abubusoft.xenon.mesh.tiledmaps.Tile;
-import com.abubusoft.xenon.vbo.TextureBuffer;
-import com.abubusoft.xenon.vbo.VertexBuffer;
+import com.abubusoft.xenon.mesh.tiledmaps.Tile
+import com.abubusoft.xenon.vbo.AbstractBuffer
+import com.abubusoft.xenon.vbo.TextureBuffer
+import com.abubusoft.xenon.vbo.VertexBuffer
 
 /**
- * <p>
- * </p>
- * 
+ *
+ *
+ *
+ *
  * @author Francesco Benincasa
- * 
  */
-public class TextureQuadModifier {
-
-	/**
-	 * @param spriteShape
-	 * @param tile
-	 */
-	/*
+object TextureQuadModifier {
+    /**
+     * @param spriteShape
+     * @param tile
+     */
+    /*
 	 * public static void setTextureCoords(MeshSprite spriteShape, Tile tile) { setTextureCoords(spriteShape, TEXTURE_INDEX_DEFAULT, tile); }
 	 */
-
-	/**
-	 * Imposta la tile come texture nella texutre [CURRENT_TEXTURE_INDEX]
-	 * 
-	 * @param tile
-	 */
-	/*
+    /**
+     * Imposta la tile come texture nella texutre [CURRENT_TEXTURE_INDEX]
+     *
+     * @param tile
+     */
+    /*
 	 * public static void setTextureCoords(MeshSprite spriteShape, int textureIndex, Tile tile) { int basePtr = 0;
 	 * 
 	 * spriteShape.texturesCoords[textureIndex][SPRITE_SHAPE_OFFSET_X] = tile.textureLowX; spriteShape.texturesCoords[textureIndex][SPRITE_SHAPE_OFFSET_Y] = tile.textureLowY;
@@ -42,34 +41,31 @@ public class TextureQuadModifier {
 	 * 
 	 * // vertici spriteShape.textures[textureIndex].put(spriteShape.texturesCoords[textureIndex]).position(0); }
 	 */
-
-	/**
-	 * @param shape
-	 * @param lowX
-	 * @param highX
-	 * @param lowY
-	 * @param highY
-	 */
-	/*
+    /**
+     * @param shape
+     * @param lowX
+     * @param highX
+     * @param lowY
+     * @param highY
+     */
+    /*
 	 * public static void setTextureCoords(QuadMesh shape, float lowX, float highX, float lowY, float highY) { setTextureCoords(shape, 0, lowX, highX, lowY, highY); }
 	 */
-
-	/**
-	 * Imposta le coordinate mediante l'animazione
-	 * 
-	 * @param timeline
-	 */
-	/*
+    /**
+     * Imposta le coordinate mediante l'animazione
+     *
+     * @param timeline
+     */
+    /*
 	 * public static void setTextureCoords(MeshSprite spriteShape, TextureTimeline timeline) { TexturedAnimationFrame currentValue = timeline.getCurrentFrame();
 	 * setTextureCoords(spriteShape, currentValue.frame); }
 	 */
-
-	/**
-	 * Imposta le coordinate mediante l'animazione
-	 * 
-	 * @param timeline
-	 */
-	/*
+    /**
+     * Imposta le coordinate mediante l'animazione
+     *
+     * @param timeline
+     */
+    /*
 	 * public static void setTextureCoords(MeshSprite spriteShape, int textureIndex, TextureTimeline timeline) { TexturedAnimationFrame currentValue = timeline.getCurrentFrame();
 	 * setTextureCoords(spriteShape, textureIndex, currentValue.frame); }
 	 * 
@@ -85,71 +81,72 @@ public class TextureQuadModifier {
 	 * 
 	 * // Quando passo un array ad un direct buffer devo poi riposizionare a 0 shape.textures[textureIndex].put(shape.texturesCoords[textureIndex]).position(0); }
 	 */
-
-	/**
-	 * <p>
-	 * Imposta per uno sprite shape le texture coordinate per la texture #0, ovvero la prima.
-	 * </p>
-	 * 
-	 * <pre>
-	 * ---------------+ U
-	 * |
-	 * |  U low, V low
-	 * |  +------------------+
-	 * |  |                  |
-	 * |  |                  |
-	 * |  |                  |
-	 * |  +------------------+ U high, V high
-	 * |
-	 * + V
-	 * </pre>
-	 * 
-	 * @param shape
-	 *            shape
-	 * @param lowU
-	 *            lower U
-	 * @param highU
-	 *            higher U
-	 * @param lowV
-	 *            lower V
-	 * @param highV
-	 *            higher V
-	 */
-	/*
+    /**
+     *
+     *
+     * Imposta per uno sprite shape le texture coordinate per la texture #0, ovvero la prima.
+     *
+     *
+     * <pre>
+     * ---------------+ U
+     * |
+     * |  U low, V low
+     * |  +------------------+
+     * |  |                  |
+     * |  |                  |
+     * |  |                  |
+     * |  +------------------+ U high, V high
+     * |
+     * + V
+    </pre> *
+     *
+     * @param shape
+     * shape
+     * @param lowU
+     * lower U
+     * @param highU
+     * higher U
+     * @param lowV
+     * lower V
+     * @param highV
+     * higher V
+     */
+    /*
 	 * public static void setTextureCoords(MeshTile shape, float lowU, float highU, float lowV, float highV) { setTextureCoords(shape, 0, lowU, highU, lowV, highV); }
 	 */
-	/**
-	 * <p>
-	 * Imposta per uno sprite shape le texture coordinate per la texture #0, ovvero la prima.
-	 * </p>
-	 * 
-	 * <pre>
-	 * ---------------+ U
-	 * |
-	 * |  U low, V low
-	 * |  +------------------+
-	 * |  |                  |
-	 * |  |                  |
-	 * |  |                  |
-	 * |  +------------------+ U high, V high
-	 * |
-	 * + V
-	 * </pre>
-	 * 
-	 * @param shape
-	 *            shape
-	 * @param textureIndex
-	 *            indice della texture
-	 * @param lowU
-	 *            lower U
-	 * @param highU
-	 *            higher U
-	 * @param lowV
-	 *            lower V
-	 * @param highV
-	 *            higher V
-	 */
-	/*
+    /**
+     *
+     *
+     * Imposta per uno sprite shape le texture coordinate per la texture #0, ovvero la prima.
+     *
+     *
+     * <pre>
+     * ---------------+ U
+     * |
+     * |  U low, V low
+     * |  +------------------+
+     * |  |                  |
+     * |  |                  |
+     * |  |                  |
+     * |  +------------------+ U high, V high
+     * |
+     * + V
+    </pre> *
+     *
+     * @param shape
+     * shape
+     * @param textureIndex
+     * indice della texture
+     * @param lowU
+     * lower U
+     * @param highU
+     * higher U
+     * @param lowV
+     * lower V
+     * @param highV
+     * higher V
+     */
+    /*
 	 * public static void setTextureCoords(MeshTile shape, int textureIndex, float lowX, float highX, float lowY, float highY) {
 	 * 
 	 * float deltaX = (highX - lowX) / (shape.boundingBox.width / shape.tileWidth); float currentX = lowX; int n = shape.texturesCoords[textureIndex].length;
@@ -167,32 +164,30 @@ public class TextureQuadModifier {
 	 * 
 	 * // Quando passo un array ad un direct buffer devo poi riposizionare a 0 shape.textures[textureIndex].put(shape.texturesCoords[textureIndex]).position(0); }
 	 */
-
-	/**
-	 * <p>
-	 * Indica il verso sul quale operare.
-	 * </p>
-	 * 
-	 * @author Francesco Benincasa
-	 * 
-	 */
-	/*
+    /**
+     *
+     *
+     * Indica il verso sul quale operare.
+     *
+     *
+     * @author Francesco Benincasa
+     */
+    /*
 	 * public enum OperationVersus { HORIZONTAL, VERTICAL };
 	 * 
 	 * public enum OperationAlign { CENTER }
 	 */
-
-	/**
-	 * Dato uno sprite, provvede ad invertire le coordinate della texture associata. Questo vuol dire, ad esempio, che se prima la texture va da 0 a 1 (in orizzontale), dopo
-	 * l'applicazione di questo metodo andrà da 1 a 0.
-	 * 
-	 * @param shape
-	 * @param lowX
-	 * @param deltaX
-	 * @param lowY
-	 * @param highY
-	 */
-	/*
+    /**
+     * Dato uno sprite, provvede ad invertire le coordinate della texture associata. Questo vuol dire, ad esempio, che se prima la texture va da 0 a 1 (in orizzontale), dopo
+     * l'applicazione di questo metodo andrà da 1 a 0.
+     *
+     * @param shape
+     * @param lowX
+     * @param deltaX
+     * @param lowY
+     * @param highY
+     */
+    /*
 	 * public static void swapTextureCoords(XmlDataModel shape, int textureIndex, OperationVersus allocation, boolean update) { if (!shape.indexesEnabled) { int n =
 	 * shape.texturesCoords[textureIndex].length; switch (allocation) { case HORIZONTAL: for (int i = 0; i < n; i += TEXTURE_DIMENSION) { shape.texturesCoords[textureIndex][i + 0] = 1.0f
 	 * - shape.texturesCoords[textureIndex][i + 0]; } break; case VERTICAL: for (int i = 0; i < n; i += TEXTURE_DIMENSION) { shape.texturesCoords[textureIndex][i + 1] = 1.0f -
@@ -215,127 +210,134 @@ public class TextureQuadModifier {
 	 * 
 	 * } else { // TODO: da sistemare throw new XenonRuntimeException("changeAspectRatioTextureCoords not supported for indexed shape"); } }
 	 */
-
-	/**
-	 * Dato uno sprite, provvede ad invertire le coordinate della texture associata (num 0). Questo vuol dire, ad esempio, che se prima la texture va da 0 a 1 (in orizzontale),
-	 * dopo l'applicazione di questo metodo andrà da 1 a 0.
-	 * 
-	 * @param shape
-	 * @param lowX
-	 * @param deltaX
-	 * @param lowY
-	 * @param highY
-	 */
-	/*
+    /**
+     * Dato uno sprite, provvede ad invertire le coordinate della texture associata (num 0). Questo vuol dire, ad esempio, che se prima la texture va da 0 a 1 (in orizzontale),
+     * dopo l'applicazione di questo metodo andrà da 1 a 0.
+     *
+     * @param shape
+     * @param lowX
+     * @param deltaX
+     * @param lowY
+     * @param highY
+     */
+    /*
 	 * public static void swapTextureCoords(XmlDataModel shape, OperationVersus allocation, boolean update) { swapTextureCoords(shape, 0, allocation, update); }
 	 */
-	
-	/**
-	 * <p>
-	 * Imposta le coordinate texture della tile attualmente sotto il cursore.
-	 * </p>
-	 * 
-	 * <pre>
-	 * 
-	 *      2--- 3       4
-	 *      |   /       /|
-	 *      |  /       / |
-	 *      | /       /  |
-	 *      |/       /   |
-	 *      1       6----5
-	 * 
-	 * </pre>
-	 * 
-	 * <p>
-	 * Il controllo validità del tile si presume essere stato fatto prima di invocare questo metodo.
-	 * </p>
-	 * 
-	 * <p>
-	 * In caso di diagonal flip, questo metodo provvede a cambiare le coordinate in modo opportuno. Da ricordare che questa operazione non può essere fatta prima, ma solo nella
-	 * definizione delle coordinate uv.
-	 * </p>
-	 * 
-	 * @param buffer
-	 *            buffer a quad da inserire.
-	 * @param current
-	 *            indice del quad da aggiornare
-	 * @param tile
-	 *            tile di partenza da
-	 * @param update
-	 *            se true provvede ad aggiornare immediatamente il buffer.
-	 */
-	public static void setTextureCoords(TextureBuffer buffer, int current, float textureLowX, float textureHighX, float textureLowY, float textureHighY, boolean diagonalFlip, boolean update) {
-		// cursor rappresenta il numero di vertici. Per ogni vertice ci sono 2
-		// coordinate per le texture
-		int basePtr = current * VertexBuffer.VERTEX_IN_QUAD_TILE * TextureBuffer.TEXTURE_DIMENSIONS;
+    /**
+     *
+     *
+     * Imposta le coordinate texture della tile attualmente sotto il cursore.
+     *
+     *
+     * <pre>
+     *
+     * 2--- 3       4
+     * |   /       /|
+     * |  /       / |
+     * | /       /  |
+     * |/       /   |
+     * 1       6----5
+     *
+    </pre> *
+     *
+     *
+     *
+     * Il controllo validità del tile si presume essere stato fatto prima di invocare questo metodo.
+     *
+     *
+     *
+     *
+     * In caso di diagonal flip, questo metodo provvede a cambiare le coordinate in modo opportuno. Da ricordare che questa operazione non può essere fatta prima, ma solo nella
+     * definizione delle coordinate uv.
+     *
+     *
+     * @param buffer
+     * buffer a quad da inserire.
+     * @param current
+     * indice del quad da aggiornare
+     * @param tile
+     * tile di partenza da
+     * @param update
+     * se true provvede ad aggiornare immediatamente il buffer.
+     */
+    fun setTextureCoords(
+        buffer: TextureBuffer,
+        current: Int,
+        textureLowX: Float,
+        textureHighX: Float,
+        textureLowY: Float,
+        textureHighY: Float,
+        diagonalFlip: Boolean,
+        update: Boolean
+    ) {
+        // cursor rappresenta il numero di vertici. Per ogni vertice ci sono 2
+        // coordinate per le texture
+        var basePtr: Int = current * AbstractBuffer.VERTEX_IN_QUAD_TILE * TextureBuffer.TEXTURE_DIMENSIONS
+        if (!diagonalFlip) {
+            buffer.coords!![basePtr + TextureBuffer.OFFSET_S] = textureLowX
+            buffer.coords!![basePtr + TextureBuffer.OFFSET_T] = textureLowY
+        } else {
+            buffer.coords!![basePtr + TextureBuffer.OFFSET_S] = textureHighX
+            buffer.coords!![basePtr + TextureBuffer.OFFSET_T] = textureHighY
+        }
+        basePtr += TextureBuffer.TEXTURE_DIMENSIONS
+        buffer.coords!![basePtr + TextureBuffer.OFFSET_S] = textureLowX
+        buffer.coords!![basePtr + TextureBuffer.OFFSET_T] = textureHighY
+        if (!diagonalFlip) {
+            basePtr += TextureBuffer.TEXTURE_DIMENSIONS
+            buffer.coords!![basePtr + TextureBuffer.OFFSET_S] = textureHighX
+            buffer.coords!![basePtr + TextureBuffer.OFFSET_T] = textureHighY
+        } else {
+            basePtr += TextureBuffer.TEXTURE_DIMENSIONS
+            buffer.coords!![basePtr + TextureBuffer.OFFSET_S] = textureLowX
+            buffer.coords!![basePtr + TextureBuffer.OFFSET_T] = textureLowY
+        }
+        basePtr += TextureBuffer.TEXTURE_DIMENSIONS
+        buffer.coords!![basePtr + TextureBuffer.OFFSET_S] = textureHighX
+        buffer.coords!![basePtr + TextureBuffer.OFFSET_T] = textureLowY
+        if (update) {
+            buffer.update()
+        }
+    }
 
-		if (!diagonalFlip) {
-			buffer.coords[basePtr + TextureBuffer.OFFSET_S] = textureLowX;
-			buffer.coords[basePtr + TextureBuffer.OFFSET_T] = textureLowY;
-		} else {
-			buffer.coords[basePtr + TextureBuffer.OFFSET_S] = textureHighX;
-			buffer.coords[basePtr + TextureBuffer.OFFSET_T] = textureHighY;
-		}
-
-		basePtr += TextureBuffer.TEXTURE_DIMENSIONS;
-		buffer.coords[basePtr + TextureBuffer.OFFSET_S] = textureLowX;
-		buffer.coords[basePtr + TextureBuffer.OFFSET_T] = textureHighY;
-
-		if (!diagonalFlip) {
-			basePtr += TextureBuffer.TEXTURE_DIMENSIONS;
-			buffer.coords[basePtr + TextureBuffer.OFFSET_S] = textureHighX;
-			buffer.coords[basePtr + TextureBuffer.OFFSET_T] = textureHighY;
-		} else {
-			basePtr += TextureBuffer.TEXTURE_DIMENSIONS;
-			buffer.coords[basePtr + TextureBuffer.OFFSET_S] = textureLowX;
-			buffer.coords[basePtr + TextureBuffer.OFFSET_T] = textureLowY;
-		}
-
-		basePtr += TextureBuffer.TEXTURE_DIMENSIONS;
-		buffer.coords[basePtr + TextureBuffer.OFFSET_S] = textureHighX;
-		buffer.coords[basePtr + TextureBuffer.OFFSET_T] = textureLowY;
-
-		if (update) {
-			buffer.update();
-		}
-
-	}
-
-	/**
-	 * <p>
-	 * Imposta le coordinate texture della tile attualmente sotto il cursore.
-	 * </p>
-	 * 
-	 * <pre>
-	 * 
-	 *      2--- 3       4
-	 *      |   /       /|
-	 *      |  /       / |
-	 *      | /       /  |
-	 *      |/       /   |
-	 *      1       6----5
-	 * 
-	 * </pre>
-	 * 
-	 * <p>
-	 * Il controllo validità del tile si presume essere stato fatto prima di invocare questo metodo.
-	 * </p>
-	 * 
-	 * <p>
-	 * In caso di diagonal flip, questo metodo provvede a cambiare le coordinate in modo opportuno. Da ricordare che questa operazione non può essere fatta prima, ma solo nella
-	 * definizione delle coordinate uv.
-	 * </p>
-	 * 
-	 * @param buffer
-	 *            buffer a quad da inserire.
-	 * @param current
-	 *            indice del quad da aggiornare
-	 * @param tile
-	 *            tile di partenza da
-	 * @param update
-	 *            se true provvede ad aggiornare immediatamente il buffer.
-	 */
-	public static void setTextureCoords(TextureBuffer buffer, int current, Tile tile, boolean update) {
-		setTextureCoords(buffer, current, tile.lowX, tile.highX, tile.lowY, tile.highY, tile.diagonalFlip, update);
-	}
+    /**
+     *
+     *
+     * Imposta le coordinate texture della tile attualmente sotto il cursore.
+     *
+     *
+     * <pre>
+     *
+     * 2--- 3       4
+     * |   /       /|
+     * |  /       / |
+     * | /       /  |
+     * |/       /   |
+     * 1       6----5
+     *
+    </pre> *
+     *
+     *
+     *
+     * Il controllo validità del tile si presume essere stato fatto prima di invocare questo metodo.
+     *
+     *
+     *
+     *
+     * In caso di diagonal flip, questo metodo provvede a cambiare le coordinate in modo opportuno. Da ricordare che questa operazione non può essere fatta prima, ma solo nella
+     * definizione delle coordinate uv.
+     *
+     *
+     * @param buffer
+     * buffer a quad da inserire.
+     * @param current
+     * indice del quad da aggiornare
+     * @param tile
+     * tile di partenza da
+     * @param update
+     * se true provvede ad aggiornare immediatamente il buffer.
+     */
+    fun setTextureCoords(buffer: TextureBuffer, current: Int, tile: Tile, update: Boolean) {
+        setTextureCoords(buffer, current, tile.lowX, tile.highX, tile.lowY, tile.highY, tile.diagonalFlip, update)
+    }
 }

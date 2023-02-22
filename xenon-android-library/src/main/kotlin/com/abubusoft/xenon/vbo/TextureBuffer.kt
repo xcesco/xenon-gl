@@ -28,7 +28,7 @@ import java.nio.FloatBuffer
  */
 @BindType
 class TextureBuffer : AbstractBuffer {
-    internal constructor(vertexCountValue: Int, allocationValue: BufferAllocationType?) : super(vertexCountValue, TEXTURE_DIMENSIONS, allocationValue) {
+    internal constructor(vertexCountValue: Int, allocationValue: BufferAllocationType) : super(vertexCountValue, TEXTURE_DIMENSIONS, allocationValue) {
         coords = FloatArray(capacity)
         build()
     }
@@ -138,6 +138,7 @@ class TextureBuffer : AbstractBuffer {
 
     companion object {
         private const val serialVersionUID = 1948612627177002191L
+
         const val TEXTURE_DIMENSIONS = 2
 
         /**

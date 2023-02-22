@@ -1,18 +1,13 @@
-package com.abubusoft.xenon.mesh.tiledmaps.isostaggered;
+package com.abubusoft.xenon.mesh.tiledmaps.isostaggered
 
-import com.abubusoft.xenon.camera.Camera;
-import com.abubusoft.xenon.math.XenonMath;
-import com.abubusoft.xenon.math.Point2;
-import com.abubusoft.xenon.mesh.tiledmaps.TiledMap;
-import com.abubusoft.xenon.mesh.tiledmaps.modelcontrollers.AbstractMapController;
-import com.abubusoft.kripton.android.Logger;
+import com.abubusoft.kripton.android.Logger
+import com.abubusoft.xenon.camera.Camera
+import com.abubusoft.xenon.math.Point2
+import com.abubusoft.xenon.math.XenonMath.clamp
+import com.abubusoft.xenon.mesh.tiledmaps.TiledMap
+import com.abubusoft.xenon.mesh.tiledmaps.modelcontrollers.AbstractMapController
 
-public class ISSMapController extends AbstractMapController {
-
-    public ISSMapController(TiledMap mapValue, Camera cameraValue) {
-        super(mapValue, cameraValue);
-    }
-
+class ISSMapController(mapValue: TiledMap?, cameraValue: Camera?) : AbstractMapController(mapValue, cameraValue) {
     /**
      * Converte un punto dello schermo nelle coordinate
      *
@@ -20,21 +15,24 @@ public class ISSMapController extends AbstractMapController {
      * @param screenY
      * @return punto con coordinate sulla mappa
      */
-    public Point2 touch(float screenX, float screenY) {
-        {
-
-            Logger.info("Isometric map position (%s , %s), window size = (%s, %s) tile size = %s", map.positionInMap.x, map.positionInMap.y, ((ISSMapHandler) (map.handler)).isoWindowWidth, ((ISSMapHandler) (map.handler)).isoWindowHeight, ((ISSMapHandler) (map.handler)).isoTileSize);
+    override fun touch(screenX: Float, screenY: Float): Point2 {
+        run {
+            Logger.info(
+                "Isometric map position (%s , %s), window size = (%s, %s) tile size = %s",
+                map.positionInMap.x,
+                map.positionInMap.y,
+                (map.handler as ISSMapHandler).isoWindowWidth,
+                (map.handler as ISSMapHandler).isoWindowHeight,
+                (map.handler as ISSMapHandler).isoTileSize
+            )
         }
-
-        {
-            workScroll.set(ISSHelper.convertRawScreen2CenteredWindow(this, screenX, screenY));
-            Logger.info("Convert raw screen (%s , %s) to window (%s , %s)", screenX, screenY, workScroll.x, workScroll.y);
+        run {
+            workScroll.set(ISSHelper.convertRawScreen2CenteredWindow(this, screenX, screenY))
+            Logger.info("Convert raw screen (%s , %s) to window (%s , %s)", screenX, screenY, workScroll.x, workScroll.y)
         }
-
-
-        {
-            workScroll.set(ISSHelper.convertRawScreen2IsoMap(this, screenX, screenY));
-            Logger.info("Convert raw screen (%s , %s) to map (%s , %s)", screenX, screenY, workScroll.x, workScroll.y);
+        run {
+            workScroll.set(ISSHelper.convertRawScreen2IsoMap(this, screenX, screenY))
+            Logger.info("Convert raw screen (%s , %s) to map (%s , %s)", screenX, screenY, workScroll.x, workScroll.y)
         }
         /*
 		{
@@ -54,11 +52,8 @@ public class ISSMapController extends AbstractMapController {
 			workScroll.set(ISSHelper.convertIsoWindow2RawScreen(this, workScroll.x, workScroll.y));
 			Logger.info("Check raw screen (%s , %s) to calculated (%s , %s)", screenX, screenY, workScroll.x, workScroll.y);
 		}
-		*/
-
-
-        Logger.info("----ss--------------------");
-		/*
+		*/Logger.info("----ss--------------------")
+        /*
 		 * scroll.x=scroll.x-(this.map.view().windowCenter.x-map.tileWidth); scroll.y=(this.map.view().windowCenter.y- map.tileHeight)-scroll.y;
 		 * 
 		 * // versione 2 scroll.x = -(scroll.y -scroll.x / 2); scroll.y = (scroll.y + scroll.x / 2);
@@ -69,67 +64,51 @@ public class ISSMapController extends AbstractMapController {
 		 * (int)scroll.x/map.tileHeight);
 		 * 
 		 * //TODO per il momento non funziona molto bene //map.handler.convertScreen2Map(scroll, screenX* screenToTiledMapFactor, screenY* screenToTiledMapFactor);
-		 */
-        return workScroll;
+		 */return workScroll
     }
 
-    @Override
-    public void position(float x, float y) {
-        map.positionInMap.setCoords(x, y);
-
+    override fun position(x: Float, y: Float) {
+        map.positionInMap.setCoords(x, y)
         if (map.scrollHorizontalLocked) {
             // se locked, la position non può andare oltre
-            map.positionInMap.x = XenonMath.clamp(map.positionInMap.x, 0, map.view().mapMaxPositionValueX);
+            map.positionInMap.x = clamp(map.positionInMap.x, 0f, map.view().mapMaxPositionValueX)
         } else {
             // la posizione nella mappa deve essere sempre circoscritta alle
             // dimensioni della mappa stessa, senza mai andare oltre
             if (map.positionInMap.x < 0f) {
-                map.positionInMap.x += map.mapWidth;
+                map.positionInMap.x += map.mapWidth.toFloat()
             }
-
             if (map.positionInMap.x > map.mapWidth) {
-                map.positionInMap.x -= map.mapWidth;
+                map.positionInMap.x -= map.mapWidth.toFloat()
             }
-
             if (map.movementEventListener != null) {
-                map.scrollHorizontalCurrentArea = (int) (map.positionInMap.x * map.listenerOptions.horizontalAreaInvSize);
-
+                map.scrollHorizontalCurrentArea = (map.positionInMap.x * map.listenerOptions.horizontalAreaInvSize).toInt()
                 if (map.scrollHorizontalPreviousArea != map.scrollHorizontalCurrentArea) {
-                    map.scrollHorizontalPreviousArea = map.scrollHorizontalCurrentArea;
+                    map.scrollHorizontalPreviousArea = map.scrollHorizontalCurrentArea
                 }
             }
         }
-
         if (map.scrollVerticalLocked) {
             // se locked, la position non può andare oltre
-            map.positionInMap.y = XenonMath.clamp(map.positionInMap.y, 0, map.view().mapMaxPositionValueY);
+            map.positionInMap.y = clamp(map.positionInMap.y, 0f, map.view().mapMaxPositionValueY)
         } else {
-            if (map.positionInMap.y < 0f)
-                map.positionInMap.y += map.mapHeight;
-
-            if (map.positionInMap.y > map.mapHeight)
-                map.positionInMap.y -= map.mapHeight;
-
+            if (map.positionInMap.y < 0f) map.positionInMap.y += map.mapHeight.toFloat()
+            if (map.positionInMap.y > map.mapHeight) map.positionInMap.y -= map.mapHeight.toFloat()
             if (map.movementEventListener != null) {
-                map.scrollVerticalCurrentArea = (int) (map.positionInMap.x * map.listenerOptions.verticalAreaInvSize);
-
+                map.scrollVerticalCurrentArea = (map.positionInMap.x * map.listenerOptions.verticalAreaInvSize).toInt()
                 if (map.scrollVerticalPreviousArea != map.scrollVerticalCurrentArea) {
-                    map.scrollVerticalCurrentArea = map.scrollVerticalPreviousArea;
+                    map.scrollVerticalCurrentArea = map.scrollVerticalPreviousArea
                 }
             }
         }
-
-        for (int i = 0; i < map.layers.size(); i++) {
-            map.layers.get(i).position(map.positionInMap.x, map.positionInMap.y);
+        for (i in map.layers.indices) {
+            map.layers[i].position(map.positionInMap.x, map.positionInMap.y)
         }
 
         // in caso di spostamento e di listener!=null mandiamo evento
         if (map.movementEventListener != null) {
-            map.movementEventListener.onPosition(map.positionInMap.x, map.positionInMap.y);
+            map.movementEventListener.onPosition(map.positionInMap.x, map.positionInMap.y)
         }
-
-        map.resetScrollAreas();
-
+        map.resetScrollAreas()
     }
-
 }

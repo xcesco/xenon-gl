@@ -1,14 +1,11 @@
 /**
- * 
+ *
  */
-package com.abubusoft.xenon.mesh.tiledmaps.tmx.loader;
+package com.abubusoft.xenon.mesh.tiledmaps.tmx.loader
 
 /**
  * @author Francesco Benincasa
- *
  */
-public abstract class TMXPredefinedLayers {
-
-	public static final CharSequence TILEDLAYER_SHAPES = "shapes";
-
+object TMXPredefinedLayers {
+    val TILEDLAYER_SHAPES: CharSequence = "shapes"
 }

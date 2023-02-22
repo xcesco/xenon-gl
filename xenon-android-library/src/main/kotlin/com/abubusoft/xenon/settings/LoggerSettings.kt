@@ -1,18 +1,15 @@
-package com.abubusoft.xenon.settings;
+package com.abubusoft.xenon.settings
 
-import com.abubusoft.xenon.core.Uncryptable;
-
-import com.abubusoft.kripton.annotation.Bind;
-import com.abubusoft.kripton.annotation.BindType;
-import com.abubusoft.kripton.annotation.BindXml;
-import com.abubusoft.kripton.xml.XmlType;
+import com.abubusoft.kripton.annotation.Bind
+import com.abubusoft.kripton.annotation.BindType
+import com.abubusoft.kripton.annotation.BindXml
+import com.abubusoft.kripton.xml.XmlType
+import com.abubusoft.xenon.core.Uncryptable
 
 @Uncryptable
 @BindType
-public class LoggerSettings {
-
-	@Bind
-	@BindXml(xmlType=XmlType.ATTRIBUTE)
-	public LoggerLevelType level = LoggerLevelType.NONE;
-
+class LoggerSettings {
+    @Bind
+    @BindXml(xmlType = XmlType.ATTRIBUTE)
+    var level = LoggerLevelType.NONE
 }

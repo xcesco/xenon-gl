@@ -1,7 +1,5 @@
-package com.abubusoft.xenon.settings;
+package com.abubusoft.xenon.settings
 
-public enum TouchSupportType {
-	
-	DISABLE,
-	SINGLE_TOUCH;
+enum class TouchSupportType {
+    DISABLE, SINGLE_TOUCH
 }

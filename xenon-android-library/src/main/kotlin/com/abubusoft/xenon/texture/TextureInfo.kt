@@ -1,154 +1,137 @@
 /**
- * 
+ *
  */
-package com.abubusoft.xenon.texture;
+package com.abubusoft.xenon.texture
 
-import com.abubusoft.xenon.opengl.XenonGL;
-
-import android.content.Context;
-import android.opengl.GLES20;
+import android.content.Context
+import android.opengl.GLES20
+import com.abubusoft.xenon.opengl.XenonGL
 
 /**
  * Contiene le informazioni relative ad una texture. Sono informazioni asettiche rispetto ad openGL, quindi ad esempio non si troverà qui il bindingId.
- * 
+ *
  * Gestisce anche le cube texture, quindi ad ogni texture possono essere associati più di una risorsa.
- * 
+ *
  * @author Francesco Benincasa
- * 
  */
-public class TextureInfo {
+class TextureInfo @JvmOverloads constructor(
+    /**
+     * tipo di caricamento
+     */
+    val load: TextureLoadType,
+    /**
+     * tipo di texture
+     */
+    val type: TextureType = TextureType.TEXTURE2D
+) {
+    /**
+     * Tipo di caricamento
+     *
+     * @author Francesco Benincasa
+     */
+    enum class TextureLoadType {
+        ASSET_TEXTURE, BITMAP_TEXTURE, FILE_TEXTURE, RESOURCE_TEXTURE
+    }
 
-	public TextureInfo(TextureLoadType loadValue) {
-		this(loadValue, TextureType.TEXTURE2D);
-	}
+    /**
+     *
+     *
+     * Tipi di texture: standard o cubiche.
+     *
+     *
+     * @author Francesco Benincasa
+     */
+    enum class TextureType(
+        /**
+         *
+         *
+         * Valore da usare per il binding opengl.
+         *
+         */
+        var value: Int
+    ) {
+        /**
+         * texture generiche
+         */
+        TEXTURE2D(GLES20.GL_TEXTURE_2D),
 
-	public TextureInfo(TextureLoadType loadValue, TextureType typeValue) {
-		load = loadValue;
-		type = typeValue;
+        /**
+         * texture cubiche
+         */
+        TEXTURE2D_CUBIC(GLES20.GL_TEXTURE_CUBE_MAP),
 
-		switch (type) {
-		case TEXTURE2D:
-			fileName = new String[1];
-			resourceId = new int[1];
-			break;
-		case TEXTURE2D_CUBIC:
-			fileName = new String[6];
-			resourceId = new int[6];
-			break;
-		case TEXTURE_EXTERNAL:
-			//TODO CHECK
-			break;
-		}
-	}
+        /**
+         * texture esterne
+         */
+        TEXTURE_EXTERNAL(XenonGL.TEXTURE_EXTERNAL_OES);
+    }
 
-	/**
-	 * Tipo di caricamento
-	 * 
-	 * @author Francesco Benincasa
-	 * 
-	 */
-	public enum TextureLoadType {
-		ASSET_TEXTURE, BITMAP_TEXTURE, FILE_TEXTURE, RESOURCE_TEXTURE
-	};
+    /**
+     * address della risorsa
+     */
+    protected var resourceId: IntArray
+    fun setResourceId(value: Int) {
+        setResourceId(0, value)
+    }
 
-	/**
-	 * <p>
-	 * Tipi di texture: standard o cubiche.
-	 * </p>
-	 * 
-	 * @author Francesco Benincasa
-	 * 
-	 */
-	public enum TextureType {
-		/**
-		 * texture generiche
-		 */
-		TEXTURE2D(GLES20.GL_TEXTURE_2D),
-		/**
-		 * texture cubiche
-		 */
-		TEXTURE2D_CUBIC(GLES20.GL_TEXTURE_CUBE_MAP),
-		/**
-		 * texture esterne
-		 */
-		TEXTURE_EXTERNAL(XenonGL.TEXTURE_EXTERNAL_OES);
+    fun setResourceId(index: Int, value: Int) {
+        resourceId[index] = value
+    }
 
-		/**
-		 * <p>
-		 * Valore da usare per il binding opengl.
-		 * </p>
-		 */
-		public int value;
+    fun getResourceId(): Int {
+        return getResourceId(0)
+    }
 
-		TextureType(int val) {
-			value = val;
-		}
-	}
+    fun getResourceId(index: Int): Int {
+        return resourceId[index]
+    }
 
-	/**
-	 * tipo di caricamento
-	 */
-	public final TextureLoadType load;
+    /**
+     * nome del filename
+     */
+    protected var fileName: Array<String?>
+    fun setFileName(value: String?) {
+        setFileName(0, value)
+    }
 
-	/**
-	 * tipo di texture
-	 */
-	public final TextureType type;
+    fun setFileName(index: Int, value: String?) {
+        fileName[index] = value
+    }
 
-	/**
-	 * address della risorsa
-	 */
-	protected int[] resourceId;
+    fun getFileName(): String? {
+        return getFileName(0)
+    }
 
-	public void setResourceId(int value) {
-		setResourceId(0, value);
-	}
+    fun getFileName(index: Int): String? {
+        return fileName[index]
+    }
 
-	public void setResourceId(int index, int value) {
-		resourceId[index] = value;
-	}
+    /**
+     * dimensione della texture
+     */
+    var dimension: TextureDimension? = null
 
-	public int getResourceId() {
-		return getResourceId(0);
-	}
+    /**
+     * opzioni per la costruzione della texture
+     */
+    var options: TextureOptions? = null
 
-	public int getResourceId(int index) {
-		return resourceId[index];
-	}
+    /**
+     * Contesto dal quale viene recupearata
+     */
+    var resourceContext: Context? = null
 
-	/**
-	 * nome del filename
-	 */
-	protected String[] fileName;
-
-	public void setFileName(String value) {
-		setFileName(0, value);
-	}
-
-	public void setFileName(int index, String value) {
-		fileName[index] = value;
-	}
-
-	public String getFileName() {
-		return getFileName(0);
-	}
-
-	public String getFileName(int index) {
-		return fileName[index];
-	}
-
-	/**
-	 * dimensione della texture
-	 */
-	public TextureDimension dimension;
-
-	/**
-	 * opzioni per la costruzione della texture
-	 */
-	public TextureOptions options;
-
-	/**
-	 * Contesto dal quale viene recupearata
-	 */
-	public Context resourceContext;
+    init {
+        when (type) {
+            TextureType.TEXTURE2D -> {
+                fileName = arrayOfNulls(1)
+                resourceId = IntArray(1)
+            }
+            TextureType.TEXTURE2D_CUBIC -> {
+                fileName = arrayOfNulls(6)
+                resourceId = IntArray(6)
+            }
+            TextureType.TEXTURE_EXTERNAL -> {}
+        }
+    }
 }

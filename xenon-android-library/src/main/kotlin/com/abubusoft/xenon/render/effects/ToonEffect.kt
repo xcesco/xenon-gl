@@ -1,25 +1,20 @@
 /**
- * 
- */
-package com.abubusoft.xenon.render.effects;
-
-import com.abubusoft.xenon.render.AbstractEffect;
-import com.abubusoft.xenon.render.UseShader;
-
-/**
- * 
- * https://github.com/yulu/GLtext/blob/master/res/raw/edge_detect_fragment_shader.glsl
- * 
- * @author Francesco Benincasa
  *
  */
-@UseShader(ToonShader.class)
-public class ToonEffect extends AbstractEffect<ToonShader> {
+package com.abubusoft.xenon.render.effects
 
-	@Override
-	protected void updateShader(ToonShader shader, long enlapsedTime, float speedAdapter) {
-		// TODO Auto-generated method stub
-		
-	}
-		
+import com.abubusoft.xenon.render.AbstractEffect
+import com.abubusoft.xenon.render.UseShader
+
+/**
+ *
+ * https://github.com/yulu/GLtext/blob/master/res/raw/edge_detect_fragment_shader.glsl
+ *
+ * @author Francesco Benincasa
+ */
+@UseShader(ToonShader::class)
+class ToonEffect : AbstractEffect<ToonShader?>() {
+    protected override fun updateShader(shader: ToonShader, enlapsedTime: Long, speedAdapter: Float) {
+        // TODO Auto-generated method stub
+    }
 }

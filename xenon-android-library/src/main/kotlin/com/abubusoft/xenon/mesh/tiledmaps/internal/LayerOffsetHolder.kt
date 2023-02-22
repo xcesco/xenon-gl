@@ -1,28 +1,24 @@
-package com.abubusoft.xenon.mesh.tiledmaps.internal;
+package com.abubusoft.xenon.mesh.tiledmaps.internal
 
-import com.abubusoft.xenon.math.Point2;
+import com.abubusoft.xenon.math.Point2
 
 /**
  * Rappresenta per un layer, il suo punto di riferimento per quel che riguarda il primo tile da disegnare
- * 
- * @author xcesco
  *
+ * @author xcesco
  */
-public class LayerOffsetHolder {
-	public int tileIndexX;
-	public int tileIndexY;
+class LayerOffsetHolder {
+    var tileIndexX = 0
+    var tileIndexY = 0
+    var screenOffsetX = 0
+    var screenOffsetY = 0
+    fun setOffset(offsetPoint: Point2) {
+        screenOffsetX = offsetPoint.x.toInt()
+        screenOffsetY = offsetPoint.y.toInt()
+    }
 
-	public int screenOffsetX;
-	public int screenOffsetY;
-
-	public void setOffset(Point2 offsetPoint) {
-		screenOffsetX = (int) offsetPoint.x;
-		screenOffsetY = (int) offsetPoint.y;
-	}
-
-	public void setOffset(int x, int y) {
-		screenOffsetX = x;
-		screenOffsetY = y;
-	}
-
+    fun setOffset(x: Int, y: Int) {
+        screenOffsetX = x
+        screenOffsetY = y
+    }
 }

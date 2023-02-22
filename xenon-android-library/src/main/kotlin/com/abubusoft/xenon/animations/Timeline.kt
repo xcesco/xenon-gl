@@ -68,7 +68,7 @@ import com.abubusoft.xenon.core.collections.SmartQueue
  * @param <A>
  * @param <M>
 </M></A></V> */
-open class Timeline<A : Animation<K>?, K : KeyFrame?, H : AnimationHandler<K>?> {
+open class Timeline<A : Animation<K>, K : KeyFrame, H : AnimationHandler<K>> {
     /**
      * Avvia l'animazione
      *
@@ -137,7 +137,7 @@ open class Timeline<A : Animation<K>?, K : KeyFrame?, H : AnimationHandler<K>?> 
      */
     fun forceNext() {
         if (handler!!.status == AnimationHandler.StatusType.RUNNING) {
-            handler.loop = false
+            handler!!.isLoop = false
         }
     }
 
@@ -149,8 +149,11 @@ open class Timeline<A : Animation<K>?, K : KeyFrame?, H : AnimationHandler<K>?> 
      * indice dell'animator
      */
     var index = 0
+
     val isAnimationFinished: Boolean
-        get() = handler!!.isFinished
+        get() {
+            return handler!!.isFinished
+        }
 
     /**
      * Durata dell'animazione. Usa il cursor
@@ -176,7 +179,7 @@ open class Timeline<A : Animation<K>?, K : KeyFrame?, H : AnimationHandler<K>?> 
      * @return
      */
     val animationName: String?
-        get() = handler.getAnimationName()
+        get() = handler!!.animationName
     /**
      * @return the handler
      */
@@ -207,7 +210,7 @@ open class Timeline<A : Animation<K>?, K : KeyFrame?, H : AnimationHandler<K>?> 
      * Sequenza delle animazioni da eseguire.
      *
      */
-    protected var channel: SmartQueue<A>
+    private var channel: SmartQueue<A> = SmartQueue(16)
     /**
      *
      *
@@ -239,22 +242,6 @@ open class Timeline<A : Animation<K>?, K : KeyFrame?, H : AnimationHandler<K>?> 
 	 * 
 	 * return false; }
 	 */
-    /**
-     *
-     *
-     * Costruttore con l'animazione da far partire subito.
-     *
-     *
-     * @param timelineName
-     * nome della timeline
-     * @param animationName
-     * animazione da far partir subito
-     * @param manager
-     * manager delle animazioni
-     */
-    init {
-        channel = SmartQueue(16)
-    }
 
     /**
      * Restituisce il valore corrente dell'animazione.
@@ -292,6 +279,9 @@ open class Timeline<A : Animation<K>?, K : KeyFrame?, H : AnimationHandler<K>?> 
 
     val isFinished: Boolean
         get() = handler!!.isFinished
+
     val isAnimationPlaying: Boolean
-        get() = handler!!.isPlaying
+        get() {
+            return handler!!.isPlaying
+        }
 }

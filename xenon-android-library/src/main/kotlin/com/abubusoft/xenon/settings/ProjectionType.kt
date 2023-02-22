@@ -1,13 +1,11 @@
 /**
- * 
+ *
  */
-package com.abubusoft.xenon.settings;
+package com.abubusoft.xenon.settings
 
 /**
  * @author Francesco Benincasa
- *
  */
-public enum ProjectionType {
-	ORTHOGONAL,
-	PERSPECTIVE;
+enum class ProjectionType {
+    ORTHOGONAL, PERSPECTIVE
 }

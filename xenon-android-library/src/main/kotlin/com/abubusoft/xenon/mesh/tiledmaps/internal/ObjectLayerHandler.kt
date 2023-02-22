@@ -1,11 +1,5 @@
-package com.abubusoft.xenon.mesh.tiledmaps.internal;
+package com.abubusoft.xenon.mesh.tiledmaps.internal
 
-import com.abubusoft.xenon.mesh.tiledmaps.ObjectLayer;
+import com.abubusoft.xenon.mesh.tiledmaps.ObjectLayer
 
-public abstract class ObjectLayerHandler extends AbstractLayerHandler<ObjectLayer> {
-
-	public ObjectLayerHandler(ObjectLayer layer) {
-		super(layer);
-	}
-
-}
+abstract class ObjectLayerHandler(layer: ObjectLayer) : AbstractLayerHandler<ObjectLayer?>(layer)

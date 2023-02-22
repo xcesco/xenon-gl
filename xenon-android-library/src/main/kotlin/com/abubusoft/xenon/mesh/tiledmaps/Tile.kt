@@ -1,192 +1,161 @@
-package com.abubusoft.xenon.mesh.tiledmaps;
+package com.abubusoft.xenon.mesh.tiledmaps
 
-import com.abubusoft.xenon.texture.TextureRegion;
-
-import com.abubusoft.kripton.annotation.BindType;
+import com.abubusoft.kripton.annotation.BindType
+import com.abubusoft.xenon.texture.TextureRegion
 
 /**
- * <p>
+ *
+ *
  * Rappresenta la singola tile
- * </p>
- * 
+ *
+ *
  * @author Francesco Benincasa
- * 
  */
 @BindType
-public class Tile extends TextureRegion {
+class Tile
+/**
+ *
+ *
+ * Costruttore
+ *
+ *
+ * @param gid
+ * @param column
+ * @param row
+ * @param atlasColumn
+ * @param atlasRow
+ * @param width
+ * @param height
+ */ @JvmOverloads constructor(
+    /**
+     * values del tile
+     */
+    var gid: Int = 0,
+    /**
+     * colonna nel layer
+     */
+    var layerColumn: Int = 0,
+    /**
+     * riga nel layer
+     */
+    var layerRow: Int = 0,
+    /**
+     * colonna nel tileset
+     */
+    var atlasColumn: Int = -1,
+    /**
+     * riga nel tileset
+     */
+    var atlasRow: Int = -1,
+    /**
+     * larghezza
+     */
+    var width: Int = 0,
+    /**
+     * altezza del tile
+     */
+    var height: Int = 0,
+    /**
+     * offsetX del tile
+     */
+    var drawOffsetX: Int = 0,
+    /**
+     * screenOffsetY del tile
+     */
+    var drawOffsetY: Int = 0
+) : TextureRegion() {
+    /**
+     * index di [TiledMap.textureList] della texture associata.
+     */
+    var textureSelector: Byte = 0
 
-	/**
-	 * values del tile
-	 */
-	public int gid;
+    /**
+     * Indica che la tile prima di essere usata deve essere ruotata in orizzontale
+     */
+    var horizontalFlip = false
 
-	/**
-	 * colonna nel tileset
-	 */
-	public int atlasColumn;
+    /**
+     * Indica che la tile prima di essere usata deve essere ruotata in verticale
+     */
+    var verticalFlip = false
 
-	/**
-	 * riga nel tileset
-	 */
-	public int atlasRow;
+    /**
+     * Indica che la tile prima di essere usata deve essere subire l'inversione tra asse startX e startY della texture
+     */
+    var diagonalFlip = false
+    /**
+     *
+     *
+     * Costruttore
+     *
+     *
+     * @param gid
+     * @param layerColumn
+     * @param layerRow
+     * @param atlasColumn
+     * @param atlasRow
+     * @param width
+     * @param height
+     */
+    /**
+     * Imposta le coordinate della texture.
+     *
+     * @param xl
+     * @param xh
+     * @param yl
+     * @param yh
+     */
+    fun setTextureCoordinate(xl: Float, xh: Float, yl: Float, yh: Float) {
+        lowX = xl
+        highX = xh
+        lowY = yl
+        highY = yh
+    }
 
-	/**
-	 * colonna nel layer
-	 */
-	public int layerColumn;
+    /**
+     * Imposta le dimensioni del tile
+     *
+     * @param tileWidth
+     * @param tileHeight
+     */
+    fun setDimensions(tileWidth: Int, tileHeight: Int) {
+        height = tileHeight
+        width = tileWidth
+    }
 
-	/**
-	 * riga nel layer
-	 */
-	public int layerRow;
+    /**
+     * Imposta la posizione del tile nel layer
+     *
+     * @param row
+     * @param col
+     */
+    fun setLayerPosition(row: Int, col: Int) {
+        layerRow = row
+        layerColumn = col
+    }
 
-	/**
-	 * larghezza
-	 */
-	public int width;
+    fun setAtlas(column: Int, row: Int) {
+        atlasColumn = column
+        atlasRow = row
+    }
 
-	/**
-	 * altezza del tile
-	 */
-	public int height;
+    fun setEmpty() {
+        gid = 0
+    }
 
-	/**
-	 * offsetX del tile
-	 */
-	public int drawOffsetX;
+    companion object {
+        fun getEmptyTile(column: Int, row: Int): Tile {
+            return Tile(0, column, row, -1, -1, 0, 0, 0, 0)
+        }
 
-	/**
-	 * screenOffsetY del tile
-	 */
-	public int drawOffsetY;
-
-	/**
-	 * index di {@link TiledMap#textureList} della texture associata.
-	 */
-	public byte textureSelector;
-
-	/**
-	 * Indica che la tile prima di essere usata deve essere ruotata in orizzontale
-	 */
-	public boolean horizontalFlip;
-
-	/**
-	 * Indica che la tile prima di essere usata deve essere ruotata in verticale
-	 */
-	public boolean verticalFlip;
-
-	/**
-	 * Indica che la tile prima di essere usata deve essere subire l'inversione tra asse startX e startY della texture
-	 */
-	public boolean diagonalFlip;
-
-	public Tile() {
-		this(0, 0, 0, -1, -1, 0, 0,0,0);
-	}
-
-	/**
-	 * <p>
-	 * Costruttore
-	 * </p>
-	 * 
-	 * @param gid
-	 * @param column
-	 * @param row
-	 * @param atlasColumn
-	 * @param atlasRow
-	 * @param width
-	 * @param height
-	 */
-	public Tile(int gid, int column, int row, int atlasColumn, int atlasRow, int width, int height) {
-		this(gid, column, row, atlasColumn, atlasRow, width, height, 0, 0);
-	}
-
-	/**
-	 * <p>
-	 * Costruttore
-	 * </p>
-	 * 
-	 * @param gid
-	 * @param column
-	 * @param row
-	 * @param atlasColumn
-	 * @param atlasRow
-	 * @param width
-	 * @param height
-	 */
-	public Tile(int gid, int column, int row, int atlasColumn, int atlasRow, int width, int height, int drawOffsetX, int drawOffsetY) {
-		this.gid = gid;
-		this.layerColumn = column;
-		this.layerRow = row;
-		this.atlasColumn = atlasColumn;
-		this.atlasRow = atlasRow;
-		this.width = width;
-		this.height = height;
-
-		this.drawOffsetX = drawOffsetX;
-		this.drawOffsetY = drawOffsetY;
-	}
-
-	public static Tile getEmptyTile(int column, int row) {
-		return new Tile(0, column, row, -1, -1, 0, 0, 0, 0);
-	}
-
-	/**
-	 * Imposta le coordinate della texture.
-	 * 
-	 * @param xl
-	 * @param xh
-	 * @param yl
-	 * @param yh
-	 */
-	public void setTextureCoordinate(float xl, float xh, float yl, float yh) {
-		lowX = xl;
-		highX = xh;
-
-		lowY = yl;
-		highY = yh;
-	}
-
-	/**
-	 * Imposta le dimensioni del tile
-	 * 
-	 * @param tileWidth
-	 * @param tileHeight
-	 */
-	public void setDimensions(int tileWidth, int tileHeight) {
-		height = tileHeight;
-		width = tileWidth;
-	}
-
-	/**
-	 * Imposta la posizione del tile nel layer
-	 * 
-	 * @param row
-	 * @param col
-	 */
-	public void setLayerPosition(int row, int col) {
-		layerRow = row;
-		layerColumn = col;
-	}
-
-	/**
-	 * Indica se la tile è vuota o meno. Una tile è vuota se è nulla o se ha id == 0.
-	 * 
-	 * @param tile
-	 * @return
-	 */
-	public static boolean isEmpty(Tile tile) {
-		if (tile == null)
-			return true;
-		return tile.gid == 0;
-	}
-
-	public void setAtlas(int column, int row) {
-		this.atlasColumn = column;
-		this.atlasRow = row;
-	}
-
-	public void setEmpty() {
-		gid = 0;
-	}
+        /**
+         * Indica se la tile è vuota o meno. Una tile è vuota se è nulla o se ha id == 0.
+         *
+         * @param tile
+         * @return
+         */
+        fun isEmpty(tile: Tile?): Boolean {
+            return if (tile == null) true else tile.gid == 0
+        }
+    }
 }

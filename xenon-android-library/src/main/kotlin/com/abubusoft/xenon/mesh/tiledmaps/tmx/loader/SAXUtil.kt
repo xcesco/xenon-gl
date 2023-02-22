@@ -11,84 +11,74 @@
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package com.abubusoft.xenon.mesh.tiledmaps.tmx.loader;
+package com.abubusoft.xenon.mesh.tiledmaps.tmx.loader
 
-import android.annotation.SuppressLint;
-
-import org.xml.sax.Attributes;
+import android.annotation.SuppressLint
+import org.xml.sax.Attributes
 
 /**
  * A utility class for parsing SAX objects.
  */
-public class SAXUtil {
+object SAXUtil {
+    fun getInt(atts: Attributes, name: String): Int {
+        val value = atts.getValue("", name)
+        if (value != null) {
+            return value.toInt()
+        }
+        throw IllegalArgumentException("No value found for attribute: $name")
+    }
 
-	public static int getInt(Attributes atts, String name) {
-		final String value = atts.getValue("", name);
-		if (value != null) {
-			return Integer.parseInt(value);
-		}
-		throw new IllegalArgumentException("No value found for attribute: " + name);
-	}
+    fun getLong(atts: Attributes, name: String): Long {
+        val value = atts.getValue("", name)
+        if (value != null) {
+            return value.toLong()
+        }
+        throw IllegalArgumentException("No value found for attribute: $name")
+    }
 
-	public static long getLong(Attributes atts, String name) {
-		final String value = atts.getValue("", name);
-		if (value != null) {
-			return Long.parseLong(value);
-		}
-		throw new IllegalArgumentException("No value found for attribute: " + name);
-	}
+    fun getInt(atts: Attributes, name: String?, defaultValue: Int): Int {
+        val value = atts.getValue("", name)
+        return value?.toInt() ?: defaultValue
+    }
 
-	public static int getInt(Attributes atts, String name, int defaultValue) {
-		final String value = atts.getValue("", name);
-		if (value != null) {
-			return Integer.parseInt(value);
-		}
-		return defaultValue;
-	}
+    /**
+     *
+     * Ottiene il valore dell'attributo in lowercase.
+     *
+     * @param atts
+     * @param name
+     * @return
+     */
+    @SuppressLint("DefaultLocale")
+    fun getString(atts: Attributes, name: String?): String {
+        return atts.getValue("", name)
+    }
 
-	/**
-	 * <p>Ottiene il valore dell'attributo in lowercase.</p>
-	 * 
-	 * @param atts
-	 * @param name
-	 * @return
-	 */
-	@SuppressLint("DefaultLocale")
-	public static String getString(Attributes atts, String name) {
-		String value=atts.getValue("", name);
-		
-		return value;
-	}
+    /**
+     *
+     * Recupera un attributo di tipo string.
+     *
+     * @param atts
+     * @param name
+     * @param defaultValue
+     * @return
+     */
+    fun getString(atts: Attributes, name: String?, defaultValue: String): String {
+        val value = atts.getValue("", name)
+        return value ?: defaultValue
+    }
 
-	/**
-	 * <p>Recupera un attributo di tipo string.</p>
-	 * 
-	 * @param atts
-	 * @param name
-	 * @param defaultValue
-	 * @return
-	 */
-	public static String getString(Attributes atts, String name, String defaultValue) {
-		String value = atts.getValue("", name);
-		if (value != null) {
-			return value;
-		}
-		return defaultValue;
-	}
-
-	/**
-	 * <p>Recupera un attributo di tipo float.</p>
-	 * 
-	 * @param atts
-	 * @param name
-	 * @param defaultValue
-	 * @return
-	 */
-	public static float getFloat(Attributes atts, String name, float defaultValue) {
-		final String value = atts.getValue("", name);
-		if (value != null) {
-			return Float.parseFloat(value);
-		}
-		return defaultValue;
-	}
+    /**
+     *
+     * Recupera un attributo di tipo float.
+     *
+     * @param atts
+     * @param name
+     * @param defaultValue
+     * @return
+     */
+    fun getFloat(atts: Attributes, name: String?, defaultValue: Float): Float {
+        val value = atts.getValue("", name)
+        return value?.toFloat() ?: defaultValue
+    }
 }

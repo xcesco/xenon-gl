@@ -1,11 +1,10 @@
-package com.abubusoft.xenon.mesh.tiledmaps;
+package com.abubusoft.xenon.mesh.tiledmaps
 
 /**
  * Direzione dello scroll.
- * 
- * @author Francesco Benincasa
  *
+ * @author Francesco Benincasa
  */
-public enum ScrollDirectionType {
-	UNKNOWN, HORIZONTAL_SCROLL, VERTICAL_SCROLL;
+enum class ScrollDirectionType {
+    UNKNOWN, HORIZONTAL_SCROLL, VERTICAL_SCROLL
 }

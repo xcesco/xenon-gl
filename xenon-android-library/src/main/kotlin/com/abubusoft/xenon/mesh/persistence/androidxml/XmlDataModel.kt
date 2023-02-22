@@ -1,18 +1,16 @@
-package com.abubusoft.xenon.mesh.persistence.androidxml;
+package com.abubusoft.xenon.mesh.persistence.androidxml
 
-import com.abubusoft.kripton.annotation.Bind;
-import com.abubusoft.kripton.annotation.BindType;
+import com.abubusoft.kripton.annotation.Bind
+import com.abubusoft.kripton.annotation.BindType
 
 @BindType("mesh")
-public class XmlDataModel {
+class XmlDataModel {
+    @Bind("sharedgeometry")
+    var geometry: XmlSharedGeometry? = null
 
-	@Bind("sharedgeometry")
-	public XmlSharedGeometry geometry;
-	
-	@Bind("submeshes")
-	public XmlSubmeshes submeshes;
-	
-	@Bind("submeshnames")
-	public XmlSubmeshnames names;
-	
+    @Bind("submeshes")
+    var submeshes: XmlSubmeshes? = null
+
+    @Bind("submeshnames")
+    var names: XmlSubmeshnames? = null
 }

@@ -1,63 +1,58 @@
-package com.abubusoft.xenon.mesh.tiledmaps;
+package com.abubusoft.xenon.mesh.tiledmaps
 
 /**
- * <p>
+ *
+ *
  * Opzioni relative al listener sugli eventi di spostamento relativi alla mappa.
- * </p>
- * 
+ *
+ *
  * @author Francesco Benincasa
- * 
  */
-public class MovementListenerOptions {
+class MovementListenerOptions private constructor() {
+    /**
+     * numero di aree in orizzontale in cui suddividere logicamente la mappa
+     */
+    var horizontalAreaCount = 0
+    var horizontalAreaInvSize = 0f
 
-	/**
-	 * numero di aree in orizzontale in cui suddividere logicamente la mappa
-	 */
-	public int horizontalAreaCount;
+    /**
+     * numero di aree in verticale in cui suddividere logicamente la mappa
+     */
+    var verticalAreaCount = 0
+    var verticalAreaInvSize = 0f
 
-	public float horizontalAreaInvSize;
+    /**
+     * numero di aree in orizzontale in cui suddividere logicamente la mappa
+     */
+    fun horizontalAreaCount(value: Int): MovementListenerOptions {
+        horizontalAreaCount = value
+        return this
+    }
 
-	/**
-	 * numero di aree in verticale in cui suddividere logicamente la mappa
-	 */
-	public int verticalAreaCount;
+    /**
+     * numero di aree in verticale in cui suddividere logicamente la mappa
+     */
+    fun verticalAreaCount(value: Int): MovementListenerOptions {
+        verticalAreaCount = value
+        return this
+    }
 
-	public float verticalAreaInvSize;
-
-	private MovementListenerOptions() {
-
-	}
-
-	/**
-	 * <p>
-	 * Opzioni di default:
-	 * </p>
-	 * <ul>
-	 * <li>horizontalAreaCount = 1</li>
-	 * <li>verticalAreaCount = 1</li>
-	 * </ul>
-	 * 
-	 * @return
-	 * 		this
-	 */
-	public static MovementListenerOptions build() {
-		return (new MovementListenerOptions()).horizontalAreaCount(1).verticalAreaCount(1);
-	}
-
-	/**
-	 * numero di aree in orizzontale in cui suddividere logicamente la mappa
-	 */
-	public MovementListenerOptions horizontalAreaCount(int value) {
-		horizontalAreaCount = value;
-		return this;
-	}
-
-	/**
-	 * numero di aree in verticale in cui suddividere logicamente la mappa
-	 */
-	public MovementListenerOptions verticalAreaCount(int value) {
-		verticalAreaCount = value;
-		return this;
-	}
-
+    companion object {
+        /**
+         *
+         *
+         * Opzioni di default:
+         *
+         *
+         *  * horizontalAreaCount = 1
+         *  * verticalAreaCount = 1
+         *
+         *
+         * @return
+         * this
+         */
+        fun build(): MovementListenerOptions {
+            return MovementListenerOptions().horizontalAreaCount(1).verticalAreaCount(1)
+        }
+    }
 }

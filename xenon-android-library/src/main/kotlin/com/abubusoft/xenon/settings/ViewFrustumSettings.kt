@@ -1,63 +1,65 @@
-package com.abubusoft.xenon.settings;
+package com.abubusoft.xenon.settings
 
-import com.abubusoft.xenon.core.Uncryptable;
-
-import com.abubusoft.kripton.annotation.Bind;
-import com.abubusoft.kripton.annotation.BindType;
+import com.abubusoft.kripton.annotation.Bind
+import com.abubusoft.kripton.annotation.BindType
+import com.abubusoft.xenon.core.Uncryptable
 
 /**
- * <p>Impostazioni del frustum.</p>
- * 
- * <p>In order to visualize a scene from different angles a virtual camera is often
+ *
+ * Impostazioni del frustum.
+ *
+ *
+ * In order to visualize a scene from different angles a virtual camera is often
  * used. The virtual camera setup, commonly done with gluPerspective and
- * gluLookAt functions, determines what is visible on screen.</p>
- * 
- * <p>The view frustum is the volume that contains everything that is potentially
+ * gluLookAt functions, determines what is visible on screen.
+ *
+ *
+ * The view frustum is the volume that contains everything that is potentially
  * (there may be occlusions) visible on the screen. This volume is defined
  * according to the camera’s settings, and when using a perspective projection
- * takes the shape of a truncated pyramid.</p>
- * 
- * <img src="doc-files/vf.gif"/>
- * 
- * <p></p>
- * 
+ * takes the shape of a truncated pyramid.
+ *
+ * <img src="doc-files/vf.gif"></img>
+ *
+ *
+ *
+ *
  * @author Francesco Benincasa
- * 
  */
 @Uncryptable
 @BindType
-public class ViewFrustumSettings {
-	/**
-	 * Definisce quale lato della view la camera deve ricoprire: altezza o
-	 * larghezza.
-	 */
-	@Bind("viewFrustumAlign")
-	public ViewFrustumAlignType align = ViewFrustumAlignType.HEIGHT_ALIGN;
+class ViewFrustumSettings {
+    /**
+     * Definisce quale lato della view la camera deve ricoprire: altezza o
+     * larghezza.
+     */
+    @Bind("viewFrustumAlign")
+    var align = ViewFrustumAlignType.HEIGHT_ALIGN
 
-	/**
-	 * field of view
-	 */
-	@Bind("viewFrustumFieldOfView")
-	public float fieldOfView = 30f;
+    /**
+     * field of view
+     */
+    @Bind("viewFrustumFieldOfView")
+    var fieldOfView = 30f
 
-	@Bind("viewFrustumProjection")
-	public ProjectionType projection = ProjectionType.PERSPECTIVE;
+    @Bind("viewFrustumProjection")
+    var projection = ProjectionType.PERSPECTIVE
 
-	/**
-	 * distanza del piano più vicino rispetto alla camera del frustum
-	 */
-	@Bind("viewFrustumZNear")
-	public float zNear = 1.0f;
+    /**
+     * distanza del piano più vicino rispetto alla camera del frustum
+     */
+    @Bind("viewFrustumZNear")
+    var zNear = 1.0f
 
-	/**
-	 * distanza del piano più lontano del frustum rispetto alla camera
-	 */
-	@Bind("viewFrustumZFar")
-	public float zFar = 1000f;
+    /**
+     * distanza del piano più lontano del frustum rispetto alla camera
+     */
+    @Bind("viewFrustumZFar")
+    var zFar = 1000f
 
-	/**
-	 * dimensione della camera. Utile solo nel caso di proiezione ortogonale
-	 */
-	@Bind("viewFrustumSize")
-	public float size = 1000f;
+    /**
+     * dimensione della camera. Utile solo nel caso di proiezione ortogonale
+     */
+    @Bind("viewFrustumSize")
+    var size = 1000f
 }

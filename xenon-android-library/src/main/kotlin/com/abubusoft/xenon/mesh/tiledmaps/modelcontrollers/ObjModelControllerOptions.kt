@@ -1,61 +1,53 @@
-package com.abubusoft.xenon.mesh.tiledmaps.modelcontrollers;
+package com.abubusoft.xenon.mesh.tiledmaps.modelcontrollers
 
-import com.abubusoft.xenon.R;
+import com.abubusoft.xenon.R
 
-public class ObjModelControllerOptions {
+class ObjModelControllerOptions private constructor() {
+    /**
+     * elenco dei movimenti
+     */
+    var resourceKeys = 0
 
-	private ObjModelControllerOptions() {
+    /**
+     * elenco delle animazioni
+     */
+    var resourceValues = 0
 
-	}
+    /**
+     * movimento iniziale
+     */
+    var status: ObjActionType? = null
+    fun resourceKeys(value: Int): ObjModelControllerOptions {
+        resourceKeys = value
+        return this
+    }
 
-	/**
-	 * elenco dei movimenti
-	 */
-	public int resourceKeys;
+    fun resourceValues(value: Int): ObjModelControllerOptions {
+        resourceValues = value
+        return this
+    }
 
-	/**
-	 * elenco delle animazioni
-	 */
-	public int resourceValues;
+    fun status(value: ObjActionType?): ObjModelControllerOptions {
+        status = value
+        return this
+    }
 
-	/**
-	 * movimento iniziale
-	 */
-	public ObjActionType status;
-
-	/**
-	 * <ul>
-	 * <li><b>resourceKeys</b>: array di stringhe dei movimenti definiti - R.array.controller_obj_key</li>
-	 * <li><b>resourceValues</b>: array di stringhe delle animazioni associate - R.array.controller_obj_value</li>
-	 * <li><b>status</b>:stato iniziale - <code>null</code></li>
-	 * </ul>
-	 * 
-	 * @return
-	 */
-	public static ObjModelControllerOptions build() {
-		ObjModelControllerOptions ret = new ObjModelControllerOptions();
-		ret.resourceKeys = R.array.tiledmap_obj_action_keys;
-		ret.resourceValues = R.array.tiledmap_obj_action_values;
-		ret.status = null;
-
-		return ret;
-	}
-
-	public ObjModelControllerOptions resourceKeys(int value) {
-		resourceKeys = value;
-		return this;
-	}
-
-	public ObjModelControllerOptions resourceValues(int value) {
-		resourceValues = value;
-		return this;
-	}
-
-	public ObjModelControllerOptions status(ObjActionType value) {
-		status=value;
-		
-		return this;
-		
-	}
-
+    companion object {
+        /**
+         *
+         *  * **resourceKeys**: array di stringhe dei movimenti definiti - R.array.controller_obj_key
+         *  * **resourceValues**: array di stringhe delle animazioni associate - R.array.controller_obj_value
+         *  * **status**:stato iniziale - `null`
+         *
+         *
+         * @return
+         */
+        fun build(): ObjModelControllerOptions {
+            val ret = ObjModelControllerOptions()
+            ret.resourceKeys = R.array.tiledmap_obj_action_keys
+            ret.resourceValues = R.array.tiledmap_obj_action_values
+            ret.status = null
+            return ret
+        }
+    }
 }

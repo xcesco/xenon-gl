@@ -36,8 +36,6 @@ object CompressedTextureLoader {
         ETC1.encodeImage(bb, bitmap.width, bitmap.height, 3, 3 * bitmap.width, compressedImage)
         etc1tex = ETC1Texture(bitmap.width, bitmap.height, compressedImage)
 
-        // ETC1Util.loadTexture(GL10.GL_TEXTURE_2D, 0, 0, GL10.GL_RGB,
-        // GL10.GL_UNSIGNED_SHORT_5_6_5, etc1tex);
         gl.glCompressedTexImage2D(
             GL10.GL_TEXTURE_2D, 0, ETC1.ETC1_RGB8_OES, bitmap.width, bitmap.height, 0, etc1tex.data.capacity(),
             etc1tex.data

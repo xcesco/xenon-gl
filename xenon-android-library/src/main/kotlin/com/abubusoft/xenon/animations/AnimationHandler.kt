@@ -13,7 +13,7 @@ import com.abubusoft.xenon.interpolations.InterpolationLinear
  * @author Francesco Benincasa
  * @param <K>
 </K> */
-abstract class AnimationHandler<K : KeyFrame?> {
+abstract class AnimationHandler<K : KeyFrame> {
     /**
      *
      *
@@ -31,16 +31,16 @@ abstract class AnimationHandler<K : KeyFrame?> {
      * @param next
      * @return
      */
-    protected abstract fun value(current: K?, enlapsedTime: Long, next: K?): K
+    protected abstract fun value(current: K, enlapsedTime: Long, next: K?): K
     protected abstract fun buildFrame(): K
 
-    constructor(animation: Animation<K>?) {
+    constructor(animation: Animation<K>) {
         set(animation)
     }
 
     constructor() {}
 
-    protected var temp: K? = null
+    protected lateinit var temp: K
     /**
      * @return the name
      */
@@ -101,11 +101,11 @@ abstract class AnimationHandler<K : KeyFrame?> {
      *
      * @param input
      */
-    fun copyFrom(input: Animation<K>?) {
+    fun copyFrom(input: Animation<K>) {
         // autoReverse = input.autoReverse;
         // cycleCount = input.cycleCount;
-        isLoop = input!!.isLoop
-        rate = input.getRate()
+        isLoop = input.isLoop
+        rate = input.rate
     }
 
     fun name(): String? {
@@ -127,7 +127,7 @@ abstract class AnimationHandler<K : KeyFrame?> {
     /**
      * key frame corrente
      */
-    var currentFrame: K? = null
+    lateinit var currentFrame: K
 
     /**
      * key frame successivo
@@ -175,7 +175,7 @@ abstract class AnimationHandler<K : KeyFrame?> {
     /**
      * listener per gli eventi legati esclusivamente ai frame
      */
-    protected var frameListener: EventFrameListener<K>? = null
+    private var frameListener: EventFrameListener<K>? = null
 
     /**
      * Imposta l'event listener
@@ -203,7 +203,7 @@ abstract class AnimationHandler<K : KeyFrame?> {
      * @param channel
      * @return frame corrente
      */
-    open fun update(enlapsedTimeValue: Long): K? {
+    open fun update(enlapsedTimeValue: Long): K {
         if (status != StatusType.RUNNING) {
             return value(currentFrame, enlapsedTime, nextFrame)
         }
@@ -299,9 +299,9 @@ abstract class AnimationHandler<K : KeyFrame?> {
      *
      * @param value
      */
-    open fun set(value: Animation<K>?) {
+    open fun set(value: Animation<K>) {
         animation = value
-        copyFrom(animation)
+        copyFrom(animation!!)
         inc = 1 // animation.rate > 0 ? 1 : -1;
         status = StatusType.STOPPED
         currentFrameIndex = 0
@@ -350,6 +350,7 @@ abstract class AnimationHandler<K : KeyFrame?> {
                     animationListener!!.onAnimationResume(currentFrame, enlapsedTime)
                 }
             }
+            else -> {}
         }
     }
 
@@ -402,7 +403,7 @@ abstract class AnimationHandler<K : KeyFrame?> {
      *
      * @return
      */
-    open fun value(): K? {
+    open fun value(): K {
         return temp
     }
 

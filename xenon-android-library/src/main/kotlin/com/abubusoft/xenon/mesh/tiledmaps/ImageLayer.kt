@@ -1,181 +1,162 @@
 /**
- * 
+ *
  */
-package com.abubusoft.xenon.mesh.tiledmaps;
+package com.abubusoft.xenon.mesh.tiledmaps
 
-import com.abubusoft.xenon.mesh.MeshFactory;
-import com.abubusoft.xenon.mesh.MeshOptions;
-import com.abubusoft.xenon.mesh.MeshSprite;
-import com.abubusoft.xenon.mesh.modifiers.TextureQuadModifier;
-import com.abubusoft.xenon.mesh.tiledmaps.internal.ImageLayerHandler;
-import com.abubusoft.xenon.mesh.tiledmaps.internal.AbstractLayerHandler;
-import com.abubusoft.xenon.mesh.tiledmaps.internal.LayerDrawer;
-import com.abubusoft.xenon.mesh.tiledmaps.internal.TiledMapView;
-import com.abubusoft.xenon.mesh.tiledmaps.tmx.loader.TMXLoaderType;
-import com.abubusoft.xenon.texture.AtlasTexture;
-import com.abubusoft.xenon.texture.AtlasTextureOptions;
-import com.abubusoft.xenon.texture.Texture;
-import com.abubusoft.xenon.texture.TextureFilterType;
-import com.abubusoft.xenon.texture.TextureManager;
-import com.abubusoft.xenon.texture.TextureOptions;
-import com.abubusoft.xenon.texture.TextureRepeatType;
-import com.abubusoft.xenon.vbo.BufferAllocationOptions;
-import com.abubusoft.xenon.vbo.BufferAllocationType;
-import com.abubusoft.xenon.core.XenonRuntimeException;
-import org.xml.sax.Attributes;
-
-import android.content.Context;
+import android.content.Context
+import com.abubusoft.xenon.core.XenonRuntimeException
+import com.abubusoft.xenon.mesh.MeshFactory.createSprite
+import com.abubusoft.xenon.mesh.MeshOptions
+import com.abubusoft.xenon.mesh.MeshSprite
+import com.abubusoft.xenon.mesh.modifiers.TextureQuadModifier.setTextureCoords
+import com.abubusoft.xenon.mesh.tiledmaps.internal.AbstractLayerHandler
+import com.abubusoft.xenon.mesh.tiledmaps.internal.ImageLayerHandler
+import com.abubusoft.xenon.mesh.tiledmaps.internal.LayerDrawer
+import com.abubusoft.xenon.mesh.tiledmaps.internal.TiledMapView
+import com.abubusoft.xenon.mesh.tiledmaps.tmx.loader.TMXLoaderType
+import com.abubusoft.xenon.texture.*
+import com.abubusoft.xenon.vbo.BufferAllocationOptions
+import com.abubusoft.xenon.vbo.BufferAllocationType
+import org.xml.sax.Attributes
 
 /**
- * <p>
+ *
+ *
  * Un layer che contiene una singola immagine.
- * </p>
- * 
+ *
+ *
  * @author Francesco Benincasa
- * 
  */
-public class ImageLayer extends Layer {
+class ImageLayer(
+    tiledMap: TiledMap,
+    /**
+     * tipo di caricamento dell'immagine: da asset o da risorsa. A seconda del valore, tratta in modo diverso l'imageSource.
+     */
+    private val loaderType: TMXLoaderType, atts: Attributes?, textureFilterValue: TextureFilterType?
+) : Layer(LayerType.IMAGE, tiledMap, atts) {
+    /**
+     * Opzione per la creazione del texture atlas.
+     */
+    private val textureOptions: TextureOptions
 
-	/**
-	 * tipo di caricamento dell'immagine: da asset o da risorsa. A seconda del valore, tratta in modo diverso l'imageSource.
-	 */
-	private final TMXLoaderType loaderType;
+    /**
+     * Nome della texture associata al layer
+     */
+    var imageSource: String? = null
 
-	/**
-	 * Opzione per la creazione del texture atlas.
-	 */
-	private TextureOptions textureOptions;
+    /**
+     * modo di riempimento
+     */
+    var fillMode: FillModeType
 
-	/**
-	 * Nome della texture associata al layer
-	 */
-	public String imageSource;
+    /**
+     *
+     *
+     * Modi di riempire il layer
+     *
+     *
+     * @author Francesco Benincasa
+     */
+    enum class FillModeType {
+        /**
+         * Ricopre la finestra, considerando quando
+         */
+        REPEAT_ON_WINDOW,
 
-	/**
-	 * modo di riempimento
-	 */
-	public FillModeType fillMode;
+        /**
+         * Ricopre la window con la texture, senza ripetizione.
+         */
+        EXPAND_ON_WINDOW, REPEAT_ON_MAP, EXPAND_ON_MAP
+    }
 
-	/**
-	 * <p>
-	 * Modi di riempire il layer
-	 * </p>
-	 * 
-	 * @author Francesco Benincasa
-	 * 
-	 */
-	public enum FillModeType {
-			/**
-			 * Ricopre la finestra, considerando quando
-			 */
-			REPEAT_ON_WINDOW,
-			/**
-			 * Ricopre la window con la texture, senza ripetizione.
-			 */
-			EXPAND_ON_WINDOW,
-			REPEAT_ON_MAP,
-			EXPAND_ON_MAP;
-	}
+    /**
+     *
+     *
+     * Evento da invocare quando si effettua il resize della window
+     *
+     */
+    override fun onBuildView(view: TiledMapView) {
+        handler!!.onBuildView(view)
+        fillMode = FillModeType.REPEAT_ON_WINDOW
+        val texture: Texture = textureList[0]
 
-	public ImageLayer(TiledMap tiledMap, TMXLoaderType loaderTypeValue, Attributes atts, TextureFilterType textureFilterValue) {
-		super(LayerType.IMAGE, tiledMap, atts);
-		loaderType = loaderTypeValue;
-		textureOptions = TextureOptions.build().textureFilter(textureFilterValue).textureRepeat(TextureRepeatType.REPEAT);
+        // nel costruttore le dimensioni della window non le abbiamo
+        // fullWindowTile.setDimensions(tiledMap.windowWidth, tiledMap.windowHeight);
+        shape = createSprite(
+            view.windowWidth.toFloat(), view.windowHeight.toFloat(),
+            MeshOptions.build().bufferAllocationOptions(
+                BufferAllocationOptions.build().indexAllocation(BufferAllocationType.STATIC).vertexAllocation(BufferAllocationType.STATIC)
+                    .textureAllocation(BufferAllocationType.STREAM)
+            )
+        )
+        when (fillMode) {
+            FillModeType.REPEAT_ON_WINDOW ->            // fullWindowTile.setTextureCoordinate(0f, (float) (1.0 * tiledMap.windowWidth / texture.info.dimension.width), 0, (float) (1.0 * tiledMap.windowHeight /
+                // texture.info.dimension.height));
+                setTextureCoords(
+                    shape!!.textures[0],
+                    0,
+                    0f,
+                    (1.0 * view.windowWidth / texture.info.dimension.width).toFloat(),
+                    0f,
+                    (1.0 * view.windowHeight / texture.info.dimension.height).toFloat(),
+                    false,
+                    true
+                )
+            FillModeType.EXPAND_ON_WINDOW ->            // ok
+                // fullWindowTile.setTextureCoordinate(0, 1, 0, 1);
+                setTextureCoords(shape!!.textures[0], 0, 0f, 1f, 0f, 1f, false, true)
+            FillModeType.REPEAT_ON_MAP -> {}
+            FillModeType.EXPAND_ON_MAP -> {}
+        }
+    }
 
-		fillMode = FillModeType.REPEAT_ON_WINDOW;
+    /**
+     *
+     *
+     * mesh per disegnare lo sfondo.
+     *
+     */
+    var shape: MeshSprite? = null
+    protected var handler: ImageLayerHandler? = null
 
-		// fullWindowTile = new Tile();
-	}
+    init {
+        textureOptions = TextureOptions.build().textureFilter(textureFilterValue).textureRepeat(TextureRepeatType.REPEAT)
+        fillMode = FillModeType.REPEAT_ON_WINDOW
 
-	/**
-	 * <p>
-	 * Evento da invocare quando si effettua il resize della window
-	 * </p>
-	 */
-	public void onBuildView(TiledMapView view) {
-		handler.onBuildView(view);
-		
-		fillMode = FillModeType.REPEAT_ON_WINDOW;
-		Texture texture = textureList.get(0);
+        // fullWindowTile = new Tile();
+    }
 
-		// nel costruttore le dimensioni della window non le abbiamo
-		// fullWindowTile.setDimensions(tiledMap.windowWidth, tiledMap.windowHeight);
+    /**
+     *
+     *
+     * Carichiamo la texture e la inseriamo tra le texture usate da questo layer
+     *
+     *
+     * @param context
+     */
+    fun loadTexture(context: Context?) {
+        var temp: Texture? = null
+        temp = when (loaderType) {
+            TMXLoaderType.ASSET_LOADER -> TextureManager.instance().createTextureFromAssetsFile(context, imageSource, textureOptions)
+            TMXLoaderType.RES_LOADER -> TextureManager.instance().createTextureFromResourceString(context, imageSource, textureOptions)
+            else -> throw XenonRuntimeException("Type of loader is not supported")
+        }
+        val tto = AtlasTextureOptions.build()
+        val texture: AtlasTexture
+        tto.tileWidth(temp.info.dimension.width).tileHeight(temp.info.dimension.height).margin(0).spacing(0)
+        texture = TextureManager.instance().createAtlasTexture(temp, tto)
+        textureList.add(texture)
+    }
 
-		shape = MeshFactory.createSprite((float) view.windowWidth, (float) view.windowHeight,
-				MeshOptions.build().bufferAllocationOptions(BufferAllocationOptions.build().indexAllocation(BufferAllocationType.STATIC).vertexAllocation(BufferAllocationType.STATIC).textureAllocation(BufferAllocationType.STREAM)));
+    override fun buildHandler(handler: AbstractLayerHandler<*>?) {
+        this.handler = handler as ImageLayerHandler?
+    }
 
-		switch (fillMode) {
-		case REPEAT_ON_WINDOW:
-			// fullWindowTile.setTextureCoordinate(0f, (float) (1.0 * tiledMap.windowWidth / texture.info.dimension.width), 0, (float) (1.0 * tiledMap.windowHeight /
-			// texture.info.dimension.height));
-			TextureQuadModifier.setTextureCoords(shape.textures[0], 0, 0f, (float) (1.0 * view.windowWidth / texture.info.dimension.width), 0, (float) (1.0 * view.windowHeight / texture.info.dimension.height), false, true);
+    override fun drawer(): LayerDrawer? {
+        return handler
+    }
 
-			break;
-		case EXPAND_ON_WINDOW:
-			// ok
-			// fullWindowTile.setTextureCoordinate(0, 1, 0, 1);
-			TextureQuadModifier.setTextureCoords(shape.textures[0], 0, 0f, 1f, 0f, 1f, false, true);
-			break;
-		case REPEAT_ON_MAP:
-			// fullWindowTile.setTextureCoordinate(0f, (float)(1.0 * tiledMap. / texture.info.dimension.width) , 0, (float)(1.0 *tiledMap.windowHeight /
-			// texture.info.dimension.height));
-			break;
-		case EXPAND_ON_MAP:
-			// fullWindowTile.setTextureCoordinate(0f, (float)(1.0 * tiledMap.windowWidth / texture.info.dimension.width) , 0, (float)(1.0 *tiledMap.windowHeight /
-			// texture.info.dimension.height));
-			break;
-		}
-
-	}
-
-	/**
-	 * <p>
-	 * mesh per disegnare lo sfondo.
-	 * </p>
-	 */
-	public MeshSprite shape;
-
-	protected ImageLayerHandler handler;
-
-	/**
-	 * <p>
-	 * Carichiamo la texture e la inseriamo tra le texture usate da questo layer
-	 * </p>
-	 * 
-	 * @param context
-	 */
-	public void loadTexture(Context context) {
-		Texture temp = null;
-		switch (loaderType) {
-		case ASSET_LOADER:
-			temp = TextureManager.instance().createTextureFromAssetsFile(context, imageSource, textureOptions);
-			break;
-		case RES_LOADER:
-			temp = TextureManager.instance().createTextureFromResourceString(context, imageSource, textureOptions);
-			break;
-		default:
-			throw new XenonRuntimeException("Type of loader is not supported");
-		}
-
-		AtlasTextureOptions tto = AtlasTextureOptions.build();
-
-		AtlasTexture texture;
-
-		tto.tileWidth(temp.info.dimension.width).tileHeight(temp.info.dimension.height).margin(0).spacing(0);
-		texture = TextureManager.instance().createAtlasTexture(temp, tto);
-		this.textureList.add(texture);
-	}
-
-	@Override
-	protected void buildHandler(AbstractLayerHandler<?> handler) {
-		this.handler=(ImageLayerHandler) handler;		
-	}
-	
-	@Override
-	public LayerDrawer drawer() {
-		return handler;
-	}
-	
-	public TiledMapView view() { return handler.view(); }
-
+    override fun view(): TiledMapView? {
+        return handler!!.view()
+    }
 }

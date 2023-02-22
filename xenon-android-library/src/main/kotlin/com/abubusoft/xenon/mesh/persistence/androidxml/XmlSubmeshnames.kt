@@ -1,13 +1,10 @@
-package com.abubusoft.xenon.mesh.persistence.androidxml;
+package com.abubusoft.xenon.mesh.persistence.androidxml
 
-import java.util.ArrayList;
-
-import com.abubusoft.kripton.annotation.Bind;
-import com.abubusoft.kripton.annotation.BindType;
+import com.abubusoft.kripton.annotation.Bind
+import com.abubusoft.kripton.annotation.BindType
 
 @BindType
-public class XmlSubmeshnames {
-
-	@Bind("submesh")
-	public ArrayList<XmlName> names;	
+class XmlSubmeshnames {
+    @Bind("submesh")
+    var names: ArrayList<XmlName?>? = null
 }

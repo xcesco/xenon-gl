@@ -1,10 +1,8 @@
-package com.abubusoft.xenon.mesh.tiledmaps.internal;
+package com.abubusoft.xenon.mesh.tiledmaps.internal
 
-
-public interface LayerHandler extends LayerDrawer  {
-
-	/**
-	 * evento sulla creazione della window
-	 */
-	void onBuildView(TiledMapView view);	
+interface LayerHandler : LayerDrawer {
+    /**
+     * evento sulla creazione della window
+     */
+    fun onBuildView(view: TiledMapView)
 }

@@ -1,21 +1,21 @@
-package com.abubusoft.xenon.mesh.tiledmaps.path;
+package com.abubusoft.xenon.mesh.tiledmaps.path
 
-public enum MoveType {
+enum class MoveType {
+    UP, RIGHT, DOWN, LEFT;
 
-	UP, RIGHT, DOWN, LEFT;
-
-	public static MoveType detect(int nodeS, int nodeT, int columns) {
-		int diff = nodeS - nodeT;
-		if (diff == 1) {
-			return MoveType.RIGHT;
-		} else if (diff == -1) {
-			return MoveType.LEFT;
-		} else if (diff == -columns) {
-			return MoveType.UP;
-		} else if (diff == columns) {
-			return MoveType.DOWN;
-		}
-		
-		return null;
-	}
+    companion object {
+        fun detect(nodeS: Int, nodeT: Int, columns: Int): MoveType? {
+            val diff = nodeS - nodeT
+            if (diff == 1) {
+                return RIGHT
+            } else if (diff == -1) {
+                return LEFT
+            } else if (diff == -columns) {
+                return UP
+            } else if (diff == columns) {
+                return DOWN
+            }
+            return null
+        }
+    }
 }

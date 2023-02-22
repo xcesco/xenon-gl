@@ -1,30 +1,26 @@
 /**
- * 
+ *
  */
-package com.abubusoft.xenon.render.effects;
+package com.abubusoft.xenon.render.effects
 
-import com.abubusoft.xenon.render.AbstractEffect;
-import com.abubusoft.xenon.render.UseShader;
+import com.abubusoft.xenon.render.AbstractEffect
+import com.abubusoft.xenon.render.UseShader
 
 /**
  * @author Francesco Benincasa
- * 
  */
-@UseShader(LedShader.class)
-public class LedEffect extends AbstractEffect<LedShader> {
+@UseShader(LedShader::class)
+class LedEffect : AbstractEffect<LedShader?>() {
+    var ledSize = 128.0f
+    var brightness = 1.0f
 
-	public LedEffect() {
-		ledSize = 128.0f;
-		brightness = 1.0f;
-	}
+    init {
+        ledSize = 128.0f
+        brightness = 1.0f
+    }
 
-	public float ledSize = 128.0f;
-	public float brightness = 1.0f;
-
-	@Override
-	protected void updateShader(LedShader shader, long enlapsedTime, float speedAdapter) {
-		shader.setLedSize(ledSize);
-		shader.setBrightness(brightness);
-	}
-
+    protected override fun updateShader(shader: LedShader, enlapsedTime: Long, speedAdapter: Float) {
+        shader.setLedSize(ledSize)
+        shader.setBrightness(brightness)
+    }
 }

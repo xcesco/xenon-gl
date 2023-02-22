@@ -1,32 +1,28 @@
-package com.abubusoft.xenon.mesh.persistence.kripton;
+package com.abubusoft.xenon.mesh.persistence.kripton
 
-import java.io.OutputStream;
+import com.abubusoft.kripton.BinderType
+import com.abubusoft.kripton.KriptonBinder
+import com.abubusoft.kripton.android.Logger
+import com.abubusoft.xenon.core.XenonRuntimeException
+import com.abubusoft.xenon.mesh.Mesh
+import java.io.OutputStream
 
-import com.abubusoft.xenon.mesh.Mesh;
-import com.abubusoft.xenon.core.XenonRuntimeException;
-import com.abubusoft.kripton.android.Logger;
+object KriptonSaver {
+    fun save(output: OutputStream?, binderType: BinderType?, mesh: Mesh) {
+        try {
+            KriptonBinder.bind(binderType).serialize(mesh, output)
+        } catch (e: Exception) {
+            Logger.fatal(e.message)
+            e.printStackTrace()
+            throw XenonRuntimeException(e)
+        }
+    }
 
-import com.abubusoft.kripton.BinderType;
-import com.abubusoft.kripton.KriptonBinder;
+    fun saveMeshIntoXML(output: OutputStream?, mesh: Mesh) {
+        save(output, BinderType.XML, mesh)
+    }
 
-public class KriptonSaver {
-	
-	
-	static void save(OutputStream output, BinderType binderType, Mesh mesh) {
-		try {
-			KriptonBinder.bind(binderType).serialize(mesh, output);			
-		} catch (Exception e) {
-			Logger.fatal(e.getMessage());
-			e.printStackTrace();
-			throw new XenonRuntimeException(e);
-		}
-	}
-	
-	public static void saveMeshIntoXML(OutputStream output, Mesh mesh) {
-		save(output, BinderType.XML, mesh);
-	}
-	
-	public static void saveMeshIntoJSON(OutputStream output, Mesh mesh) {
-		save(output, BinderType.JSON, mesh);
-	}
+    fun saveMeshIntoJSON(output: OutputStream?, mesh: Mesh) {
+        save(output, BinderType.JSON, mesh)
+    }
 }

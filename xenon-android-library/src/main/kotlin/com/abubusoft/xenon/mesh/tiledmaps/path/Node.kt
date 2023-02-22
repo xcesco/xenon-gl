@@ -1,58 +1,56 @@
-package com.abubusoft.xenon.mesh.tiledmaps.path;
+package com.abubusoft.xenon.mesh.tiledmaps.path
 
-public class Node implements Comparable<Node> {
-	
-	public final int id;
+class Node(val id: Int, arcCount: Int) : Comparable<Node> {
+    var arcs: IntArray
 
-	public static final int INVALID_PARENT = -1;
+    /** The path cost for this node  */
+    var cost = 0
 
-	/**
-	 * costruttore
-	 * @param id
-	 * 		id del nodo. Immutabile
-	 * @param arcCount
-	 */
-	public Node(int id, int arcCount) {
-		this.id=id;
-		arcs = new int[arcCount];
-	}
+    /** The parent of this node, how we reached it in the search  */
+    var parent = 0
 
-	public int[] arcs;
+    /** The heuristic cost of this node  */
+    var heuristic = 0f
 
-	/** The path cost for this node */
-	public int cost;
-	/** The parent of this node, how we reached it in the search */
-	public int parent;
-	/** The heuristic cost of this node */
-	public float heuristic;
-	/** The search depth of this node */
-	public int depth;
+    /** The search depth of this node  */
+    var depth = 0
 
-	/**
-	 * Set the parent of this node
-	 * 
-	 * @param parent
-	 *            The parent node which lead us to this node
-	 * @return The depth we have no reached in searching
-	 */
-	public int setParent(int parent, int depth) {
-		this.depth = depth + 1;
-		this.parent = parent;
+    /**
+     * costruttore
+     * @param id
+     * id del nodo. Immutabile
+     * @param arcCount
+     */
+    init {
+        arcs = IntArray(arcCount)
+    }
 
-		return depth;
-	}
+    /**
+     * Set the parent of this node
+     *
+     * @param parent
+     * The parent node which lead us to this node
+     * @return The depth we have no reached in searching
+     */
+    fun setParent(parent: Int, depth: Int): Int {
+        this.depth = depth + 1
+        this.parent = parent
+        return depth
+    }
 
-	@Override
-	public int compareTo(Node another) {
-		float f = heuristic + cost;
-		float of = another.heuristic + another.cost;
+    override fun compareTo(another: Node): Int {
+        val f = heuristic + cost
+        val of = another.heuristic + another.cost
+        return if (f < of) {
+            -1
+        } else if (f > of) {
+            1
+        } else {
+            0
+        }
+    }
 
-		if (f < of) {
-			return -1;
-		} else if (f > of) {
-			return 1;
-		} else {
-			return 0;
-		}
-	}
+    companion object {
+        const val INVALID_PARENT = -1
+    }
 }

@@ -1,49 +1,37 @@
-package com.abubusoft.xenon.mesh.tiledmaps;
+package com.abubusoft.xenon.mesh.tiledmaps
 
-import com.abubusoft.xenon.mesh.tiledmaps.internal.MapHandler;
-import com.abubusoft.xenon.mesh.tiledmaps.isometric.IsometricMapHandler;
-import com.abubusoft.xenon.mesh.tiledmaps.isostaggered.ISSMapHandler;
-import com.abubusoft.xenon.mesh.tiledmaps.orthogonal.OrthogonalMapHandler;
-import com.abubusoft.kripton.android.Logger;
+import com.abubusoft.kripton.android.Logger
+import com.abubusoft.xenon.mesh.tiledmaps.internal.MapHandler
+import com.abubusoft.xenon.mesh.tiledmaps.isometric.IsometricMapHandler
+import com.abubusoft.xenon.mesh.tiledmaps.isostaggered.ISSMapHandler
+import com.abubusoft.xenon.mesh.tiledmaps.orthogonal.OrthogonalMapHandler
 
 /**
- * 
- * Enume relativo all'orientamento della mappa. In base all'orientamento vengono definiti gli handler per la mappa ed i vari layer.
- * 
- * @author xcesco
  *
+ * Enume relativo all'orientamento della mappa. In base all'orientamento vengono definiti gli handler per la mappa ed i vari layer.
+ *
+ * @author xcesco
  */
-public enum MapOrientationType {
-		ORTHOGONAL(OrthogonalMapHandler.class),
-		ISOMETRIC(IsometricMapHandler.class),
-		STAGGERED(ISSMapHandler.class),
-		HEXAGONAL(null);
+enum class MapOrientationType(
+    /**
+     * classe dell'handler della mappa
+     */
+    private val mapHandlerClazz: Class<out MapHandler>?
+) {
+    ORTHOGONAL(OrthogonalMapHandler::class.java), ISOMETRIC(IsometricMapHandler::class.java), STAGGERED(ISSMapHandler::class.java), HEXAGONAL(null);
 
-	/**
-	 * classe dell'handler della mappa
-	 */
-	private Class<? extends MapHandler> mapHandlerClazz;
-
-
-
-	private MapOrientationType(Class<? extends MapHandler> mapHandlerClazz) {
-		this.mapHandlerClazz = mapHandlerClazz;
-	}
-
-	/**
-	 * Crea il map handler associato
-	 * 
-	 * @return map handler
-	 */
-	public MapHandler createMapHandler(TiledMap map) {
-		try {
-			return (MapHandler) mapHandlerClazz.getDeclaredConstructor(TiledMap.class).newInstance(map);
-		} catch (Exception e) {
-			Logger.fatal(e.getMessage());
-			e.printStackTrace();
-		}
-
-		throw (new RuntimeException("Tiled layer handler not defined for " + this));
-	}
-
+    /**
+     * Crea il map handler associato
+     *
+     * @return map handler
+     */
+    fun createMapHandler(map: TiledMap?): MapHandler {
+        try {
+            return mapHandlerClazz!!.getDeclaredConstructor(TiledMap::class.java).newInstance(map) as MapHandler
+        } catch (e: Exception) {
+            Logger.fatal(e.message)
+            e.printStackTrace()
+        }
+        throw RuntimeException("Tiled layer handler not defined for $this")
+    }
 }

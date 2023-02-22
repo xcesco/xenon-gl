@@ -1,72 +1,69 @@
 /**
- * 
+ *
  */
-package com.abubusoft.xenon.texture;
+package com.abubusoft.xenon.texture
 
 /**
  * @author Francesco Benincasa
- * 
  */
-public class RenderedTextureOptions {
+class RenderedTextureOptions {
+    var depthBuffer = false
+    var renderFactor = 0f
+    fun depthBuffer(value: Boolean): RenderedTextureOptions {
+        depthBuffer = value
+        return this
+    }
 
-	/**
-	 * <p>
-	 * Valori predefiniti:
-	 * </p>
-	 * <dl>
-	 * <dt>name</dt>
-	 * <dd>[undefined]</dd>
-	 * <dt>depthBuffer</dt>
-	 * <dd>true</dd>
-	 * <dt>textureInternalFormat</dt>
-	 * <dd>TextureInternalFormatType.UNSIGNED_BYTE</dd>
-	 * <dt>renderFactor</dt>
-	 * <dd>1.0</dd>
-	 * </dl>
-	 * 
-	 * @return
-	 * 		opzioni
-	 */
-	public static RenderedTextureOptions build() {
-		return (new RenderedTextureOptions()).depthBuffer(true).textureInternalFormat(TextureInternalFormatType.UNSIGNED_BYTE).renderFactor(1.f);
-	}
+    fun renderFactor(value: Float): RenderedTextureOptions {
+        renderFactor = value
+        return this
+    }
 
-	public boolean depthBuffer;
-	
-	public float renderFactor;
+    var name = "[RenderedTexture noname]"
 
-	public RenderedTextureOptions depthBuffer(boolean value) {
-		depthBuffer = value;
-		return this;
-	}
-	
-	public RenderedTextureOptions renderFactor(float value) {
-		renderFactor = value;
-		return this;
-	}
+    /**
+     * Tipo di formato interno della texture: unsigned byte o float
+     *
+     */
+    var textureInternalFormat: TextureInternalFormatType? = null
+    fun name(value: String): RenderedTextureOptions {
+        name = value
+        return this
+    }
 
-	public String name = "[RenderedTexture noname]";
+    /**
+     * Tipo di formato interno della texture: unsigned byte o float
+     *
+     * @param value
+     * @return
+     */
+    fun textureInternalFormat(value: TextureInternalFormatType?): RenderedTextureOptions {
+        textureInternalFormat = value
+        return this
+    }
 
-	/**
-	 * Tipo di formato interno della texture: unsigned byte o float
-	 * 
-	 */
-	public TextureInternalFormatType textureInternalFormat;
-
-	public RenderedTextureOptions name(String value) {
-		this.name = value;
-
-		return this;
-	}
-
-	/**
-	 * Tipo di formato interno della texture: unsigned byte o float
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public RenderedTextureOptions textureInternalFormat(TextureInternalFormatType value) {
-		textureInternalFormat = value;
-		return this;
-	}
+    companion object {
+        /**
+         *
+         *
+         * Valori predefiniti:
+         *
+         * <dl>
+         * <dt>name</dt>
+         * <dd>[undefined]</dd>
+         * <dt>depthBuffer</dt>
+         * <dd>true</dd>
+         * <dt>textureInternalFormat</dt>
+         * <dd>TextureInternalFormatType.UNSIGNED_BYTE</dd>
+         * <dt>renderFactor</dt>
+         * <dd>1.0</dd>
+        </dl> *
+         *
+         * @return
+         * opzioni
+         */
+        fun build(): RenderedTextureOptions {
+            return RenderedTextureOptions().depthBuffer(true).textureInternalFormat(TextureInternalFormatType.UNSIGNED_BYTE).renderFactor(1f)
+        }
+    }
 }

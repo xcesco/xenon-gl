@@ -1,40 +1,34 @@
-package com.abubusoft.xenon.mesh.persistence.max3d;
+package com.abubusoft.xenon.mesh.persistence.max3d
 
 /**
- * <p>Sempre e solo triangoli</p>
- * @author Francesco Benincasa
  *
+ * Sempre e solo triangoli
+ * @author Francesco Benincasa
  */
-public class Max3dsModelData {
+class Max3dsModelData(var name: String) {
+    /**
+     * startX 3
+     */
+    var vertices: FloatArray
 
-	public String name;
-	/**
-	 * startX 3
-	 */
-	public float[] vertices;
-	/**
-	 * startX 3
-	 */
-	public float[] normals;
-	/**
-	 * startX 2
-	 */
-	public float[] textCoords;
-	/**
-	 * startX 3
-	 */
-	public int[] indices;
+    /**
+     * startX 3
+     */
+    var normals: FloatArray
 
-	public Max3dsModelData(String value) {
-		name=value;
-	}
+    /**
+     * startX 2
+     */
+    var textCoords: FloatArray
 
-	public void setData(float[] aVertices, float[] aNormals, float[] aTexCoords, int[] aIndices) {		
-		vertices=aVertices;
-		normals=aNormals;
-		textCoords=aTexCoords;
-		indices=aIndices;
-		
-	}
-
+    /**
+     * startX 3
+     */
+    var indices: IntArray
+    fun setData(aVertices: FloatArray, aNormals: FloatArray, aTexCoords: FloatArray, aIndices: IntArray) {
+        vertices = aVertices
+        normals = aNormals
+        textCoords = aTexCoords
+        indices = aIndices
+    }
 }
